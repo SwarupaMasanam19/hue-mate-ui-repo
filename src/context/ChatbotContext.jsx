@@ -1,11 +1,17 @@
+// src/context/ChatbotContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import RecommendationEngine from '../utils/RecommendationEngine';
 
 const ChatbotContext = createContext();
 
 export const ChatbotProvider = ({ children }) => {
+  // Keep your existing state variables
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState('welcome');
   const [userImage, setUserImage] = useState(null);
+  const [recommender] = useState(new RecommendationEngine());
+  
+  // Expanded formData with our recommendation properties
   const [formData, setFormData] = useState({
     skinTone: '',
     gender: '',
@@ -18,90 +24,54 @@ export const ChatbotProvider = ({ children }) => {
     selectedTop: null,
     selectedBottom: null,
     selectedJewelry: null,
-    selectedFootwear: null
+    selectedFootwear: null,
+    // New fields for our enhanced recommendations
+    seasonalColorType: '',
+    event: ''
   });
 
-  const toggleChatbot = () => {
-    setIsOpen(!isOpen);
-  };
+  // Rest of your existing functions...
 
-  const setUserPhotoAndAnalyze = (imageData) => {
-    setUserImage(imageData);
-    setCurrentStep('skinToneAnalysis');
-  };
-
+  // Enhanced goToNextStep that updates the recommendation engine
   const goToNextStep = (currentStepName, data = {}) => {
     // Update form data with new values
-    setFormData(prev => ({
-      ...prev,
-      ...data
-    }));
+    setFormData(prev => {
+      const newData = { ...prev, ...data };
+      
+      // Update recommendation engine with new data
+      if (data.skinTone) recommender.setSkinTone(data.skinTone);
+      if (data.gender) recommender.setGender(data.gender);
+      if (data.bodyType) recommender.setBodyType(data.bodyType);
+      if (data.season) recommender.setSeason(data.season);
+      if (data.event) recommender.setEvent(data.event);
+      if (data.style) recommender.setStyle(data.style);
+      if (data.colorPreference) recommender.setColorPreference(data.colorPreference);
+      if (data.seasonalColorType) recommender.setSeasonalColorType(data.seasonalColorType);
+      if (data.budget) recommender.setBudget(data.budget);
+      
+      return newData;
+    });
 
-    // Map to determine the next step based on current step
+    // Your existing step navigation...
     const stepMap = {
       'welcome': 'uploadPhoto',
       'uploadPhoto': 'skinToneAnalysis',
-      'skinToneAnalysis': 'gender',
-      'gender': 'bodyType',
-      'bodyType': 'occasion',
-      'occasion': 'style',
-      'style': 'season',
-      'season': 'colorPreference',
-      'colorPreference': 'budget',
-      'budget': 'topSelection',
-      'topSelection': 'bottomSelection',
-      'bottomSelection': 'jewelrySelection',
-      'jewelrySelection': 'footwearSelection',
-      'footwearSelection': 'finalOutfit'
+      // Rest of your steps...
     };
 
     const nextStep = stepMap[currentStepName] || 'welcome';
     setCurrentStep(nextStep);
   };
 
-  const resetChatbot = () => {
-    setCurrentStep('welcome');
-    setUserImage(null);
-    setFormData({
-      skinTone: '',
-      gender: '',
-      bodyType: '',
-      occasion: '',
-      style: '',
-      season: '',
-      colorPreference: '',
-      budget: '',
-      selectedTop: null,
-      selectedBottom: null,
-      selectedJewelry: null,
-      selectedFootwear: null
-    });
-  };
-
-  // Prevent body scrolling when chatbot is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen]);
-
   return (
     <ChatbotContext.Provider
       value={{
         isOpen,
-        toggleChatbot,
         currentStep,
         userImage,
         formData,
-        setUserPhotoAndAnalyze,
-        goToNextStep,
-        resetChatbot
+        recommender, // Make recommender available to components
+        goToNextStep
       }}
     >
       {children}

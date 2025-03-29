@@ -1,64 +1,108 @@
 import React from 'react';
-import { useChatbot } from '../../context/ChatbotContext';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import { Camera, Palette, ShirtIcon, Users, Calendar, ShoppingBag, ArrowRight } from 'lucide-react';
 
-const Welcome = () => {
-  const { goToNextStep } = useChatbot();
-
-  const handleStart = () => {
-    goToNextStep('welcome');
-  };
-
+const Welcome = ({ onStart }) => {
+  const features = [
+    {
+      icon: <Camera size={48} color="#f59e0b" />,
+      title: "Skin Tone Analysis",
+      description: "Detect your unique skin tone for perfect color matching"
+    },
+    {
+      icon: <Palette size={48} color="#f59e0b" />,
+      title: "Color Matching",
+      description: "Get personalized color recommendations that complement your skin"
+    },
+    {
+      icon: <ShirtIcon size={48} color="#f59e0b" />,
+      title: "Style Recommendations",
+      description: "Find clothing styles that flatter your unique body shape"
+    },
+    {
+      icon: <Users size={48} color="#f59e0b" />,
+      title: "Body Type Analysis",
+      description: "Discover what styles work best for your body shape"
+    },
+    {
+      icon: <Calendar size={48} color="#f59e0b" />,
+      title: "Occasion Styling",
+      description: "Get outfit ideas for different events and occasions"
+    },
+    {
+      icon: <ShoppingBag size={48} color="#f59e0b" />,
+      title: "Shopping Assistance",
+      description: "Find where to buy your perfect styles within your budget"
+    }
+  ];
+  
   return (
-    <div className="flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent mb-6">
-        Welcome to HueMate
-      </h2>
+    <div className="welcome-container" style={{
+      textAlign: 'center',
+      maxWidth: '90%',
+      margin: '0 auto',
+      padding: '20px'
+    }}>
+      <h1 style={{
+        fontSize: '36px',
+        color: '#f59e0b',
+        marginBottom: '16px'
+      }}>Welcome to HueMate</h1>
       
-      <p className="text-lg mb-6">
-        Your AI-powered fashion assistant that helps you find the perfect outfit based on your skin tone, body type, and preferences.
+      <p style={{
+        fontSize: '18px',
+        color: 'white',
+        marginBottom: '32px'
+      }}>
+        Your AI-powered fashion assistant that helps you find the perfect outfit based on your skin tone and body type.
       </p>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full">
-        <Card>
-          <div className="w-16 h-16 bg-gradient-to-br from-amber-200 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '24px',
+        marginBottom: '40px'
+      }}>
+        {features.map((feature, index) => (
+          <div key={index} style={{
+            background: 'rgba(255,255,255,0.1)',
+            borderRadius: '16px',
+            padding: '24px',
+            textAlign: 'center',
+            transition: 'transform 0.3s',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            <div style={{marginBottom: '16px'}}>{feature.icon}</div>
+            <h3 style={{
+              fontSize: '20px',
+              color: 'white',
+              marginBottom: '8px'
+            }}>{feature.title}</h3>
+            <p style={{color: 'rgba(255,255,255,0.7)'}}>{feature.description}</p>
           </div>
-          <h3 className="text-xl font-semibold mb-2">Skin Tone Analysis</h3>
-          <p className="text-gray-300">Upload your photo and let our AI analyze your skin tone for perfect color matches.</p>
-        </Card>
-        
-        <Card>
-          <div className="w-16 h-16 bg-gradient-to-br from-amber-200 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Personalized Styling</h3>
-          <p className="text-gray-300">Get outfit recommendations tailored to your body type, occasion, and personal style.</p>
-        </Card>
-        
-        <Card>
-          <div className="w-16 h-16 bg-gradient-to-br from-amber-200 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-            </svg>
-          </div>
-          <h3 className="text-xl font-semibold mb-2">Budget-Friendly Options</h3>
-          <p className="text-gray-300">Find the perfect outfit within your budget with direct shopping links.</p>
-        </Card>
+        ))}
       </div>
       
-      <Button 
-        primary
-        onClick={handleStart}
+      <button style={{
+        padding: '12px 32px',
+        background: '#f59e0b',
+        color: 'white',
+        border: 'none',
+        borderRadius: '30px',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        margin: '0 auto'
+      }}
+      onClick={onStart}
       >
-        Let's Get Started
-      </Button>
+        Get Started <ArrowRight size={20} />
+      </button>
     </div>
   );
 };

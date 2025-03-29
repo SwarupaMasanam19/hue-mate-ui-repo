@@ -1,62 +1,111 @@
-import React from 'react';
-import { useChatbot } from '../../context/ChatbotContext';
-import OptionCard from '../ui/OptionCard';
+import React, { useState } from 'react';
+import { Box, Triangle, Circle, Square, Calculator, Youtube } from 'lucide-react';
+import BodyShapeCalculator from '../ui/BodyShapeCalculator';
 
-const BodyTypeSelection = () => {
-  const { formData, goToNextStep } = useChatbot();
-  const { gender } = formData;
-
-  // Body type options based on gender
-  const bodyTypeOptions = {
-    female: [
-      { id: 'hourglass', label: 'Hourglass', description: 'Balanced top and bottom with a defined waist' },
-      { id: 'pear', label: 'Pear', description: 'Narrower shoulders and wider hips' },
-      { id: 'apple', label: 'Apple', description: 'Fuller midsection with slimmer legs' },
-      { id: 'rectangle', label: 'Rectangle', description: 'Similar measurements at shoulders, waist, and hips' },
-      { id: 'inverted-triangle', label: 'Inverted Triangle', description: 'Broader shoulders and narrower hips' }
-    ],
-    male: [
-      { id: 'triangle', label: 'Triangle', description: 'Narrower shoulders and wider waist/hips' },
-      { id: 'inverted-triangle', label: 'Athletic', description: 'Broader shoulders and chest with narrower waist' },
-      { id: 'rectangle', label: 'Rectangle', description: 'Relatively straight up and down with less definition' },
-      { id: 'oval', label: 'Oval', description: 'Fuller midsection with average shoulders' },
-      { id: 'trapezoid', label: 'Trapezoid', description: 'Wider shoulders that taper to a narrower waist' }
-    ],
-    'non-binary': [
-      { id: 'rectangle', label: 'Straight', description: 'Minimal difference between shoulders, waist, and hips' },
-      { id: 'curve', label: 'Curved', description: 'More defined curves at hips or chest' },
-      { id: 'balanced', label: 'Balanced', description: 'Proportional shoulders and hips with a defined waist' },
-      { id: 'broad-shoulder', label: 'Broad Shoulder', description: 'Wider shoulders compared to hips' },
-      { id: 'broad-hip', label: 'Broad Hip', description: 'Wider hips compared to shoulders' }
-    ]
+const BodyTypeSelection = ({ gender, onSelect }) => {
+  const [selectedType, setSelectedType] = useState(null);
+  const [showCalculator, setShowCalculator] = useState(false);
+  
+  const getBodyTypeOptions = () => {
+    if (gender === 'female') {
+      return [
+        { id: 'hourglass-women', name: 'Hourglass', icon: <Box size={40} /> },
+        { id: 'pear-women', name: 'Pear', icon: <Triangle size={40} /> },
+        { id: 'rectangle-women', name: 'Rectangle', icon: <Square size={40} /> },
+        { id: 'apple-women', name: 'Apple', icon: <Circle size={40} /> }
+      ];
+    } else {
+      return [
+        { id: 'trapezoid-men', name: 'Trapezoid', icon: <Triangle size={40} /> },
+        { id: 'inverted-triangle-men', name: 'Athletic', icon: <Triangle size={40} style={{transform: 'rotate(180deg)'}} /> },
+        { id: 'rectangle-men', name: 'Rectangle', icon: <Square size={40} /> },
+        { id: 'oval-men', name: 'Oval', icon: <Circle size={40} /> }
+      ];
+    }
   };
-
-  const bodyTypes = bodyTypeOptions[gender] || bodyTypeOptions.female;
-
-  const handleSelect = (bodyType) => {
-    goToNextStep('bodyType', { bodyType });
+  
+  const handleTypeSelect = (type) => {
+    setSelectedType(type);
+    onSelect(type);
   };
-
+  
   return (
-    <div className="flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent mb-6">
-        Select Your Body Type
-      </h2>
+    <div className="body-type-screen">
+      <h2 className="gradient-text">Select Your Body Type</h2>
+      <p>This helps us recommend clothes that flatter your natural shape.</p>
       
-      <p className="text-lg mb-8">
-        This helps us recommend clothing styles that complement your natural shape.
-      </p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 w-full">
-        {bodyTypes.map((option) => (
-          <OptionCard
-            key={option.id}
-            label={option.label}
-            description={option.description}
-            onClick={() => handleSelect(option.id)}
-            size="large"
-          />
+      <div className="body-type-grid">
+        {getBodyTypeOptions().map(type => (
+          <div 
+            key={type.id}
+            className={`body-type-card ${selectedType === type.id ? 'selected' : ''}`}
+            onClick={() => handleTypeSelect(type.id)}
+          >
+            <div className="body-type-icon">
+              {type.icon}
+            </div>
+            <p>{type.name}</p>
+          </div>
         ))}
+      </div>
+      
+      <div className="helper-options" style={{marginTop: '24px', display: 'flex', justifyContent: 'center', gap: '16px'}}>
+        <div 
+          className="calculator-option"
+          style={{
+            padding: '15px', 
+            background: 'rgba(255, 255, 255, 0.1)', 
+            borderRadius: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            cursor: 'pointer'
+          }}
+          onClick={() => setShowCalculator(true)}
+        >
+          <Calculator size={32} color="#f59e0b" />
+          <p style={{marginTop: '8px'}}>Don't know your body shape?</p>
+          <p style={{fontSize: '14px', color: '#f59e0b'}}>Use our calculator</p>
+        </div>
+        
+        <div 
+          className="video-option"
+          style={{
+            padding: '15px', 
+            background: 'rgba(255, 255, 255, 0.1)', 
+            borderRadius: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            cursor: 'pointer'
+          }}
+          onClick={() => window.open(gender === 'female' ? 
+            'https://youtube.com/shorts/JaKLQQWeUro' : 
+            'https://youtube.com/shorts/yDmUQhR2dKI', 
+            '_blank')}
+        >
+          <Youtube size={32} color="#f59e0b" />
+          <p style={{marginTop: '8px'}}>Learn how to measure</p>
+          <p style={{fontSize: '14px', color: '#f59e0b'}}>Watch quick video</p>
+        </div>
+      </div>
+      
+      {showCalculator && (
+        <BodyShapeCalculator 
+          gender={gender} 
+          onCalculate={handleTypeSelect}
+          onClose={() => setShowCalculator(false)}
+        />
+      )}
+      
+      <div className="action-buttons">
+        <button 
+          className="primary-button"
+          onClick={() => onSelect(selectedType)}
+          disabled={!selectedType}
+        >
+          Continue
+        </button>
       </div>
     </div>
   );

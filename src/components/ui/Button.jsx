@@ -27,15 +27,7 @@ const Button = ({
     
   );
 
-  <button 
-  className="chatbot-button"
-  onClick={() => setIsOpen(!isOpen)}
-  aria-label="Open HueMate Assistant"
->
-  <div className="chatbot-button-inner">
-    <img src="/huemate-logo.png" alt="HueMate" />
-  </div>
-</button>
+  
 };
 
 export default Button;
