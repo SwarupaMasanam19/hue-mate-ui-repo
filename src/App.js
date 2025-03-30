@@ -1,11 +1,12 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 import RecommendationEngine from './utils/RecommendationEngine';
-import BodyTypeSelector from './components/steps/BodyTypeSelection'; 
+import BodyTypeSelector from './components/steps/BodyTypeSelection';
+import BodyShapeCalculator from './components/BodyShapeCalculator';
+import Welcome from './components/steps/Welcome';
 
 // Camera Component
-function Camera({ onCapture, onCancel }) {
+function Camera({ onCapture, onCancel, onSwitchToUpload }) {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
   
@@ -34,7 +35,6 @@ function Camera({ onCapture, onCancel }) {
         stream.getTracks().forEach(track => track.stop());
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   const capturePhoto = () => {
@@ -63,11 +63,54 @@ function Camera({ onCapture, onCancel }) {
         </button>
         <button onClick={onCancel} className="cancel-button">Cancel</button>
       </div>
+      <button onClick={onSwitchToUpload} className="switch-to-upload-button">
+        Upload a photo instead
+      </button>
     </div>
   );
 }
 
-// Gender Selection Component - defined outside App
+// File Upload Component
+function FileUpload({ onUpload, onCancel, onSwitchToCamera }) {
+  const fileInputRef = useRef(null);
+  
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onUpload(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  return (
+    <div className="file-upload-container">
+      <div className="upload-area" onClick={() => fileInputRef.current.click()}>
+        <div className="upload-icon">📁</div>
+        <p>Click to select a photo or drag and drop</p>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
+      </div>
+      <div className="upload-controls">
+        <button onClick={onCancel} className="cancel-button">
+          Cancel
+        </button>
+        <button onClick={onSwitchToCamera} className="switch-to-camera-button">
+          Take a photo instead
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Gender Selection Component
 function GenderSelection({ onGenderSelect, onContinue, selectedGender }) {
   return (
     <div className="gender-screen">
@@ -128,6 +171,289 @@ function GenderSelection({ onGenderSelect, onContinue, selectedGender }) {
   );
 }
 
+// Photo Option Selection Component
+function PhotoOptionSelector({ onSelectOption }) {
+  return (
+    <div className="photo-option-screen">
+      <h2 className="gradient-text">How would you like to proceed?</h2>
+      <p>We need a photo to analyze your skin tone.</p>
+      
+      <div className="photo-options">
+        <div 
+          className="photo-option-card"
+          onClick={() => onSelectOption('camera')}
+        >
+          <div className="option-icon">📸</div>
+          <h3>Take a Photo Now</h3>
+          <p>Use your camera to take a photo right now</p>
+        </div>
+        
+        <div 
+          className="photo-option-card"
+          onClick={() => onSelectOption('upload')}
+        >
+          <div className="option-icon">📁</div>
+          <h3>Upload a Photo</h3>
+          <p>Select a photo from your device</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Season Selection Component
+function SeasonSelection({ onSelect }) {
+  const seasons = [
+    { id: 'spring', name: 'Spring', icon: '🌸' },
+    { id: 'summer', name: 'Summer', icon: '☀️' },
+    { id: 'fall', name: 'Fall', icon: '🍂' },
+    { id: 'winter', name: 'Winter', icon: '❄️' },
+    { id: 'all', name: 'All Seasons', icon: '🔄' }
+  ];
+  
+  return (
+    <div className="season-selection-screen">
+      <h2 className="gradient-text">Which season are you shopping for?</h2>
+      <p>This helps us recommend appropriate fabrics and styles.</p>
+      
+      <div className="season-options">
+        {seasons.map(season => (
+          <div 
+            key={season.id}
+            className="season-card"
+            onClick={() => onSelect(season.id)}
+          >
+            <div className="season-icon">{season.icon}</div>
+            <h3>{season.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Occasion Selection Component
+function OccasionSelection({ onSelect }) {
+  const occasions = [
+    { id: 'casual', name: 'Casual', icon: '👕' },
+    { id: 'work', name: 'Work/Office', icon: '💼' },
+    { id: 'formal', name: 'Formal Event', icon: '✨' },
+    { id: 'wedding', name: 'Wedding', icon: '💍' },
+    { id: 'party', name: 'Party', icon: '🎉' },
+    { id: 'festive', name: 'Festival/Celebration', icon: '🪔' },
+    { id: 'vacation', name: 'Vacation', icon: '🏖️' },
+    { id: 'date', name: 'Date Night', icon: '❤️' }
+  ];
+  
+  return (
+    <div className="occasion-selection-screen">
+      <h2 className="gradient-text">What's the occasion?</h2>
+      <p>Help us recommend outfits that are perfect for your event.</p>
+      
+      <div className="occasion-options">
+        {occasions.map(occasion => (
+          <div 
+            key={occasion.id}
+            className="occasion-card"
+            onClick={() => onSelect(occasion.id)}
+          >
+            <div className="occasion-icon">{occasion.icon}</div>
+            <h3>{occasion.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Style Selection Component
+function StyleSelection({ onSelect }) {
+  const styles = [
+    { id: 'western', name: 'Western', icon: '👗' },
+    { id: 'traditional', name: 'Traditional', icon: '👘' },
+    { id: 'indo-western', name: 'Indo-Western', icon: '🎀' },
+    { id: 'formal', name: 'Formal', icon: '👔' },
+    { id: 'casual', name: 'Casual', icon: '👕' },
+    { id: 'bohemian', name: 'Bohemian', icon: '🌸' }
+  ];
+  
+  return (
+    <div className="style-selection-screen">
+      <h2 className="gradient-text">What style do you prefer?</h2>
+      <p>Let us know your preferred fashion style.</p>
+      
+      <div className="style-options">
+        {styles.map(style => (
+          <div 
+            key={style.id}
+            className="style-card"
+            onClick={() => onSelect(style.id)}
+          >
+            <div className="style-icon">{style.icon}</div>
+            <h3>{style.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Budget Input Component
+function BudgetInput({ onSubmit }) {
+  const [budget, setBudget] = useState("");
+  const [range, setRange] = useState("");
+  
+  const handleRangeSelect = (selectedRange) => {
+    setRange(selectedRange);
+    
+    // Set default budget based on range
+    switch(selectedRange) {
+      case 'low':
+        setBudget("1000");
+        break;
+      case 'medium':
+        setBudget("3000");
+        break;
+      case 'high':
+        setBudget("5000");
+        break;
+      case 'premium':
+        setBudget("10000");
+        break;
+      default:
+        setBudget("");
+    }
+  };
+  
+  return (
+    <div className="budget-input-screen">
+      <h2 className="gradient-text">What's your budget?</h2>
+      <p>This helps us recommend items within your price range.</p>
+      
+      <div className="budget-ranges">
+        <div 
+          className={`budget-range-card ${range === 'low' ? 'selected' : ''}`}
+          onClick={() => handleRangeSelect('low')}
+        >
+          <div className="budget-icon">💰</div>
+          <h3>Budget</h3>
+          <p>Around ₹1000</p>
+        </div>
+        
+        <div 
+          className={`budget-range-card ${range === 'medium' ? 'selected' : ''}`}
+          onClick={() => handleRangeSelect('medium')}
+        >
+          <div className="budget-icon">💰💰</div>
+          <h3>Medium</h3>
+          <p>Around ₹3000</p>
+        </div>
+        
+        <div 
+          className={`budget-range-card ${range === 'high' ? 'selected' : ''}`}
+          onClick={() => handleRangeSelect('high')}
+        >
+          <div className="budget-icon">💰💰💰</div>
+          <h3>High</h3>
+          <p>Around ₹5000</p>
+        </div>
+        
+        <div 
+          className={`budget-range-card ${range === 'premium' ? 'selected' : ''}`}
+          onClick={() => handleRangeSelect('premium')}
+        >
+          <div className="budget-icon">💎</div>
+          <h3>Premium</h3>
+          <p>₹10000+</p>
+        </div>
+      </div>
+      
+      <div className="custom-budget">
+        <label>Or specify exact amount (₹):</label>
+        <input 
+          type="number" 
+          value={budget} 
+          onChange={(e) => setBudget(e.target.value)}
+          placeholder="Enter amount"
+        />
+      </div>
+      
+      <div className="action-buttons">
+        <button 
+          className="primary-button"
+          onClick={() => onSubmit(budget, range)}
+          disabled={!budget && !range}
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Outfit Type Selection Component
+function OutfitTypeSelection({ onSelect }) {
+  return (
+    <div className="outfit-type-screen">
+      <h2 className="gradient-text">What are you looking for?</h2>
+      <p>Let us know what we can help you find today.</p>
+      
+      <div className="outfit-type-options">
+        <div 
+          className="outfit-type-card"
+          onClick={() => onSelect('full')}
+        >
+          <div className="outfit-type-icon">👔👖👞</div>
+          <h3>Complete Outfit</h3>
+          <p>Get recommendations for a full head-to-toe look</p>
+        </div>
+        
+        <div 
+          className="outfit-type-card"
+          onClick={() => onSelect('specific')}
+        >
+          <div className="outfit-type-icon">🛍️</div>
+          <h3>Specific Items</h3>
+          <p>Find recommendations for individual pieces</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Specific Item Selection Component
+function SpecificItemSelection({ onSelect }) {
+  const items = [
+    { id: 'tops', name: 'Tops', icon: '👕' },
+    { id: 'bottoms', name: 'Bottoms', icon: '👖' },
+    { id: 'dresses', name: 'Dresses', icon: '👗' },
+    { id: 'footwear', name: 'Footwear', icon: '👞' },
+    { id: 'accessories', name: 'Accessories', icon: '👜' },
+    { id: 'jewelry', name: 'Jewelry', icon: '💍' },
+    { id: 'outerwear', name: 'Outerwear', icon: '🧥' }
+  ];
+  
+  return (
+    <div className="specific-item-screen">
+      <h2 className="gradient-text">What specific item are you looking for?</h2>
+      <p>Select what you'd like us to recommend.</p>
+      
+      <div className="specific-item-options">
+        {items.map(item => (
+          <div 
+            key={item.id}
+            className="specific-item-card"
+            onClick={() => onSelect(item.id)}
+          >
+            <div className="specific-item-icon">{item.icon}</div>
+            <h3>{item.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // Main App Component
 function App() {
   const [recommender] = useState(new RecommendationEngine());
@@ -136,6 +462,13 @@ function App() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [gender, setGender] = useState(null);
   const [bodyType, setBodyType] = useState(null);
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [season, setSeason] = useState(null);
+  const [occasion, setOccasion] = useState(null);
+  const [style, setStyle] = useState(null);
+  const [budget, setBudget] = useState(null);
+  const [outfitType, setOutfitType] = useState(null);
+  const [specificItem, setSpecificItem] = useState(null);
 
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -148,52 +481,130 @@ function App() {
   };
   
   const handleGenderContinue = () => {
+    setStep('photoOption');
+  };
+  
+  const handlePhotoOptionSelect = (option) => {
+    if (option === 'camera') {
+      setStep('camera');
+    } else if (option === 'upload') {
+      setStep('upload');
+    }
+  };
+  
+  const handleSwitchToUpload = () => {
+    setStep('upload');
+  };
+  
+  const handleSwitchToCamera = () => {
     setStep('camera');
+  };
+  
+  const handleFileUpload = (imageData) => {
+    setCapturedImage(imageData);
+    setStep('analysis');
   };
   
   const handleBodyTypeSelect = (selectedBodyType) => {
     setBodyType(selectedBodyType);
     recommender.setBodyType(selectedBodyType);
+    setStep('confirmation');
+  };
+  
+  const handleCalculatorOpen = () => {
+    setShowCalculator(true);
+  };
+  
+  const handleCalculatorResult = (result) => {
+    setBodyType(result);
+    setShowCalculator(false);
+  };
+  
+  const handleVideoLink = () => {
+    // Use the same video for both genders
+    const videoUrl = 'https://www.youtube.com/watch?v=wV9a_ERkXlE&list=LL&index=2';
+    
+    // Ideally, you would embed this video in your app
+    // For now, we'll open it in a new tab
+    window.open(videoUrl, '_blank');
+  };
+  
+  const handleConfirmation = (confirmed) => {
+    if (confirmed) {
+      setStep('season');
+    } else {
+      // Let them change skin tone or body type
+      setStep('editInfo');
+    }
+  };
+  
+  const handleEditInfo = (editType) => {
+    if (editType === 'skinTone') {
+      setStep('photoOption');
+    } else if (editType === 'bodyType') {
+      setStep('bodyType');
+    }
+  };
+  
+  const handleSeasonSelect = (selectedSeason) => {
+    setSeason(selectedSeason);
+    recommender.setSeason(selectedSeason);
+    setStep('occasion');
+  };
+  
+  const handleOccasionSelect = (selectedOccasion) => {
+    setOccasion(selectedOccasion);
+    recommender.setEvent(selectedOccasion);
+    setStep('style');
+  };
+  
+  const handleStyleSelect = (selectedStyle) => {
+    setStyle(selectedStyle);
+    recommender.setStyle(selectedStyle);
+    setStep('budget');
+  };
+  
+  const handleBudgetSubmit = (amount, range) => {
+    setBudget({ amount, range });
+    recommender.setBudget(amount);
+    setStep('outfitType');
+  };
+  
+  const handleOutfitTypeSelect = (type) => {
+    setOutfitType(type);
+    if (type === 'full') {
+      setStep('results');
+    } else {
+      setStep('specificItem');
+    }
+  };
+  
+  const handleSpecificItemSelect = (item) => {
+    setSpecificItem(item);
     setStep('results');
   };
-
+  
   useEffect(() => {
-    // Animate chatbot button on load
+    // Always add the pulsing animation to the chatbot button
     const chatbotButton = document.querySelector('.chatbot-button');
     if (chatbotButton) {
-      // Add pulsing animation
       chatbotButton.classList.add('pulse-animation');
-      
-      // Create tooltip
-      let tooltip = document.createElement('div');
-      tooltip.className = 'chatbot-tooltip';
-      tooltip.innerHTML = 'Click me to start! 👋';
-      tooltip.style.position = 'absolute';
-      tooltip.style.bottom = '120px';
-      tooltip.style.right = '30px';
-      tooltip.style.background = 'white';
-      tooltip.style.color = '#1e1e3f';
-      tooltip.style.padding = '8px 16px';
-      tooltip.style.borderRadius = '16px';
-      tooltip.style.fontWeight = 'bold';
-      tooltip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-      tooltip.style.animation = 'bounce 2s infinite';
-      tooltip.style.zIndex = '999';
-      
-      document.body.appendChild(tooltip);
-      
-      // Cleanup on component unmount
-      return () => {
-        if (document.body.contains(tooltip)) {
-          document.body.removeChild(tooltip);
-        }
-        chatbotButton.classList.remove('pulse-animation');
-      };
     }
-  }, []);
+    
+    // Remove the tooltip if we're past the welcome step
+    if (step !== 'welcome' && document.querySelector('.chatbot-tooltip')) {
+      const tooltip = document.querySelector('.chatbot-tooltip');
+      if (tooltip && document.body.contains(tooltip)) {
+        document.body.removeChild(tooltip);
+      }
+    }
+  }, [step]);
 
   return (
     <div className="App">
+      {/* Render the welcome component as the main page content */}
+      <Welcome onStart={() => setIsOpen(true)} />
+      
       <button 
         className="chatbot-button"
         onClick={() => setIsOpen(!isOpen)}
@@ -214,37 +625,22 @@ function App() {
             <button onClick={() => setIsOpen(false)} className="close-button">×</button>
           </div>
           
-          {/* Add greeting message */}
+          {/* Welcome/greeting message */}
           {step === 'welcome' && (
-            <div className="chatbot-greeting" style={{
-              padding: '20px',
-              background: 'rgba(245, 158, 11, 0.1)',
-              borderRadius: '12px',
-              margin: '20px',
-              textAlign: 'center',
-              animation: 'fadeIn 0.5s'
-            }}>
-              <h2 style={{color: '#f59e0b', marginBottom: '12px'}}>Hello there! 👋</h2>
-              <p style={{marginBottom: '12px'}}>
+            <div className="chatbot-greeting">
+              <h2>Hello there!</h2>
+              <p>
                 I'm HueMate, your personal AI fashion assistant. I'm here to help you find the perfect outfit based on your skin tone and body shape.
               </p>
-              <p style={{marginBottom: '16px'}}>
+              <p>
                 I can analyze your skin tone, recommend complementary colors, suggest styles that flatter your body type, and much more!
               </p>
-              <p style={{fontWeight: 'bold'}}>
+              <p>
                 Let's get started by learning a bit about you. Please select your gender to begin.
               </p>
               <button 
                 onClick={() => setStep('gender')}
-                style={{
-                  padding: '10px 20px',
-                  background: '#f59e0b',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '20px',
-                  marginTop: '16px',
-                  cursor: 'pointer'
-                }}
+                className="greeting-button"
               >
                 Let's Begin!
               </button>
@@ -252,56 +648,16 @@ function App() {
           )}
 
           <div className="chatbot-content">
-            {step === 'features' && (
-              <div className="welcome-screen">
-                <h2 className="gradient-text">Welcome to HueMate</h2>
-                <p className="welcome-text">Your AI-powered fashion assistant that helps you find the perfect outfit based on your skin tone.</p>
-                
-                <div className="features-grid">
-                  <div className="feature-card">
-                    <div className="feature-icon">📸</div>
-                    <h3>Skin Tone Analysis</h3>
-                    <p>Take a photo to analyze your unique skin tone.</p>
-                  </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">👗</div>
-                    <h3>Style Recommendations</h3>
-                    <p>Get personalized clothing suggestions.</p>
-                  </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">🎨</div>
-                    <h3>Color Matching</h3>
-                    <p>Find colors that complement your skin.</p>
-                  </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">💼</div>
-                    <h3>Occasion-Based Styling</h3>
-                    <p>Get outfit ideas for any event.</p>
-                  </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">📏</div>
-                    <h3>Body Shape Analysis</h3>
-                    <p>Learn what styles flatter your body type.</p>
-                  </div>
-                  <div className="feature-card">
-                    <div className="feature-icon">💰</div>
-                    <h3>Budget-Friendly Options</h3>
-                    <p>Find stylish options within your budget.</p>
-                  </div>
-                </div>
-
-                <button className="primary-button" onClick={() => setStep('gender')}>
-                  Get Started
-                </button>
-              </div>
-            )}
-
             {step === 'gender' && (
               <GenderSelection 
                 onGenderSelect={handleGenderSelect}
                 onContinue={handleGenderContinue}
                 selectedGender={gender}
               />
+            )}
+            
+            {step === 'photoOption' && (
+              <PhotoOptionSelector onSelectOption={handlePhotoOptionSelect} />
             )}
 
             {step === 'camera' && (
@@ -311,7 +667,21 @@ function App() {
 
                 <Camera 
                   onCapture={handleCapture}
-                  onCancel={() => setStep('gender')}
+                  onCancel={() => setStep('photoOption')}
+                  onSwitchToUpload={handleSwitchToUpload}
+                />
+              </div>
+            )}
+            
+            {step === 'upload' && (
+              <div className="upload-screen">
+                <h2 className="gradient-text">Upload a Photo</h2>
+                <p>For the best skin tone analysis, choose a clear photo in good lighting without makeup.</p>
+                
+                <FileUpload 
+                  onUpload={handleFileUpload}
+                  onCancel={() => setStep('photoOption')}
+                  onSwitchToCamera={handleSwitchToCamera}
                 />
               </div>
             )}
@@ -321,11 +691,12 @@ function App() {
                 <h2 className="gradient-text">Skin Tone Analysis</h2>
                 <div className="results-container">
                   <div className="results-photo-container">
-                    {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
                     <img src={capturedImage} alt="Your photo" className="results-photo" />
                   </div>
                   <div className="skin-tone-result">
-                    <p className="compliment">Looking great!</p>
+                    <p className="compliment">
+                      {gender === 'female' ? 'Looking gorgeous!' : 'Looking handsome!'}
+                    </p>
                     <div className="tone-indicator">
                       <div className="color-circle" style={{ backgroundColor: '#D4A76A' }}>
                         <span className="hex-code">#D4A76A</span>
@@ -342,7 +713,7 @@ function App() {
                   <button className="primary-button" onClick={() => setStep('bodyType')}>
                     Continue
                   </button>
-                  <button className="secondary-button" onClick={() => setStep('camera')}>
+                  <button className="secondary-button" onClick={() => setStep('photoOption')}>
                     Retake Photo
                   </button>
                 </div>
@@ -353,7 +724,93 @@ function App() {
               <BodyTypeSelector 
                 gender={gender} 
                 onSelect={handleBodyTypeSelect}
+                onCalculatorOpen={handleCalculatorOpen}
+                onVideoLink={handleVideoLink}
               />
+            )}
+            
+            {showCalculator && (
+              <BodyShapeCalculator 
+                gender={gender}
+                onCalculate={handleCalculatorResult}
+                onClose={() => setShowCalculator(false)}
+              />
+            )}
+            
+            {step === 'confirmation' && (
+              <div className="confirmation-screen">
+                <h2 className="gradient-text">Let's Confirm Your Information</h2>
+                <p>Is this information correct?</p>
+                
+                <div className="info-summary">
+                  <div className="info-item">
+                    <h3>Skin Tone:</h3>
+                    <div className="skin-tone-chip" style={{ backgroundColor: '#D4A76A' }}>
+                      Warm Medium
+                    </div>
+                  </div>
+                  
+                  <div className="info-item">
+                    <h3>Body Type:</h3>
+                    <div className="body-type-chip">
+                      {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Not specified'}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="action-buttons">
+                  <button className="primary-button" onClick={() => handleConfirmation(true)}>
+                    Yes, Continue
+                  </button>
+                  <button className="secondary-button" onClick={() => handleConfirmation(false)}>
+                    No, I Need to Change Something
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {step === 'editInfo' && (
+              <div className="edit-info-screen">
+                <h2 className="gradient-text">What would you like to change?</h2>
+                
+                <div className="edit-options">
+                  <div className="edit-option-card" onClick={() => handleEditInfo('skinTone')}>
+                    <div className="edit-icon">🎨</div>
+                    <h3>Change Skin Tone</h3>
+                    <p>Take a new photo or upload a different one</p>
+                  </div>
+                  
+                  <div className="edit-option-card" onClick={() => handleEditInfo('bodyType')}>
+                    <div className="edit-icon">📏</div>
+                    <h3>Change Body Type</h3>
+                    <p>Select a different body shape</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {step === 'season' && (
+              <SeasonSelection onSelect={handleSeasonSelect} />
+            )}
+            
+            {step === 'occasion' && (
+              <OccasionSelection onSelect={handleOccasionSelect} />
+            )}
+            
+            {step === 'style' && (
+              <StyleSelection onSelect={handleStyleSelect} />
+            )}
+            
+            {step === 'budget' && (
+              <BudgetInput onSubmit={handleBudgetSubmit} />
+            )}
+            
+            {step === 'outfitType' && (
+              <OutfitTypeSelection onSelect={handleOutfitTypeSelect} />
+            )}
+            
+            {step === 'specificItem' && (
+              <SpecificItemSelection onSelect={handleSpecificItemSelect} />
             )}
 
             {step === 'results' && (
@@ -362,7 +819,6 @@ function App() {
                 
                 <div className="results-summary">
                   <div className="result-photo-container">
-                    {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
                     <img src={capturedImage} alt="Your photo" className="result-photo" />
                   </div>
                   
@@ -376,36 +832,28 @@ function App() {
                     
                     <div className="result-item">
                       <h3>Body Type</h3>
-                      <div>{bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}</div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Best Colors For You</h3>
-                      <div className="color-chips">
-                        <div className="color-chip" style={{ backgroundColor: '#50C878' }}></div>
-                        <div className="color-chip" style={{ backgroundColor: '#FF7F50' }}></div>
-                        <div className="color-chip" style={{ backgroundColor: '#008080' }}></div>
-                        <div className="color-chip" style={{ backgroundColor: '#FFD700' }}></div>
-                        <div className="color-chip" style={{ backgroundColor: '#800020' }}></div>
+                      <div className="body-type-result">
+                        {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="demo-next-steps">
-                  <p>Your full fashion recommendations would include:</p>
-                  <ul>
-                    <li>Personalized clothing items based on your skin tone and body shape</li>
-                    <li>Specific fabric recommendations for your skin</li>
-                    <li>Outfit combinations for different occasions</li>
-                    <li>Accessory suggestions to complete your look</li>
-                    <li>Shopping suggestions within your budget</li>
-                  </ul>
+                <div className="color-palette-container">
+                  <h3>Your Recommended Color Palette</h3>
+                  <div className="color-palette">
+                    <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
+                      <span className="color-name">Gold</span>
+                    </div>
+                  </div>
                 </div>
                 
-                <div className="action-buttons">
+                <div className="results-actions">
                   <button className="primary-button" onClick={() => setStep('welcome')}>
                     Start Over
+                  </button>
+                  <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
+                    Change Skin Tone
                   </button>
                 </div>
               </div>
