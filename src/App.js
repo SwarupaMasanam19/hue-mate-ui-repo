@@ -4,9 +4,16 @@ import RecommendationEngine from './utils/RecommendationEngine';
 import BodyTypeSelector from './components/steps/BodyTypeSelection';
 import BodyShapeCalculator from './components/BodyShapeCalculator';
 import Welcome from './components/steps/Welcome';
+import { 
+  Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
+  Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
+  Music, Landmark, Palmtree, ShoppingBag, Scissors, 
+  Feather, Wallet, CreditCard, Diamond, Layers, 
+  Footprints, Glasses, Palette, Ruler
+} from 'lucide-react';
 
-// Camera Component
-function Camera({ onCapture, onCancel, onSwitchToUpload }) {
+// CameraCapture Component
+function CameraCapture({ onCapture, onCancel, onSwitchToUpload }) {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
   
@@ -88,7 +95,9 @@ function FileUpload({ onUpload, onCancel, onSwitchToCamera }) {
   return (
     <div className="file-upload-container">
       <div className="upload-area" onClick={() => fileInputRef.current.click()}>
-        <div className="upload-icon">📁</div>
+        <div className="upload-icon">
+          <Camera size={48} color="#f59e0b" />
+        </div>
         <p>Click to select a photo or drag and drop</p>
         <input
           type="file"
@@ -183,7 +192,9 @@ function PhotoOptionSelector({ onSelectOption }) {
           className="photo-option-card"
           onClick={() => onSelectOption('camera')}
         >
-          <div className="option-icon">📸</div>
+          <div className="option-icon">
+            <Camera size={48} color="#f59e0b" />
+          </div>
           <h3>Take a Photo Now</h3>
           <p>Use your camera to take a photo right now</p>
         </div>
@@ -192,7 +203,9 @@ function PhotoOptionSelector({ onSelectOption }) {
           className="photo-option-card"
           onClick={() => onSelectOption('upload')}
         >
-          <div className="option-icon">📁</div>
+          <div className="option-icon">
+            <Camera size={48} color="#f59e0b" />
+          </div>
           <h3>Upload a Photo</h3>
           <p>Select a photo from your device</p>
         </div>
@@ -204,11 +217,11 @@ function PhotoOptionSelector({ onSelectOption }) {
 // Season Selection Component
 function SeasonSelection({ onSelect }) {
   const seasons = [
-    { id: 'spring', name: 'Spring', icon: '🌸' },
-    { id: 'summer', name: 'Summer', icon: '☀️' },
-    { id: 'fall', name: 'Fall', icon: '🍂' },
-    { id: 'winter', name: 'Winter', icon: '❄️' },
-    { id: 'all', name: 'All Seasons', icon: '🔄' }
+    { id: 'spring', name: 'Spring', icon: <Flower size={24} /> },
+    { id: 'summer', name: 'Summer', icon: <Sun size={24} /> },
+    { id: 'fall', name: 'Fall', icon: <Leaf size={24} /> },
+    { id: 'winter', name: 'Winter', icon: <Snowflake size={24} /> },
+    { id: 'all', name: 'All Seasons', icon: <RefreshCw size={24} /> }
   ];
   
   return (
@@ -235,14 +248,14 @@ function SeasonSelection({ onSelect }) {
 // Occasion Selection Component
 function OccasionSelection({ onSelect }) {
   const occasions = [
-    { id: 'casual', name: 'Casual', icon: '👕' },
-    { id: 'work', name: 'Work/Office', icon: '💼' },
-    { id: 'formal', name: 'Formal Event', icon: '✨' },
-    { id: 'wedding', name: 'Wedding', icon: '💍' },
-    { id: 'party', name: 'Party', icon: '🎉' },
-    { id: 'festive', name: 'Festival/Celebration', icon: '🪔' },
-    { id: 'vacation', name: 'Vacation', icon: '🏖️' },
-    { id: 'date', name: 'Date Night', icon: '❤️' }
+    { id: 'casual', name: 'Casual', icon: <Shirt size={24} /> },
+    { id: 'work', name: 'Work/Office', icon: <Briefcase size={24} /> },
+    { id: 'formal', name: 'Formal Event', icon: <Sparkles size={24} /> },
+    { id: 'wedding', name: 'Wedding', icon: <Heart size={24} /> },
+    { id: 'party', name: 'Party', icon: <Music size={24} /> },
+    { id: 'festive', name: 'Festival/Celebration', icon: <Landmark size={24} /> },
+    { id: 'vacation', name: 'Vacation', icon: <Palmtree size={24} /> },
+    { id: 'date', name: 'Date Night', icon: <Heart size={24} /> }
   ];
   
   return (
@@ -269,12 +282,12 @@ function OccasionSelection({ onSelect }) {
 // Style Selection Component
 function StyleSelection({ onSelect }) {
   const styles = [
-    { id: 'western', name: 'Western', icon: '👗' },
-    { id: 'traditional', name: 'Traditional', icon: '👘' },
-    { id: 'indo-western', name: 'Indo-Western', icon: '🎀' },
-    { id: 'formal', name: 'Formal', icon: '👔' },
-    { id: 'casual', name: 'Casual', icon: '👕' },
-    { id: 'bohemian', name: 'Bohemian', icon: '🌸' }
+    { id: 'western', name: 'Western', icon: <ShoppingBag size={24} /> },
+    { id: 'traditional', name: 'Traditional', icon: <Shirt size={24} /> },
+    { id: 'indo-western', name: 'Indo-Western', icon: <Scissors size={24} /> },
+    { id: 'formal', name: 'Formal', icon: <Briefcase size={24} /> },
+    { id: 'casual', name: 'Casual', icon: <Shirt size={24} /> },
+    { id: 'bohemian', name: 'Bohemian', icon: <Feather size={24} /> }
   ];
   
   return (
@@ -293,6 +306,45 @@ function StyleSelection({ onSelect }) {
             <h3>{style.name}</h3>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+// Color Preference Component
+function ColorPreferenceSelection({ onSelect }) {
+  return (
+    <div className="color-preference-screen">
+      <h2 className="gradient-text">Choose Your Color Palette</h2>
+      <p>Select colors that complement your skin tone.</p>
+      
+      <div className="color-options">
+        <div 
+          className="color-option-card"
+          onClick={() => onSelect('warm')}
+          style={{background: 'linear-gradient(to right, #ff9966, #ff5e62)'}}
+        >
+          <h3>Warm Colors</h3>
+          <p>Reds, oranges, yellows, amber, gold</p>
+        </div>
+        
+        <div 
+          className="color-option-card"
+          onClick={() => onSelect('cool')}
+          style={{background: 'linear-gradient(to right, #4facfe, #00f2fe)'}}
+        >
+          <h3>Cool Colors</h3>
+          <p>Blues, purples, greens, silver, cool pinks</p>
+        </div>
+        
+        <div 
+          className="color-option-card"
+          onClick={() => onSelect('neutral')}
+          style={{background: 'linear-gradient(to right, #E0E0E0, #BDBDBD)'}}
+        >
+          <h3>Neutral Colors</h3>
+          <p>Black, white, gray, beige, navy</p>
+        </div>
       </div>
     </div>
   );
@@ -335,7 +387,7 @@ function BudgetInput({ onSubmit }) {
           className={`budget-range-card ${range === 'low' ? 'selected' : ''}`}
           onClick={() => handleRangeSelect('low')}
         >
-          <div className="budget-icon">💰</div>
+          <div className="budget-icon"><Wallet size={24} /></div>
           <h3>Budget</h3>
           <p>Around ₹1000</p>
         </div>
@@ -344,7 +396,7 @@ function BudgetInput({ onSubmit }) {
           className={`budget-range-card ${range === 'medium' ? 'selected' : ''}`}
           onClick={() => handleRangeSelect('medium')}
         >
-          <div className="budget-icon">💰💰</div>
+          <div className="budget-icon"><Wallet size={24} /></div>
           <h3>Medium</h3>
           <p>Around ₹3000</p>
         </div>
@@ -353,7 +405,7 @@ function BudgetInput({ onSubmit }) {
           className={`budget-range-card ${range === 'high' ? 'selected' : ''}`}
           onClick={() => handleRangeSelect('high')}
         >
-          <div className="budget-icon">💰💰💰</div>
+          <div className="budget-icon"><CreditCard size={24} /></div>
           <h3>High</h3>
           <p>Around ₹5000</p>
         </div>
@@ -362,7 +414,7 @@ function BudgetInput({ onSubmit }) {
           className={`budget-range-card ${range === 'premium' ? 'selected' : ''}`}
           onClick={() => handleRangeSelect('premium')}
         >
-          <div className="budget-icon">💎</div>
+          <div className="budget-icon"><Diamond size={24} /></div>
           <h3>Premium</h3>
           <p>₹10000+</p>
         </div>
@@ -403,7 +455,7 @@ function OutfitTypeSelection({ onSelect }) {
           className="outfit-type-card"
           onClick={() => onSelect('full')}
         >
-          <div className="outfit-type-icon">👔👖👞</div>
+          <div className="outfit-type-icon"><Layers size={24} /></div>
           <h3>Complete Outfit</h3>
           <p>Get recommendations for a full head-to-toe look</p>
         </div>
@@ -412,7 +464,7 @@ function OutfitTypeSelection({ onSelect }) {
           className="outfit-type-card"
           onClick={() => onSelect('specific')}
         >
-          <div className="outfit-type-icon">🛍️</div>
+          <div className="outfit-type-icon"><ShoppingBag size={24} /></div>
           <h3>Specific Items</h3>
           <p>Find recommendations for individual pieces</p>
         </div>
@@ -424,13 +476,13 @@ function OutfitTypeSelection({ onSelect }) {
 // Specific Item Selection Component
 function SpecificItemSelection({ onSelect }) {
   const items = [
-    { id: 'tops', name: 'Tops', icon: '👕' },
-    { id: 'bottoms', name: 'Bottoms', icon: '👖' },
-    { id: 'dresses', name: 'Dresses', icon: '👗' },
-    { id: 'footwear', name: 'Footwear', icon: '👞' },
-    { id: 'accessories', name: 'Accessories', icon: '👜' },
-    { id: 'jewelry', name: 'Jewelry', icon: '💍' },
-    { id: 'outerwear', name: 'Outerwear', icon: '🧥' }
+    { id: 'tops', name: 'Tops', icon: <Shirt size={24} /> },
+    { id: 'bottoms', name: 'Bottoms', icon: <Landmark size={24} /> },
+    { id: 'dresses', name: 'Dresses', icon: <Shirt size={24} /> },
+    { id: 'footwear', name: 'Footwear', icon: <Footprints size={24} /> },
+    { id: 'accessories', name: 'Accessories', icon: <Glasses size={24} /> },
+    { id: 'jewelry', name: 'Jewelry', icon: <Diamond size={24} /> },
+    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={24} /> }
   ];
   
   return (
@@ -454,11 +506,138 @@ function SpecificItemSelection({ onSelect }) {
   );
 }
 
+// Item Recommendation Component
+function ItemRecommendations({ items, type, onSelect }) {
+  return (
+    <div className="recommendations-screen">
+      <h2 className="gradient-text">Recommended {type}</h2>
+      <p>Based on your preferences, we think these would look great on you!</p>
+      
+      <div className="recommendation-grid">
+        {items.map(item => (
+          <div 
+            key={item.id}
+            className="recommendation-card"
+            onClick={() => onSelect(item)}
+          >
+            <div className="recommendation-image">
+              <img 
+                src={item.image || "/api/placeholder/300/400"} 
+                alt={item.name}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://via.placeholder.com/300x400?text=Fashion+Item";
+                }}
+              />
+            </div>
+            <div className="recommendation-details">
+              <h3>{item.name}</h3>
+              <p className="recommendation-price">₹{item.price}</p>
+              <div className="recommendation-tags">
+                <span className="recommendation-tag">{item.style}</span>
+                <span className="recommendation-tag">{item.color}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div className="recommendation-actions">
+        <button className="primary-button">Show More Options</button>
+      </div>
+    </div>
+  );
+}
+
+// Final Outfit Component
+function FinalOutfit({ outfit, skinTone, bodyType, onStartOver }) {
+  return (
+    <div className="final-outfit-screen">
+      <h2 className="gradient-text">Your Perfect Outfit</h2>
+      
+      <div className="outfit-summary">
+        <div className="outfit-details">
+          <h3>Style Profile</h3>
+          <div className="profile-item">
+            <span className="profile-label">Skin Tone:</span>
+            <span className="profile-value">{skinTone}</span>
+          </div>
+          <div className="profile-item">
+            <span className="profile-label">Body Type:</span>
+            <span className="profile-value">{bodyType}</span>
+          </div>
+          <div className="profile-item">
+            <span className="profile-label">Total Price:</span>
+            <span className="profile-value">₹{outfit.totalPrice}</span>
+          </div>
+        </div>
+        
+        <div className="outfit-items">
+          {outfit.items.map(item => (
+            <div key={item.id} className="outfit-item">
+              <div className="outfit-item-image">
+                <img 
+                  src={item.image || "/api/placeholder/150/200"} 
+                  alt={item.name}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://via.placeholder.com/150x200?text=Item";
+                  }}
+                />
+              </div>
+              <div className="outfit-item-details">
+                <h4>{item.name}</h4>
+                <p>₹{item.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="shopping-links">
+        <h3>Shop this look at:</h3>
+        <div className="shop-buttons">
+          <a 
+            href="https://amazon.in" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="shop-button"
+          >
+            Amazon
+          </a>
+          <a 
+            href="https://flipkart.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="shop-button"
+          >
+            Flipkart
+          </a>
+          <a 
+            href="https://meesho.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="shop-button"
+          >
+            Meesho
+          </a>
+        </div>
+      </div>
+      
+      <div className="final-actions">
+        <button className="primary-button" onClick={onStartOver}>
+          Start Over
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Main App Component
 function App() {
   const [recommender] = useState(new RecommendationEngine());
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState('welcome'); 
+  const [step, setStep] = useState('welcome');
   const [capturedImage, setCapturedImage] = useState(null);
   const [gender, setGender] = useState(null);
   const [bodyType, setBodyType] = useState(null);
@@ -466,9 +645,12 @@ function App() {
   const [season, setSeason] = useState(null);
   const [occasion, setOccasion] = useState(null);
   const [style, setStyle] = useState(null);
+  const [colorPreference, setColorPreference] = useState(null);
   const [budget, setBudget] = useState(null);
   const [outfitType, setOutfitType] = useState(null);
   const [specificItem, setSpecificItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState({});
+  const [showCalculatorReminder, setShowCalculatorReminder] = useState(false);
 
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -508,7 +690,11 @@ function App() {
   const handleBodyTypeSelect = (selectedBodyType) => {
     setBodyType(selectedBodyType);
     recommender.setBodyType(selectedBodyType);
-    setStep('confirmation');
+    setShowCalculatorReminder(true);
+    setTimeout(() => {
+      setShowCalculatorReminder(false);
+      setStep('confirmation');
+    }, 3000);
   };
   
   const handleCalculatorOpen = () => {
@@ -518,6 +704,12 @@ function App() {
   const handleCalculatorResult = (result) => {
     setBodyType(result);
     setShowCalculator(false);
+    // Show a message that body type has been calculated
+    setShowCalculatorReminder(true);
+    setTimeout(() => {
+      setShowCalculatorReminder(false);
+      setStep('confirmation');
+    }, 3000);
   };
   
   const handleVideoLink = () => {
@@ -561,6 +753,12 @@ function App() {
   const handleStyleSelect = (selectedStyle) => {
     setStyle(selectedStyle);
     recommender.setStyle(selectedStyle);
+    setStep('colorPreference');
+  };
+  
+  const handleColorPreferenceSelect = (selected) => {
+    setColorPreference(selected);
+    recommender.setColorPalette(selected);
     setStep('budget');
   };
   
@@ -573,6 +771,9 @@ function App() {
   const handleOutfitTypeSelect = (type) => {
     setOutfitType(type);
     if (type === 'full') {
+      // Get recommendations for a full outfit
+      const recommendations = recommender.getRecommendedItems('outfit');
+      setSelectedItems({ fullOutfit: recommendations[0] });
       setStep('results');
     } else {
       setStep('specificItem');
@@ -581,7 +782,53 @@ function App() {
   
   const handleSpecificItemSelect = (item) => {
     setSpecificItem(item);
+    // Get recommendations for this specific item type
+    const recommendations = recommender.getRecommendedItems(item);
+    setSelectedItems({ specificType: item, items: recommendations });
+    setStep('itemRecommendations');
+  };
+  
+  const handleItemSelect = (item) => {
+    setSelectedItems(prev => ({
+      ...prev,
+      [specificItem]: item
+    }));
+    
+    // Ask if they want to select another item
+    if (specificItem === 'tops') {
+      // Recommend bottoms to go with the top
+      const bottomRecommendations = recommender.getCompatibleItems('bottom', item);
+      setSelectedItems(prev => ({
+        ...prev,
+        bottomRecommendations
+      }));
+      setStep('bottomRecommendations');
+    } else {
+      setStep('results');
+    }
+  };
+  
+  const handleBottomSelect = (item) => {
+    setSelectedItems(prev => ({
+      ...prev,
+      bottoms: item
+    }));
     setStep('results');
+  };
+  
+  const handleStartOver = () => {
+    setStep('welcome');
+    setCapturedImage(null);
+    setGender(null);
+    setBodyType(null);
+    setSeason(null);
+    setOccasion(null);
+    setStyle(null);
+    setColorPreference(null);
+    setBudget(null);
+    setOutfitType(null);
+    setSpecificItem(null);
+    setSelectedItems({});
   };
   
   useEffect(() => {
@@ -599,6 +846,16 @@ function App() {
       }
     }
   }, [step]);
+
+  const getGreeting = () => {
+    if (gender === 'female') {
+      return "Hello Beautiful!";
+    } else if (gender === 'male') {
+      return "Hello Handsome!";
+    } else {
+      return "Hello there!";
+    }
+  };
 
   return (
     <div className="App">
@@ -622,13 +879,13 @@ function App() {
               <img src="/huemate-logo.png" alt="HueMate" className="header-logo-image" onError={(e) => { e.target.src = "/chatbot-logo.png"; }} />
             </div>
             <h1>HueMate - Your Perfect Shade</h1>
-            <button onClick={() => setIsOpen(false)} className="close-button">×</button>
+            <button onClick={() => setIsOpen(false)} className="close-button"><X size={24} /></button>
           </div>
           
           {/* Welcome/greeting message */}
           {step === 'welcome' && (
             <div className="chatbot-greeting">
-              <h2>Hello there!</h2>
+              <h2>{getGreeting()}</h2>
               <p>
                 I'm HueMate, your personal AI fashion assistant. I'm here to help you find the perfect outfit based on your skin tone and body shape.
               </p>
@@ -642,7 +899,7 @@ function App() {
                 onClick={() => setStep('gender')}
                 className="greeting-button"
               >
-                Let's Begin!
+                Let's Begin! <ArrowRight size={16} />
               </button>
             </div>
           )}
@@ -665,7 +922,7 @@ function App() {
                 <h2 className="gradient-text">Take a Photo</h2>
                 <p>For the best skin tone analysis, take a clear photo in good lighting without makeup.</p>
 
-                <Camera 
+                <CameraCapture 
                   onCapture={handleCapture}
                   onCancel={() => setStep('photoOption')}
                   onSwitchToUpload={handleSwitchToUpload}
@@ -711,10 +968,10 @@ function App() {
 
                 <div className="action-buttons">
                   <button className="primary-button" onClick={() => setStep('bodyType')}>
-                    Continue
+                    Continue <ArrowRight size={16} />
                   </button>
                   <button className="secondary-button" onClick={() => setStep('photoOption')}>
-                    Retake Photo
+                    Retake Photo <Camera size={16} />
                   </button>
                 </div>
               </div>
@@ -735,6 +992,16 @@ function App() {
                 onCalculate={handleCalculatorResult}
                 onClose={() => setShowCalculator(false)}
               />
+            )}
+            
+            {showCalculatorReminder && (
+              <div className="calculator-reminder">
+                <AlertCircle size={16} />
+                <p>
+                  Still having issues determining your body type? 
+                  Try our calculator to get more accurate results!
+                </p>
+              </div>
             )}
             
             {step === 'confirmation' && (
@@ -760,10 +1027,10 @@ function App() {
                 
                 <div className="action-buttons">
                   <button className="primary-button" onClick={() => handleConfirmation(true)}>
-                    Yes, Continue
+                    Yes, Continue <ArrowRight size={16} />
                   </button>
                   <button className="secondary-button" onClick={() => handleConfirmation(false)}>
-                    No, I Need to Change Something
+                    No, I Need to Change Something <X size={16} />
                   </button>
                 </div>
               </div>
@@ -775,13 +1042,13 @@ function App() {
                 
                 <div className="edit-options">
                   <div className="edit-option-card" onClick={() => handleEditInfo('skinTone')}>
-                    <div className="edit-icon">🎨</div>
+                    <div className="edit-icon"><Palette size={24} /></div>
                     <h3>Change Skin Tone</h3>
                     <p>Take a new photo or upload a different one</p>
                   </div>
                   
                   <div className="edit-option-card" onClick={() => handleEditInfo('bodyType')}>
-                    <div className="edit-icon">📏</div>
+                    <div className="edit-icon"><Ruler size={24} /></div>
                     <h3>Change Body Type</h3>
                     <p>Select a different body shape</p>
                   </div>
@@ -801,6 +1068,10 @@ function App() {
               <StyleSelection onSelect={handleStyleSelect} />
             )}
             
+            {step === 'colorPreference' && (
+              <ColorPreferenceSelection onSelect={handleColorPreferenceSelect} />
+            )}
+            
             {step === 'budget' && (
               <BudgetInput onSubmit={handleBudgetSubmit} />
             )}
@@ -811,6 +1082,22 @@ function App() {
             
             {step === 'specificItem' && (
               <SpecificItemSelection onSelect={handleSpecificItemSelect} />
+            )}
+            
+            {step === 'itemRecommendations' && selectedItems.items && (
+              <ItemRecommendations 
+                items={selectedItems.items}
+                type={specificItem}
+                onSelect={handleItemSelect}
+              />
+            )}
+            
+            {step === 'bottomRecommendations' && selectedItems.bottomRecommendations && (
+              <ItemRecommendations 
+                items={selectedItems.bottomRecommendations}
+                type="bottoms"
+                onSelect={handleBottomSelect}
+              />
             )}
 
             {step === 'results' && (
@@ -836,6 +1123,20 @@ function App() {
                         {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}
                       </div>
                     </div>
+                    
+                    <div className="result-item">
+                      <h3>Occasion</h3>
+                      <div className="occasion-result">
+                        {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Casual'}
+                      </div>
+                    </div>
+                    
+                    <div className="result-item">
+                      <h3>Budget</h3>
+                      <div className="budget-result">
+                        ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -845,15 +1146,88 @@ function App() {
                     <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
                       <span className="color-name">Gold</span>
                     </div>
+                    <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
+                      <span className="color-name">Brown</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#228B22'}}>
+                      <span className="color-name">Forest Green</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
+                      <span className="color-name">Indian Red</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
+                      <span className="color-name">Amber</span>
+                    </div>
                   </div>
+                </div>
+                
+                {/* Display selected items or outfit */}
+                <div className="outfit-container">
+                  <h3>Selected Items</h3>
+                  
+                  {outfitType === 'full' ? (
+                    <div className="full-outfit">
+                      <img 
+                        src="/api/placeholder/500/600"
+                        alt="Full outfit"
+                        className="outfit-image"
+                      />
+                      <div className="outfit-details">
+                        <h4>Complete Outfit</h4>
+                        <p>Price: ₹5999</p>
+                        <div className="shop-links">
+                          <a href="https://amazon.in" target="_blank" rel="noopener noreferrer">Amazon</a>
+                          <a href="https://flipkart.com" target="_blank" rel="noopener noreferrer">Flipkart</a>
+                          <a href="https://meesho.com" target="_blank" rel="noopener noreferrer">Meesho</a>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="specific-items">
+                      {selectedItems.tops && (
+                        <div className="selected-item">
+                          <img 
+                            src={selectedItems.tops.image || "/api/placeholder/200/250"}
+                            alt={selectedItems.tops.name}
+                            className="item-image"
+                          />
+                          <div className="item-details">
+                            <h4>Top: {selectedItems.tops.name}</h4>
+                            <p>Price: ₹{selectedItems.tops.price}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {selectedItems.bottoms && (
+                        <div className="selected-item">
+                          <img 
+                            src={selectedItems.bottoms.image || "/api/placeholder/200/250"}
+                            alt={selectedItems.bottoms.name}
+                            className="item-image"
+                          />
+                          <div className="item-details">
+                            <h4>Bottom: {selectedItems.bottoms.name}</h4>
+                            <p>Price: ₹{selectedItems.bottoms.price}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="virtual-try-on">
+                  <h3>Want to see how it looks?</h3>
+                  <button className="primary-button">
+                    Virtual Try-On <Camera size={16} />
+                  </button>
                 </div>
                 
                 <div className="results-actions">
                   <button className="primary-button" onClick={() => setStep('welcome')}>
-                    Start Over
+                    Start Over <RefreshCw size={16} />
                   </button>
                   <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
-                    Change Skin Tone
+                    Change Skin Tone <Palette size={16} />
                   </button>
                 </div>
               </div>
