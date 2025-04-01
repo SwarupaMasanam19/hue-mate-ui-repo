@@ -1,9 +1,80 @@
-import React from 'react';
-import ChatbotContent from './ChatbotContent';
+import React, { useState } from 'react';
 import { useChatbot } from '../context/ChatbotContext';
 
+// Import Step Components
+import Welcome from './steps/Welcome';
+import UploadPhoto from './steps/UploadPhoto';
+import SkinToneAnalysis from './steps/SkinToneAnalysis';
+import GenderSelection from './steps/GenderSelection';
+import BodyTypeSelection from './steps/BodyTypeSelection';
+import OccasionSelection from './steps/OccasionSelection';
+import StyleSelection from './steps/StyleSelection';
+import SeasonSelection from './steps/SeasonSelection';
+import ColorPreference from './steps/ColorPreference';
+import BudgetInput from './steps/BudgetInput';
+import ItemSelection from './steps/ItemSelection';
+import FinalOutfit from './steps/FinalOutfit';
+
+// Import Modal Components
+import YouTubeVideoPlayer from './YouTubeVideoPlayer';
+import BodyShapeCalculator from './BodyShapeCalculator';
+
 const ChatbotContainer = ({ isOpen }) => {
-  const { toggleChatbot } = useChatbot();
+  const { toggleChatbot, currentStep, formData } = useChatbot();
+  const [showVideo, setShowVideo] = useState(false);
+  const [showCalculator, setShowCalculator] = useState(false);
+  
+  // Video player controllers
+  const handleOpenVideo = () => {
+    // Instead of setting state, open in a new tab directly
+    window.open('https://www.youtube.com/watch?v=wV9a_ERkXlE', '_blank');
+  };
+  
+  const handleCloseVideo = () => {
+    setShowVideo(false);
+  };
+  
+  // Calculator controllers
+  const handleOpenCalculator = () => {
+    setShowCalculator(true);
+  };
+  
+  const handleCloseCalculator = () => {
+    setShowCalculator(false);
+  };
+  
+  const handleCalculatorResult = (result) => {
+    // Use ChatbotContext to update the body type
+    // Then close the calculator
+    setShowCalculator(false);
+  };
+
+  // Component mapping based on current step
+  const stepComponents = {
+    welcome: Welcome,
+    uploadPhoto: UploadPhoto,
+    skinToneAnalysis: SkinToneAnalysis,
+    gender: GenderSelection,
+    bodyType: () => (
+      <BodyTypeSelection 
+        onVideoOpen={handleOpenVideo} 
+        onCalculatorOpen={handleOpenCalculator}
+      />
+    ),
+    occasion: OccasionSelection,
+    style: StyleSelection,
+    season: SeasonSelection,
+    colorPreference: ColorPreference,
+    budget: BudgetInput,
+    topSelection: () => <ItemSelection itemType="tops" />,
+    bottomSelection: () => <ItemSelection itemType="bottoms" />,
+    jewelrySelection: () => <ItemSelection itemType="jewelry" />,
+    footwearSelection: () => <ItemSelection itemType="footwear" />,
+    finalOutfit: FinalOutfit
+  };
+
+  // Render current step component
+  const CurrentStepComponent = stepComponents[currentStep] || Welcome;
 
   return (
     <div className={`chatbot-container ${isOpen ? 'open' : ''}`}>
@@ -34,9 +105,29 @@ const ChatbotContainer = ({ isOpen }) => {
               </svg>
             </button>
           </div>
+          
           <div className="chatbot-content">
-            <ChatbotContent />
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <CurrentStepComponent formData={formData} />
+            </div>
           </div>
+          
+          {/* Modals - these will appear as "new pages" */}
+          {showVideo && (
+            <YouTubeVideoPlayer 
+              videoId="wV9a_ERkXlE" 
+              onClose={handleCloseVideo}
+              onOpenCalculator={handleOpenCalculator}
+            />
+          )}
+          
+          {showCalculator && (
+            <BodyShapeCalculator 
+              gender={formData.gender || 'female'}
+              onClose={handleCloseCalculator}
+              onCalculate={handleCalculatorResult}
+            />
+          )}
         </>
       )}
     </div>

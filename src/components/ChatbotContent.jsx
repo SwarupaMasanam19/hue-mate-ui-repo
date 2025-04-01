@@ -3,7 +3,7 @@ import { useChatbot } from '../context/ChatbotContext';
 
 // Import Step Components
 import Welcome from './steps/Welcome';
-import UploadPhoto from './steps/UploadPhoto';
+import UploadPhoto from './steps/UploadPhoto'; // This is now camera-only
 import SkinToneAnalysis from './steps/SkinToneAnalysis';
 import GenderSelection from './steps/GenderSelection';
 import BodyTypeSelection from './steps/BodyTypeSelection';
@@ -18,10 +18,10 @@ import FinalOutfit from './steps/FinalOutfit';
 const ChatbotContent = () => {
   const { currentStep, formData } = useChatbot();
 
-  // Component mapping based on current step
+  // Component mapping based on current step - no file upload option
   const stepComponents = {
     welcome: Welcome,
-    uploadPhoto: UploadPhoto,
+    uploadPhoto: UploadPhoto, // This is now camera-only
     skinToneAnalysis: SkinToneAnalysis,
     gender: GenderSelection,
     bodyType: BodyTypeSelection,

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { X, Calculator, ArrowRight, CheckCircle } from 'lucide-react';
 
-const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
+const BodyShapeCalculator = ({ gender = 'female', onClose, onCalculate }) => {
   const [measurements, setMeasurements] = useState({
     shoulders: '',
     bust: '',
@@ -19,6 +18,11 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
       ...prev,
       [name]: value
     }));
+  };
+  
+  const handleOpenVideo = () => {
+    // Open the YouTube video in a new tab
+    window.open('https://www.youtube.com/watch?v=wV9a_ERkXlE', '_blank');
   };
   
   const calculateBodyType = () => {
@@ -44,22 +48,21 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
         const waistBustRatio = waistVal / bustVal;
         const waistHipRatio = waistVal / hipsVal;
         
-        // More accurate calculation
         if (bustHipDiff <= 5 && waistBustRatio < 0.75) {
-          result = 'hourglass-women';
-        } else if (hipsVal > bustVal + 5 && waistHipRatio < 0.75) {
-          result = 'pear-women';
-        } else if (bustVal > hipsVal + 5 && waistBustRatio < 0.75) {
-          result = 'inverted-triangle-women';
+          result = 'hourglass';
+        } else if (hipsVal > bustVal + 5) {
+          result = 'pear';
+        } else if (bustVal > hipsVal + 5) {
+          result = 'inverted-triangle';
         } else if (waistBustRatio >= 0.8 && waistHipRatio >= 0.8) {
-          result = 'rectangle-women';
+          result = 'rectangle';
         } else if (waistVal > bustVal && waistVal > hipsVal) {
-          result = 'apple-women';
+          result = 'apple';
         } else {
-          result = 'hourglass-women'; // Default
+          result = 'hourglass'; // Default
         }
       } else {
-        // For men - more accurate calculation
+        // For men
         const { shoulders, chest, waist } = measurements;
         const shouldersVal = parseFloat(shoulders);
         const chestVal = parseFloat(chest);
@@ -72,81 +75,77 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
         }
         
         const shoulderWaistRatio = shouldersVal / waistVal;
-        const chestWaistRatio = chestVal / waistVal;
         
-        if (shoulderWaistRatio > 1.2 && chestWaistRatio > 1.1) {
-          result = 'inverted-triangle-men';
+        if (shoulderWaistRatio > 1.2) {
+          result = 'inverted-triangle';
         } else if (shoulderWaistRatio < 0.9) {
-          result = 'triangle-men';
-        } else if (shoulderWaistRatio >= 0.9 && shoulderWaistRatio <= 1.1 && chestWaistRatio >= 0.9 && chestWaistRatio <= 1.1) {
-          result = 'rectangle-men';
+          result = 'triangle';
+        } else if (shoulderWaistRatio >= 0.9 && shoulderWaistRatio <= 1.1) {
+          result = 'rectangle';
         } else if (waistVal > shouldersVal && waistVal > chestVal) {
-          result = 'oval-men';
+          result = 'oval';
         } else {
-          result = 'trapezoid-men';
+          result = 'trapezoid'; // Default
         }
       }
       
       setLoading(false);
       setResult(result);
-    }, 1500);
+    }, 2000);
   };
   
-  const getBodyTypeDescription = (type) => {
-    const descriptions = {
-      'hourglass-women': "Your bust and hips are about the same width, with a well-defined waist. Clothes that accentuate your waist will look fantastic on you.",
-      'pear-women': "Your hips are wider than your shoulders, creating a beautiful feminine silhouette. Tops that add volume to your shoulders can help balance your proportions.",
-      'inverted-triangle-women': "Your shoulders are broader than your hips. Clothes that add volume to your lower half will create a balanced silhouette.",
-      'rectangle-women': "Your shoulders, waist, and hips are about the same width. Creating definition at the waist with your clothing will add curves.",
-      'apple-women': "You carry weight around your midsection, with slimmer legs and often a great bust. Empire waistlines and V-necks are flattering choices.",
-      'inverted-triangle-men': "Your shoulders and chest are broader than your waist. This athletic build is flattered by straight-leg pants and fitted shirts.",
-      'triangle-men': "Your lower body is wider than your upper body. Structured jackets and detailed tops help balance your proportions.",
-      'rectangle-men': "Your shoulders, chest, and waist are similar in width. Layering and texture can add dimension to this balanced frame.",
-      'oval-men': "You carry weight around your midsection. Vertical patterns and straight-cut shirts are flattering choices.",
-      'trapezoid-men': "Your shoulders are slightly wider than your waist, with a gradual taper. This balanced build works well with most styles."
-    };
-    
-    return descriptions[type] || "Based on your measurements, we've determined your body shape.";
+  const handleApplyResult = () => {
+    if (result && onCalculate) {
+      onCalculate(result);
+    }
   };
-
-  const getBodyTypeName = (type) => {
-    return type.split('-')[0].charAt(0).toUpperCase() + type.split('-')[0].slice(1);
-  };
-
-  const getBodyTypeIcon = (type) => {
-    if (type.includes('hourglass')) return '⌛';
-    if (type.includes('pear')) return '🔻';
-    if (type.includes('apple') || type.includes('oval')) return '⭕';
-    if (type.includes('rectangle')) return '◻️';
-    if (type.includes('triangle') && !type.includes('inverted')) return '▼';
-    if (type.includes('inverted-triangle')) return '▲';
-    if (type.includes('trapezoid')) return '⏢';
-    return '📏';
-  };
-
+  
+  // Button styles without requiring Button component
+  const primaryButtonStyles = "w-full py-3 px-4 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium transition-colors shadow-lg";
+  const secondaryButtonStyles = "w-full py-3 px-4 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors";
+  const disabledButtonStyles = "opacity-50 cursor-not-allowed";
+  
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
       {result ? (
         <div className="bg-gradient-to-br from-indigo-900/90 to-purple-900/90 rounded-2xl p-8 max-w-md w-full animate-fade-in border border-white/10 shadow-xl">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <CheckCircle size={24} className="text-green-400" />
+              <span className="text-green-400">✓</span>
               <h2 className="text-xl font-bold">Body Shape Calculated</h2>
             </div>
             <button 
               onClick={onClose}
               className="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors"
             >
-              <X size={18} />
+              ✕
             </button>
           </div>
           
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">{getBodyTypeIcon(result)}</div>
+            <div className="text-5xl mb-4">
+              {result === 'hourglass' && '⌛'}
+              {result === 'pear' && '🍐'}
+              {result === 'rectangle' && '▭'}
+              {result === 'apple' && '🍎'}
+              {result === 'inverted-triangle' && '🔻'}
+              {result === 'triangle' && '▲'}
+              {result === 'oval' && '⭕'}
+              {result === 'trapezoid' && '⏢'}
+            </div>
             <h3 className="text-2xl font-bold text-amber-400 mb-2">
-              {getBodyTypeName(result)}
+              {result.charAt(0).toUpperCase() + result.slice(1)}
             </h3>
-            <p className="text-white/80">{getBodyTypeDescription(result)}</p>
+            <p className="text-white/80">
+              {result === 'hourglass' && 'Your bust and hips are about the same width, with a well-defined waist.'}
+              {result === 'pear' && 'Your hips are wider than your shoulders, creating a feminine silhouette.'}
+              {result === 'rectangle' && 'Your shoulders, waist, and hips are about the same width with little waist definition.'}
+              {result === 'apple' && 'You carry weight around your midsection, with slimmer legs.'}
+              {result === 'inverted-triangle' && 'Your shoulders are broader than your hips.'}
+              {result === 'triangle' && 'Your lower body is wider than your upper body.'}
+              {result === 'oval' && 'You carry weight in your midsection.'}
+              {result === 'trapezoid' && 'Your shoulders are slightly wider than your waist, with a gradual taper.'}
+            </p>
           </div>
           
           <div className="grid grid-cols-2 gap-3 mb-8">
@@ -154,7 +153,7 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
               if (!value) return null;
               return (
                 <div key={key} className="bg-white/5 p-3 rounded-lg">
-                  <div className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                  <div className="text-white/60 text-xs uppercase mb-1">
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </div>
                   <div className="font-bold">{value} inches</div>
@@ -166,17 +165,15 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={() => setResult(null)}
-              className="flex-1 py-3 px-4 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center gap-2"
+              className={secondaryButtonStyles}
             >
-              <Calculator size={18} />
               Recalculate
             </button>
             
             <button
-              onClick={() => onCalculate(result)}
-              className="flex-1 py-3 px-4 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-lg shadow-amber-500/10 transition-all hover:-translate-y-1 flex items-center justify-center gap-2"
+              onClick={handleApplyResult}
+              className={primaryButtonStyles}
             >
-              <ArrowRight size={18} />
               Apply Result
             </button>
           </div>
@@ -185,14 +182,14 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
         <div className="bg-gradient-to-br from-indigo-900/90 to-purple-900/90 rounded-2xl p-6 max-w-md w-full shadow-xl border border-white/10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <Calculator size={24} className="text-amber-400" />
+              <span className="text-amber-400">🧮</span>
               <h2 className="text-xl font-bold">Body Shape Calculator</h2>
             </div>
             <button 
               onClick={onClose}
               className="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors"
             >
-              <X size={18} />
+              ✕
             </button>
           </div>
           
@@ -277,27 +274,26 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
           <button
             onClick={calculateBodyType}
             disabled={loading}
-            className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className={`${primaryButtonStyles} ${loading ? disabledButtonStyles : ''}`}
           >
             {loading ? (
               <>
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
+                <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2 inline-block"></span>
                 <span>Calculating...</span>
               </>
             ) : (
-              <>
-                <Calculator size={18} />
-                <span>Calculate My Body Shape</span>
-              </>
+              <span>Calculate My Body Shape</span>
             )}
           </button>
           
-          <p className="text-white/50 text-xs text-center mt-4">
-            For accurate results, use a measuring tape and measure directly against your body.
-          </p>
+          <div className="flex justify-center mt-4">
+            <button 
+              onClick={handleOpenVideo} 
+              className="text-amber-400 hover:text-amber-300 text-sm"
+            >
+              Need help measuring? Watch our video guide
+            </button>
+          </div>
         </div>
       )}
     </div>

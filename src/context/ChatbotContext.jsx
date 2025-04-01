@@ -1,20 +1,16 @@
-// src/context/ChatbotContext.jsx
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import RecommendationEngine from '../utils/RecommendationEngine';
+import React, { createContext, useState, useContext } from 'react';
 
+// Create context
 const ChatbotContext = createContext();
 
 export const ChatbotProvider = ({ children }) => {
-  // Keep your existing state variables
+  // State for managing the chatbot interface
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState('welcome');
   const [userImage, setUserImage] = useState(null);
-  const [recommender] = useState(new RecommendationEngine());
-  
-  // Expanded formData with our recommendation properties
   const [formData, setFormData] = useState({
-    skinTone: '',
     gender: '',
+    skinTone: '',
     bodyType: '',
     occasion: '',
     style: '',
@@ -24,54 +20,86 @@ export const ChatbotProvider = ({ children }) => {
     selectedTop: null,
     selectedBottom: null,
     selectedJewelry: null,
-    selectedFootwear: null,
-    // New fields for our enhanced recommendations
-    seasonalColorType: '',
-    event: ''
+    selectedFootwear: null
   });
 
-  // Rest of your existing functions...
+  // Toggle the chatbot open/closed
+  const toggleChatbot = () => {
+    setIsOpen(!isOpen);
+  };
 
-  // Enhanced goToNextStep that updates the recommendation engine
+  // Process to the next step with data
   const goToNextStep = (currentStepName, data = {}) => {
     // Update form data with new values
-    setFormData(prev => {
-      const newData = { ...prev, ...data };
-      
-      // Update recommendation engine with new data
-      if (data.skinTone) recommender.setSkinTone(data.skinTone);
-      if (data.gender) recommender.setGender(data.gender);
-      if (data.bodyType) recommender.setBodyType(data.bodyType);
-      if (data.season) recommender.setSeason(data.season);
-      if (data.event) recommender.setEvent(data.event);
-      if (data.style) recommender.setStyle(data.style);
-      if (data.colorPreference) recommender.setColorPreference(data.colorPreference);
-      if (data.seasonalColorType) recommender.setSeasonalColorType(data.seasonalColorType);
-      if (data.budget) recommender.setBudget(data.budget);
-      
-      return newData;
-    });
+    setFormData(prev => ({
+      ...prev,
+      ...data
+    }));
 
-    // Your existing step navigation...
+    // Define step navigation flow
     const stepMap = {
       'welcome': 'uploadPhoto',
       'uploadPhoto': 'skinToneAnalysis',
-      // Rest of your steps...
+      'skinToneAnalysis': 'gender',
+      'gender': 'bodyType',
+      'bodyType': 'occasion',
+      'occasion': 'style',
+      'style': 'season',
+      'season': 'colorPreference',
+      'colorPreference': 'budget',
+      'budget': 'topSelection',
+      'topSelection': 'bottomSelection',
+      'bottomSelection': 'jewelrySelection',
+      'jewelrySelection': 'footwearSelection',
+      'footwearSelection': 'finalOutfit'
     };
 
-    const nextStep = stepMap[currentStepName] || 'welcome';
-    setCurrentStep(nextStep);
+    // Set the next step
+    setCurrentStep(stepMap[currentStepName] || 'welcome');
+  };
+
+  // Go back to a specific step
+  const goToStep = (stepName) => {
+    setCurrentStep(stepName);
+  };
+
+  // Reset the chatbot
+  const resetChatbot = () => {
+    setCurrentStep('welcome');
+    setUserImage(null);
+    setFormData({
+      gender: '',
+      skinTone: '',
+      bodyType: '',
+      occasion: '',
+      style: '',
+      season: '',
+      colorPreference: '',
+      budget: '',
+      selectedTop: null,
+      selectedBottom: null,
+      selectedJewelry: null,
+      selectedFootwear: null
+    });
+  };
+
+  // Set user image
+  const setImage = (imageUrl) => {
+    setUserImage(imageUrl);
   };
 
   return (
     <ChatbotContext.Provider
       value={{
         isOpen,
+        toggleChatbot,
         currentStep,
         userImage,
         formData,
-        recommender, // Make recommender available to components
-        goToNextStep
+        goToNextStep,
+        goToStep,
+        resetChatbot,
+        setImage
       }}
     >
       {children}
@@ -79,6 +107,7 @@ export const ChatbotProvider = ({ children }) => {
   );
 };
 
+// Custom hook to use the chatbot context
 export const useChatbot = () => {
   const context = useContext(ChatbotContext);
   if (!context) {

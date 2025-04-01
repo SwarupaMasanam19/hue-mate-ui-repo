@@ -4,6 +4,8 @@ import RecommendationEngine from './utils/RecommendationEngine';
 import BodyTypeSelector from './components/steps/BodyTypeSelection';
 import BodyShapeCalculator from './components/BodyShapeCalculator';
 import Welcome from './components/steps/Welcome';
+import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
+
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
@@ -13,7 +15,8 @@ import {
 } from 'lucide-react';
 
 // CameraCapture Component
-function CameraCapture({ onCapture, onCancel, onSwitchToUpload }) {
+// CameraCapture Component
+function CameraCapture({ onCapture, onCancel }) {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
   
@@ -32,6 +35,7 @@ function CameraCapture({ onCapture, onCancel, onSwitchToUpload }) {
       } catch (err) {
         console.error("Error accessing camera:", err);
         alert("Could not access camera. Please allow camera access.");
+        onCancel(); // Go back if camera access fails
       }
     }
     
@@ -53,6 +57,7 @@ function CameraCapture({ onCapture, onCancel, onSwitchToUpload }) {
     canvas.getContext('2d').drawImage(videoRef.current, 0, 0);
     const imageDataUrl = canvas.toDataURL('image/png');
     
+    // Stop the camera after capturing
     if (stream) {
       stream.getTracks().forEach(track => track.stop());
       videoRef.current.srcObject = null;
@@ -62,63 +67,86 @@ function CameraCapture({ onCapture, onCancel, onSwitchToUpload }) {
   };
   
   return (
-    <div className="camera-container">
-      <video ref={videoRef} autoPlay playsInline className="camera-preview" />
-      <div className="camera-controls">
-        <button onClick={capturePhoto} className="capture-button">
-          <div className="capture-button-inner"></div>
+    <div className="camera-container" style={{
+      width: '100%',
+      maxWidth: '500px',
+      margin: '0 auto',
+      position: 'relative',
+      borderRadius: '12px',
+      overflow: 'hidden',
+      backgroundColor: '#000',
+      boxShadow: '0 10px 25px rgba(0,0,0,0.3)'
+    }}>
+      <video 
+        ref={videoRef} 
+        autoPlay 
+        playsInline 
+        style={{
+          width: '100%',
+          display: 'block',
+          transform: 'scaleX(-1)' // Mirror effect for selfie
+        }}
+      />
+      
+      <div style={{
+        position: 'absolute',
+        bottom: '20px',
+        left: '0',
+        right: '0',
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '20px'
+      }}>
+        {/* Prominent circular capture button */}
+        <button 
+          onClick={capturePhoto}
+          style={{
+            width: '70px',
+            height: '70px',
+            borderRadius: '50%',
+            backgroundColor: 'white',
+            border: 'none',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+          }}
+        >
+          <div style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            border: '4px solid #f59e0b',
+            backgroundColor: 'white'
+          }}></div>
         </button>
-        <button onClick={onCancel} className="cancel-button">Cancel</button>
       </div>
-      <button onClick={onSwitchToUpload} className="switch-to-upload-button">
-        Upload a photo instead
+      
+      {/* Cancel button in top right */}
+      <button 
+        onClick={onCancel}
+        style={{
+          position: 'absolute',
+          top: '15px',
+          right: '15px',
+          background: 'rgba(0,0,0,0.5)',
+          color: 'white',
+          border: 'none',
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer'
+        }}
+      >
+        <X size={20} />
       </button>
     </div>
   );
 }
-
-// File Upload Component
-function FileUpload({ onUpload, onCancel, onSwitchToCamera }) {
-  const fileInputRef = useRef(null);
-  
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onUpload(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
-  return (
-    <div className="file-upload-container">
-      <div className="upload-area" onClick={() => fileInputRef.current.click()}>
-        <div className="upload-icon">
-          <Camera size={48} color="#f59e0b" />
-        </div>
-        <p>Click to select a photo or drag and drop</p>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept="image/*"
-          style={{ display: 'none' }}
-        />
-      </div>
-      <div className="upload-controls">
-        <button onClick={onCancel} className="cancel-button">
-          Cancel
-        </button>
-        <button onClick={onSwitchToCamera} className="switch-to-camera-button">
-          Take a photo instead
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // Gender Selection Component
 function GenderSelection({ onGenderSelect, onContinue, selectedGender }) {
   return (
@@ -175,40 +203,6 @@ function GenderSelection({ onGenderSelect, onContinue, selectedGender }) {
         >
           Continue
         </button>
-      </div>
-    </div>
-  );
-}
-
-// Photo Option Selection Component
-function PhotoOptionSelector({ onSelectOption }) {
-  return (
-    <div className="photo-option-screen">
-      <h2 className="gradient-text">How would you like to proceed?</h2>
-      <p>We need a photo to analyze your skin tone.</p>
-      
-      <div className="photo-options">
-        <div 
-          className="photo-option-card"
-          onClick={() => onSelectOption('camera')}
-        >
-          <div className="option-icon">
-            <Camera size={48} color="#f59e0b" />
-          </div>
-          <h3>Take a Photo Now</h3>
-          <p>Use your camera to take a photo right now</p>
-        </div>
-        
-        <div 
-          className="photo-option-card"
-          onClick={() => onSelectOption('upload')}
-        >
-          <div className="option-icon">
-            <Camera size={48} color="#f59e0b" />
-          </div>
-          <h3>Upload a Photo</h3>
-          <p>Select a photo from your device</p>
-        </div>
       </div>
     </div>
   );
@@ -663,28 +657,8 @@ function App() {
   };
   
   const handleGenderContinue = () => {
-    setStep('photoOption');
-  };
-  
-  const handlePhotoOptionSelect = (option) => {
-    if (option === 'camera') {
-      setStep('camera');
-    } else if (option === 'upload') {
-      setStep('upload');
-    }
-  };
-  
-  const handleSwitchToUpload = () => {
-    setStep('upload');
-  };
-  
-  const handleSwitchToCamera = () => {
+    // Skip photo option, go straight to camera
     setStep('camera');
-  };
-  
-  const handleFileUpload = (imageData) => {
-    setCapturedImage(imageData);
-    setStep('analysis');
   };
   
   const handleBodyTypeSelect = (selectedBodyType) => {
@@ -712,14 +686,11 @@ function App() {
     }, 3000);
   };
   
+  const [showVideo, setShowVideo] = useState(false);
   const handleVideoLink = () => {
-    // Use the same video for both genders
-    const videoUrl = 'https://www.youtube.com/watch?v=wV9a_ERkXlE&list=LL&index=2';
-    
-    // Ideally, you would embed this video in your app
-    // For now, we'll open it in a new tab
-    window.open(videoUrl, '_blank');
+    setShowVideo(true);
   };
+  
   
   const handleConfirmation = (confirmed) => {
     if (confirmed) {
@@ -732,12 +703,14 @@ function App() {
   
   const handleEditInfo = (editType) => {
     if (editType === 'skinTone') {
-      setStep('photoOption');
+      // Go directly to camera instead of photo option
+      setStep('camera'); 
     } else if (editType === 'bodyType') {
       setStep('bodyType');
     }
   };
-  
+
+
   const handleSeasonSelect = (selectedSeason) => {
     setSeason(selectedSeason);
     recommender.setSeason(selectedSeason);
@@ -913,10 +886,6 @@ function App() {
               />
             )}
             
-            {step === 'photoOption' && (
-              <PhotoOptionSelector onSelectOption={handlePhotoOptionSelect} />
-            )}
-
             {step === 'camera' && (
               <div className="camera-screen">
                 <h2 className="gradient-text">Take a Photo</h2>
@@ -924,21 +893,7 @@ function App() {
 
                 <CameraCapture 
                   onCapture={handleCapture}
-                  onCancel={() => setStep('photoOption')}
-                  onSwitchToUpload={handleSwitchToUpload}
-                />
-              </div>
-            )}
-            
-            {step === 'upload' && (
-              <div className="upload-screen">
-                <h2 className="gradient-text">Upload a Photo</h2>
-                <p>For the best skin tone analysis, choose a clear photo in good lighting without makeup.</p>
-                
-                <FileUpload 
-                  onUpload={handleFileUpload}
-                  onCancel={() => setStep('photoOption')}
-                  onSwitchToCamera={handleSwitchToCamera}
+                  onCancel={() => setStep('gender')}
                 />
               </div>
             )}
@@ -947,35 +902,41 @@ function App() {
               <div className="analysis-screen">
                 <h2 className="gradient-text">Skin Tone Analysis</h2>
                 <div className="results-container">
-                  <div className="results-photo-container">
-                    <img src={capturedImage} alt="Your photo" className="results-photo" />
-                  </div>
-                  <div className="skin-tone-result">
-                    <p className="compliment">
-                      {gender === 'female' ? 'Looking gorgeous!' : 'Looking handsome!'}
-                    </p>
-                    <div className="tone-indicator">
-                      <div className="color-circle" style={{ backgroundColor: '#D4A76A' }}>
-                        <span className="hex-code">#D4A76A</span>
-                      </div>
-                      <div className="tone-info">
-                        <h3 className="tone-name">Warm Medium</h3>
-                        <p className="tone-description">A beautiful warm undertone with golden highlights</p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="results-photo-container">
+                <img src={capturedImage} alt="Your photo" className="results-photo" />
                 </div>
-
-                <div className="action-buttons">
-                  <button className="primary-button" onClick={() => setStep('bodyType')}>
-                    Continue <ArrowRight size={16} />
-                  </button>
-                  <button className="secondary-button" onClick={() => setStep('photoOption')}>
-                    Retake Photo <Camera size={16} />
-                  </button>
-                </div>
+                <div className="skin-tone-result">
+                <p className="compliment">
+                {gender === 'female' ? 'Looking gorgeous!' : 'Looking handsome!'}
+                </p>
+               <div className="tone-indicator">
+               <div className="color-circle" style={{ backgroundColor: '#D4A76A' }}>
+               <span className="hex-code">#D4A76A</span>
+               </div>
+               <div className="tone-info">
+               <h3 className="tone-name">Warm Medium</h3>
+               <p className="tone-description">A beautiful warm undertone with golden highlights</p>
+               </div>
               </div>
-            )}
+              </div>
+              </div>
+
+              <div className="action-buttons">
+              <button 
+                  className="primary-button" 
+                  onClick={() => setStep('bodyType')}
+              >
+              Continue <ArrowRight size={16} />
+              </button>
+              <button 
+              className="secondary-button" 
+              onClick={() => setStep('camera')}
+              >
+              Retake Photo <Camera size={16} />
+             </button>
+            </div>
+          </div>
+           )}
 
             {step === 'bodyType' && (
               <BodyTypeSelector 
@@ -1003,6 +964,17 @@ function App() {
                 </p>
               </div>
             )}
+
+            {showVideo && (
+              <YouTubeVideoPlayer 
+                videoId="420TbEabNzY"
+                onClose={() => setShowVideo(false)}
+                onOpenCalculator={() => {
+                setShowVideo(false);
+                setShowCalculator(true);
+            }}
+          />
+          )}
             
             {step === 'confirmation' && (
               <div className="confirmation-screen">
@@ -1044,7 +1016,7 @@ function App() {
                   <div className="edit-option-card" onClick={() => handleEditInfo('skinTone')}>
                     <div className="edit-icon"><Palette size={24} /></div>
                     <h3>Change Skin Tone</h3>
-                    <p>Take a new photo or upload a different one</p>
+                    <p>Take a new photo with the camera</p>
                   </div>
                   
                   <div className="edit-option-card" onClick={() => handleEditInfo('bodyType')}>
@@ -1055,6 +1027,8 @@ function App() {
                 </div>
               </div>
             )}
+
+            
             
             {step === 'season' && (
               <SeasonSelection onSelect={handleSeasonSelect} />

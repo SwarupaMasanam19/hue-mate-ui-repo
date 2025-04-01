@@ -22,12 +22,15 @@ const Button = ({
   const disabledStyles = disabled ? "opacity-50 cursor-not-allowed hover:transform-none" : "cursor-pointer";
   
   return (
-    
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseStyles} ${variantStyles} ${widthStyles} ${disabledStyles} ${className}`}
+      {...props}
+    >
       {children}
-    
+    </button>
   );
-
-  
 };
 
 export default Button;

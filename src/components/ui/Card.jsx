@@ -6,9 +6,13 @@ const Card = ({ children, onClick, active = false, className = '', ...props }) =
   const activeStyles = active ? "border-2 border-amber-400" : "";
   
   return (
-    
+    <div 
+      className={`${baseStyles} ${interactiveStyles} ${activeStyles} ${className}`}
+      onClick={onClick}
+      {...props}
+    >
       {children}
-    
+    </div>
   );
 };
 
