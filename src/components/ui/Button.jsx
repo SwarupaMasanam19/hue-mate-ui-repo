@@ -4,29 +4,32 @@ const Button = ({
   children, 
   onClick, 
   primary = false, 
-  secondary = false, 
+  secondary = false,
   disabled = false,
   fullWidth = false,
-  className = '', 
-  ...props 
+  className = '',
+  ...rest
 }) => {
-  const baseStyles = "font-semibold px-6 py-3 rounded-full transition-all duration-300 transform hover:-translate-y-1 focus:outline-none";
+  const baseStyles = "py-3 px-8 rounded-full font-medium transition-all";
   
-  const variantStyles = primary
-    ? "bg-gradient-to-r from-amber-400 to-amber-600 text-white shadow-lg hover:shadow-amber-500/20"
-    : secondary
-      ? "bg-white/10 backdrop-blur-md text-white hover:bg-white/20 shadow-lg hover:shadow-white/10"
-      : "bg-gray-700 text-white hover:bg-gray-600";
+  const primaryStyles = "bg-amber-500 hover:bg-amber-600 text-white shadow-lg";
+  const secondaryStyles = "bg-indigo-700/50 hover:bg-indigo-600/50 text-white";
+  const disabledStyles = "opacity-50 cursor-not-allowed";
   
-  const widthStyles = fullWidth ? "w-full" : "";
-  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed hover:transform-none" : "cursor-pointer";
+  const styles = `
+    ${baseStyles}
+    ${primary ? primaryStyles : secondary ? secondaryStyles : ''}
+    ${disabled ? disabledStyles : 'cursor-pointer'}
+    ${fullWidth ? 'w-full' : ''}
+    ${className}
+  `;
   
   return (
     <button
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variantStyles} ${widthStyles} ${disabledStyles} ${className}`}
-      {...props}
+      className={styles}
+      {...rest}
     >
       {children}
     </button>

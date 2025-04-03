@@ -5,17 +5,18 @@ import BodyTypeSelector from './components/steps/BodyTypeSelection';
 import BodyShapeCalculator from './components/BodyShapeCalculator';
 import Welcome from './components/steps/Welcome';
 import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
-
+import { useChatbot } from './context/ChatbotContext';
+import CalculatorPage from './components/CalculatorPage';
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
   Music, Landmark, Palmtree, ShoppingBag, Scissors, 
-  Feather, Wallet, CreditCard, Diamond, Layers, 
-  Footprints, Glasses, Palette, Ruler
+  Feather, Wallet, CreditCard, Diamond, Layers, Square, Triangle,
+  Footprints, Glasses, Palette, Ruler, Calculator, ChevronUp, Circle, Hourglass
 } from 'lucide-react';
 
 // CameraCapture Component
-// CameraCapture Component
+
 function CameraCapture({ onCapture, onCancel }) {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
@@ -636,6 +637,7 @@ function App() {
   const [gender, setGender] = useState(null);
   const [bodyType, setBodyType] = useState(null);
   const [showCalculator, setShowCalculator] = useState(false);
+  
   const [season, setSeason] = useState(null);
   const [occasion, setOccasion] = useState(null);
   const [style, setStyle] = useState(null);
@@ -645,7 +647,16 @@ function App() {
   const [specificItem, setSpecificItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [showCalculatorReminder, setShowCalculatorReminder] = useState(false);
-
+  
+  const bodyTypeIcons = {
+    'pear': Triangle,
+    'apple': Circle,
+    'rectangle': Square,
+    'hourglass': Hourglass,
+    'inverted-triangle': ChevronUp,
+    'oval': Circle,
+    'trapezoid': ChevronUp,
+};
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
     setStep('analysis');
@@ -671,14 +682,47 @@ function App() {
     }, 3000);
   };
   
+  const handleOpenCalculator = () => {
+    setShowCalculator(true);
+  };
+
+  const handleCloseCalculator = () => {
+    setShowCalculator(false);
+  };
   const handleCalculatorOpen = () => {
     setShowCalculator(true);
   };
   
+
+  const handleVideoLink = () => {
+    setShowVideo(true);
+  };
+
+  const handleCloseVideo = () => {
+    setShowVideo(false);
+  };
+  useEffect(() => {
+    const handleOpenVideoEvent = () => {
+      handleVideoLink();
+    };
+
+    const handleOpenCalculatorEvent = () => {
+      handleCalculatorOpen();
+    };
+
+    document.addEventListener('openVideo', handleOpenVideoEvent);
+    document.addEventListener('openCalculator', handleOpenCalculatorEvent);
+
+    return () => {
+      document.removeEventListener('openVideo', handleOpenVideoEvent);
+      document.removeEventListener('openCalculator', handleOpenCalculatorEvent);
+    };
+  }, []);
   const handleCalculatorResult = (result) => {
     setBodyType(result);
     setShowCalculator(false);
     // Show a message that body type has been calculated
+    console.log('Calculator result: ', result);
     setShowCalculatorReminder(true);
     setTimeout(() => {
       setShowCalculatorReminder(false);
@@ -687,9 +731,24 @@ function App() {
   };
   
   const [showVideo, setShowVideo] = useState(false);
-  const handleVideoLink = () => {
-    setShowVideo(true);
-  };
+
+  useEffect(() => {
+    const handleOpenVideoEvent = () => {
+      handleVideoLink();
+    };
+
+    const handleOpenCalculatorEvent = () => {
+      handleCalculatorOpen();
+    };
+
+    document.addEventListener('openVideo', handleOpenVideoEvent);
+    document.addEventListener('openCalculator', handleOpenCalculatorEvent);
+
+    return () => {
+      document.removeEventListener('openVideo', handleOpenVideoEvent);
+      document.removeEventListener('openCalculator', handleOpenCalculatorEvent);
+    };
+  }, []);
   
   
   const handleConfirmation = (confirmed) => {
@@ -830,6 +889,8 @@ function App() {
     }
   };
 
+  
+
   return (
     <div className="App">
       {/* Render the welcome component as the main page content */}
@@ -938,22 +999,19 @@ function App() {
           </div>
            )}
 
-            {step === 'bodyType' && (
-              <BodyTypeSelector 
-                gender={gender} 
-                onSelect={handleBodyTypeSelect}
-                onCalculatorOpen={handleCalculatorOpen}
-                onVideoLink={handleVideoLink}
-              />
-            )}
-            
-            {showCalculator && (
-              <BodyShapeCalculator 
-                gender={gender}
-                onCalculate={handleCalculatorResult}
-                onClose={() => setShowCalculator(false)}
-              />
-            )}
+
+        {step === 'bodyType' && (
+         <BodyTypeSelector
+          gender={gender}
+          onSelect={handleBodyTypeSelect}
+         >
+      <div>
+        
+        {showCalculator && <CalculatorPage onClose={handleCloseCalculator} />}
+      </div>
+      </BodyTypeSelector>
+      )}
+
             
             {showCalculatorReminder && (
               <div className="calculator-reminder">
@@ -964,50 +1022,75 @@ function App() {
                 </p>
               </div>
             )}
-
-            {showVideo && (
-              <YouTubeVideoPlayer 
-                videoId="420TbEabNzY"
-                onClose={() => setShowVideo(false)}
-                onOpenCalculator={() => {
-                setShowVideo(false);
-                setShowCalculator(true);
-            }}
-          />
-          )}
+          <div>
+      
+      {showCalculator && (
+        <CalculatorPage 
+        onClose={handleCloseCalculator}
+        onCalculate={handleCalculatorResult}
+        />
+      )}
+    </div>
+          {showVideo && (
+            <div className="video-full-page">
+            <div className="video-box">
+             <div className="video-container">
+                <YouTubeVideoPlayer
+                    videoId="420TbEabNzY"
+                    onClose={handleCloseVideo}
+                    onOpenCalculator={handleCalculatorOpen}
+                />
+            </div>
+            <div className="video-message">
+                <div>How to Measure Your Body</div>
+                <div>After watching this video, you'll know exactly how to take the correct measurements for your body type.</div>
+                <button onClick={handleCalculatorOpen}>
+                    <Calculator size={20} /> Open Body Shape Calculator
+                </button>
+                <button onClick={handleCloseVideo}>Close Video</button>
+            </div>
+            <button onClick={handleCloseVideo} className="video-close">
+                <X size={24} />
+            </button>
+          </div>
+          </div>
+           )}
             
-            {step === 'confirmation' && (
-              <div className="confirmation-screen">
-                <h2 className="gradient-text">Let's Confirm Your Information</h2>
-                <p>Is this information correct?</p>
-                
-                <div className="info-summary">
-                  <div className="info-item">
-                    <h3>Skin Tone:</h3>
-                    <div className="skin-tone-chip" style={{ backgroundColor: '#D4A76A' }}>
-                      Warm Medium
-                    </div>
-                  </div>
-                  
-                  <div className="info-item">
+            {
+    step === 'confirmation' && (
+        <div className="confirmation-screen">
+            <h2 className="gradient-text">Confirm Body Shape Selection</h2>
+            <p>Would you like to proceed with the automatic result or select manually?</p>
+
+            <div className="info-summary">
+                <div className="info-item">
                     <h3>Body Type:</h3>
                     <div className="body-type-chip">
-                      {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Not specified'}
+                        {bodyType ? (
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                {React.createElement(bodyTypeIcons[bodyType.split('-')[0]], { size: 30 })}
+                                <span style={{ marginLeft: '10px' }}>
+                                    {bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1)}
+                                </span>
+                            </div>
+                        ) : (
+                            'Not specified'
+                        )}
                     </div>
-                  </div>
                 </div>
-                
-                <div className="action-buttons">
-                  <button className="primary-button" onClick={() => handleConfirmation(true)}>
-                    Yes, Continue <ArrowRight size={16} />
-                  </button>
-                  <button className="secondary-button" onClick={() => handleConfirmation(false)}>
-                    No, I Need to Change Something <X size={16} />
-                  </button>
-                </div>
-              </div>
-            )}
-            
+            </div>
+
+            <div className="action-buttons">
+                <button className="secondary-button" onClick={() => setStep('bodyType')}>
+                    Manual Selection
+                </button>
+                <button className="primary-button" onClick={() => handleConfirmation(true)}>
+                    Automatic Result
+                </button>
+            </div>
+        </div>
+    )
+}
             {step === 'editInfo' && (
               <div className="edit-info-screen">
                 <h2 className="gradient-text">What would you like to change?</h2>
@@ -1212,5 +1295,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
