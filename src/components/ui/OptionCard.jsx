@@ -1,5 +1,4 @@
 import React from 'react';
-import Card from './Card';
 
 const OptionCard = ({ 
   label, 
@@ -7,28 +6,54 @@ const OptionCard = ({
   description, 
   onClick, 
   active = false,
-  size = 'small' // small, medium, large
+  size = 'small', // small, medium, large
+  className = ''
 }) => {
+  // Size variants
   const sizeClasses = {
-    small: 'py-4',
-    medium: 'py-5',
-    large: 'py-6'
+    small: 'py-3 px-4',
+    medium: 'py-5 px-5',
+    large: 'py-6 px-6'
   };
   
+  // Active state styling
+  const activeStyles = active
+    ? 'ring-2 ring-amber-500 bg-amber-500/10'
+    : 'hover:bg-white/10';
+  
+  // Combine styles
+  const cardStyles = `
+    bg-white/5 
+    backdrop-blur-md 
+    rounded-xl 
+    cursor-pointer 
+    transition-all 
+    flex 
+    flex-col 
+    items-center 
+    text-center
+    ${sizeClasses[size]}
+    ${activeStyles}
+    ${className}
+  `.trim();
+  
   return (
-    <Card 
-      onClick={onClick} 
-      active={active}
-      className={`flex flex-col items-center justify-center text-center ${sizeClasses[size]}`}
+    <div 
+      className={cardStyles}
+      onClick={onClick}
     >
       {icon && (
-        <div className="text-3xl mb-3">{icon}</div>
+        <div className="mb-3 text-3xl flex justify-center">
+          {typeof icon === 'string' ? icon : icon}
+        </div>
       )}
-      <h3 className="text-lg font-semibold mb-1">{label}</h3>
+      
+      <h3 className="text-lg font-medium mb-1">{label}</h3>
+      
       {description && (
-        <p className="text-sm text-gray-300">{description}</p>
+        <p className="text-sm text-white/70">{description}</p>
       )}
-    </Card>
+    </div>
   );
 };
 

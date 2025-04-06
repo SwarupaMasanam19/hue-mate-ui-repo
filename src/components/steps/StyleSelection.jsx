@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useChatbot } from '../../context/ChatbotContext';
-import OptionCard from '../ui/OptionCard';
+import Button from '../ui/Button';
 
 const StyleSelection = () => {
   const { goToNextStep } = useChatbot();
+  const [selectedStyle, setSelectedStyle] = useState(null);
 
   const styleOptions = [
     { id: 'casual', label: 'Casual', icon: '👕', description: 'Relaxed, everyday outfits' },
@@ -15,30 +16,49 @@ const StyleSelection = () => {
   ];
 
   const handleSelect = (style) => {
-    goToNextStep('style', { style });
+    setSelectedStyle(style);
+  };
+
+  const handleContinue = () => {
+    if (selectedStyle) {
+      goToNextStep('style', { style: selectedStyle });
+    }
   };
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent mb-6">
-        Choose Your Style
-      </h2>
+    <div className="body-type-screen">
+      <h2 className="gradient-text">Choose Your Style</h2>
+      <p>What style of clothing do you prefer?</p>
       
-      <p className="text-lg mb-8">
-        What style of clothing do you prefer?
-      </p>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 w-full max-w-4xl">
+      <div className="body-types-container" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         {styleOptions.map((option) => (
-          <OptionCard
+          <div 
             key={option.id}
-            label={option.label}
-            icon={option.icon}
-            description={option.description}
+            className={`body-type-card ${selectedStyle === option.id ? 'selected' : ''}`}
             onClick={() => handleSelect(option.id)}
-            size="medium"
-          />
+          >
+            <div className="body-type-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
+            <p>{option.label}</p>
+            <p className="text-sm text-gray-300 text-center">{option.description}</p>
+          </div>
         ))}
+      </div>
+      
+      <div className="action-buttons">
+        <Button 
+          primary 
+          onClick={handleContinue}
+          disabled={!selectedStyle}
+        >
+          Continue
+        </Button>
+        
+        <Button 
+          secondary 
+          onClick={() => goToNextStep('occasion')}
+        >
+          Back
+        </Button>
       </div>
     </div>
   );

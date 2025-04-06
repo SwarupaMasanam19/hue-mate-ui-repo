@@ -29,13 +29,27 @@ const ChatbotContainer = ({ isOpen }) => {
   // Set up global functions and event listeners to open calculator and video
   useEffect(() => {
     if (isOpen) {
-      // Define global functions
-      window.openCalculator = () => setShowCalculator(true);
-      window.openVideo = () => setShowVideo(true);
+      // Define global functions for direct access
+      window.openCalculator = () => {
+        setShowCalculator(true);
+        setShowVideo(false); // Close video if open
+      };
       
-      // Add event listeners for direct component communication
-      const handleOpenCalculator = () => setShowCalculator(true);
-      const handleOpenVideo = () => setShowVideo(true);
+      window.openVideo = () => {
+        setShowVideo(true);
+        setShowCalculator(false); // Close calculator if open
+      };
+      
+      // Add event listeners for component communication
+      const handleOpenCalculator = () => {
+        setShowCalculator(true);
+        setShowVideo(false); // Close video if open
+      };
+      
+      const handleOpenVideo = () => {
+        setShowVideo(true);
+        setShowCalculator(false); // Close calculator if open
+      };
       
       document.addEventListener('openCalculator', handleOpenCalculator);
       document.addEventListener('openVideo', handleOpenVideo);
@@ -58,9 +72,23 @@ const ChatbotContainer = ({ isOpen }) => {
     setShowVideo(false);
   };
   
+  const handleOpenVideo = () => {
+    setShowVideo(true);
+    if (showCalculator) {
+      setShowCalculator(false); // Close calculator if open
+    }
+  };
+  
   // Calculator controllers
   const handleCloseCalculator = () => {
     setShowCalculator(false);
+  };
+  
+  const handleOpenCalculator = () => {
+    setShowCalculator(true);
+    if (showVideo) {
+      setShowVideo(false); // Close video if open
+    }
   };
   
   const handleCalculatorResult = (result) => {
@@ -120,10 +148,7 @@ const ChatbotContainer = ({ isOpen }) => {
         <YouTubeVideoPlayer 
           videoId={videoId}
           onClose={handleCloseVideo}
-          onOpenCalculator={() => {
-            handleCloseVideo();
-            setShowCalculator(true);
-          }}
+          onOpenCalculator={handleOpenCalculator}
         />
       )}
       
@@ -132,6 +157,7 @@ const ChatbotContainer = ({ isOpen }) => {
           gender={formData?.gender || 'female'}
           onClose={handleCloseCalculator}
           onCalculate={handleCalculatorResult}
+          onOpenVideo={handleOpenVideo}
         />
       )}
     </div>

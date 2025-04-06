@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useChatbot } from '../../context/ChatbotContext';
-import OptionCard from '../ui/OptionCard';
 import Button from '../ui/Button';
 
 const OccasionSelection = () => {
   const { goToNextStep } = useChatbot();
   const [customOccasion, setCustomOccasion] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
+  const [selectedOccasion, setSelectedOccasion] = useState(null);
 
   const occasionOptions = [
     { id: 'casual', label: 'Casual', icon: '🏡' },
@@ -23,8 +23,9 @@ const OccasionSelection = () => {
   const handleSelect = (occasion) => {
     if (occasion === 'custom') {
       setShowCustomInput(true);
+      setSelectedOccasion(null);
     } else {
-      goToNextStep('occasion', { occasion });
+      setSelectedOccasion(occasion);
     }
   };
 
@@ -34,32 +35,53 @@ const OccasionSelection = () => {
     }
   };
 
+  const handleContinue = () => {
+    if (selectedOccasion) {
+      goToNextStep('occasion', { occasion: selectedOccasion });
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent mb-6">
-        What's the Occasion?
-      </h2>
-      
-      <p className="text-lg mb-8">
-        Select an occasion to help us recommend the perfect outfit.
-      </p>
+    <div className="body-type-screen">
+      <h2 className="gradient-text">What's the Occasion?</h2>
+      <p>Select an occasion to help us recommend the perfect outfit.</p>
       
       {!showCustomInput ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 w-full max-w-4xl">
-          {occasionOptions.map((option) => (
-            <OptionCard
-              key={option.id}
-              label={option.label}
-              icon={option.icon}
-              onClick={() => handleSelect(option.id)}
-              size="medium"
-            />
-          ))}
-        </div>
+        <>
+          <div className="body-types-container" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+            {occasionOptions.map((option) => (
+              <div 
+                key={option.id}
+                className={`body-type-card ${selectedOccasion === option.id ? 'selected' : ''}`}
+                onClick={() => handleSelect(option.id)}
+              >
+                <div className="body-type-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
+                <p>{option.label}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="action-buttons">
+            <Button 
+              primary 
+              onClick={handleContinue}
+              disabled={!selectedOccasion}
+            >
+              Continue
+            </Button>
+            
+            <Button 
+              secondary 
+              onClick={() => goToNextStep('bodyType')}
+            >
+              Back
+            </Button>
+          </div>
+        </>
       ) : (
-        <div className="w-full max-w-md">
-          <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 mb-6">
-            <label htmlFor="custom-occasion" className="block text-left mb-2 font-medium">
+        <div className="custom-occasion-container" style={{ width: '100%', maxWidth: '500px' }}>
+          <div className="body-type-card" style={{ padding: '20px' }}>
+            <label htmlFor="custom-occasion" style={{ display: 'block', textAlign: 'left', marginBottom: '10px' }}>
               Tell us about your occasion
             </label>
             <input
@@ -68,23 +90,31 @@ const OccasionSelection = () => {
               value={customOccasion}
               onChange={(e) => setCustomOccasion(e.target.value)}
               placeholder="e.g., Beach Wedding, Job Interview, etc."
-              className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '10px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '4px',
+                color: 'white'
+              }}
             />
           </div>
           
-          <div className="flex space-x-4">
-            <Button
-              secondary
-              onClick={() => setShowCustomInput(false)}
-            >
-              Back
-            </Button>
+          <div className="action-buttons">
             <Button
               primary
               onClick={handleCustomSubmit}
               disabled={!customOccasion.trim()}
             >
               Continue
+            </Button>
+            
+            <Button
+              secondary
+              onClick={() => setShowCustomInput(false)}
+            >
+              Back
             </Button>
           </div>
         </div>

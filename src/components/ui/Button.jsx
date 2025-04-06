@@ -10,25 +10,44 @@ const Button = ({
   className = '',
   ...rest
 }) => {
+  // Base styles that apply to all buttons
   const baseStyles = "py-3 px-8 rounded-full font-medium transition-all";
   
-  const primaryStyles = "bg-amber-500 hover:bg-amber-600 text-white shadow-lg";
-  const secondaryStyles = "bg-indigo-700/50 hover:bg-indigo-600/50 text-white";
-  const disabledStyles = "opacity-50 cursor-not-allowed";
+  // Primary button styles (amber gradient for primary action)
+  const primaryStyles = primary 
+    ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg hover:from-amber-600 hover:to-amber-700" 
+    : "";
   
-  const styles = `
+  // Secondary button styles (subtle background for secondary actions)
+  const secondaryStyles = secondary 
+    ? "bg-white/10 hover:bg-white/20 text-white border border-white/20" 
+    : "";
+  
+  // Disabled state styling
+  const disabledStyles = disabled 
+    ? "opacity-50 cursor-not-allowed" 
+    : "cursor-pointer";
+  
+  // Full width option
+  const widthStyles = fullWidth 
+    ? "w-full" 
+    : "";
+  
+  // Combine all styles
+  const buttonStyles = `
     ${baseStyles}
-    ${primary ? primaryStyles : secondary ? secondaryStyles : ''}
-    ${disabled ? disabledStyles : 'cursor-pointer'}
-    ${fullWidth ? 'w-full' : ''}
+    ${primaryStyles}
+    ${secondaryStyles}
+    ${disabledStyles}
+    ${widthStyles}
     ${className}
-  `;
+  `.trim();
   
   return (
     <button
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={styles}
+      className={buttonStyles}
       {...rest}
     >
       {children}

@@ -7,6 +7,7 @@ import Welcome from './components/steps/Welcome';
 import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
 import { useChatbot } from './context/ChatbotContext';
 import CalculatorPage from './components/CalculatorPage';
+
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
@@ -636,7 +637,6 @@ function App() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [gender, setGender] = useState(null);
   const [bodyType, setBodyType] = useState(null);
-  const [showCalculator, setShowCalculator] = useState(false);
   
   const [season, setSeason] = useState(null);
   const [occasion, setOccasion] = useState(null);
@@ -647,7 +647,9 @@ function App() {
   const [specificItem, setSpecificItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState({});
   const [showCalculatorReminder, setShowCalculatorReminder] = useState(false);
-  
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [videoId, setVideoId] = useState("420TbEabNzY");
   const bodyTypeIcons = {
     'pear': Triangle,
     'apple': Circle,
@@ -683,6 +685,7 @@ function App() {
   };
   
   const handleOpenCalculator = () => {
+    setShowVideo(false);
     setShowCalculator(true);
   };
 
@@ -712,12 +715,22 @@ function App() {
 
     document.addEventListener('openVideo', handleOpenVideoEvent);
     document.addEventListener('openCalculator', handleOpenCalculatorEvent);
-
+    
+    
     return () => {
       document.removeEventListener('openVideo', handleOpenVideoEvent);
       document.removeEventListener('openCalculator', handleOpenCalculatorEvent);
+      
+      
     };
-  }, []);
+  }, [showVideo, showCalculator]);
+
+  const handleOpenVideo = (id = "420TbEabNzY") => {
+    setShowCalculator(false); // Close calculator if open
+    if (id) setVideoId(id);
+    setShowVideo(true);
+  };
+  
   const handleCalculatorResult = (result) => {
     setBodyType(result);
     setShowCalculator(false);
@@ -730,7 +743,6 @@ function App() {
     }, 3000);
   };
   
-  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     const handleOpenVideoEvent = () => {
@@ -1004,6 +1016,8 @@ function App() {
          <BodyTypeSelector
           gender={gender}
           onSelect={handleBodyTypeSelect}
+          onOpenCalculator={handleOpenCalculator}
+          onOpenVideo={handleOpenVideo}
          >
       <div>
         
@@ -1023,7 +1037,35 @@ function App() {
               </div>
             )}
           <div>
+
+          {showCalculator && (
+  <BodyShapeCalculator
+    gender={gender || 'female'}
+    onCalculate={(result) => {
+      setBodyType(result); // Assuming you have this state
+      setShowCalculator(false);
+    }}
+    onClose={handleCloseCalculator}
+    onOpenVideo={handleOpenVideo}
+  />
+)}
+     {showVideo && (
+  <YouTubeVideoPlayer
+    videoId={videoId}
+    onClose={handleCloseVideo}
+    onOpenCalculator={handleOpenCalculator}
+  />
+)}
       
+      <BodyTypeSelector
+  gender={gender}
+  onSelect={handleBodyTypeSelect}
+  onOpenCalculator={handleOpenCalculator}
+  onOpenVideo={handleOpenVideo}
+/>
+
+
+
       {showCalculator && (
         <CalculatorPage 
         onClose={handleCloseCalculator}

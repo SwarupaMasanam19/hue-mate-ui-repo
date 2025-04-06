@@ -2,10 +2,17 @@ import React, { useState } from 'react';
 import { useChatbot } from '../../context/ChatbotContext';
 import Button from '../ui/Button';
 import { LayoutTemplate, RectangleHorizontal, CircleDot, Calculator, Youtube } from 'lucide-react';
-const BodyTypeSelection = () => {
+const BodyTypeSelection = ({gender, onSelect, onOpenCalculator, onOpenVideo}) => {
   const { goToNextStep } = useChatbot();
   const [selectedBodyType, setSelectedBodyType] = useState(null);
 
+  const handleCalculatorOpen = () => {
+    if (onOpenCalculator) onOpenCalculator();
+  };
+
+  const handleVideoOpen = () => {
+    if (onOpenVideo) onOpenVideo();
+  };
   const bodyTypeOptions = [
     {
       id: 'hourglass',
@@ -51,6 +58,7 @@ const BodyTypeSelection = () => {
   const handleOpenCalculator = () => {
     document.dispatchEvent(new CustomEvent('openCalculator'));
   };
+
 
   const handleOpenVideo = () => {
     document.dispatchEvent(new CustomEvent('openVideo'));

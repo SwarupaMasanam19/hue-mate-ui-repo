@@ -1,31 +1,58 @@
 import React, { useState } from 'react';
-import { X, Calculator } from 'lucide-react';
+import { X, Triangle, Circle, Square, Hourglass, Youtube, Calculator } from 'lucide-react';
+import Button from '../ui/Button';
 
-const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
+const BodyShapeCalculator = ({ gender = 'female', onCalculate, onClose, onOpenVideo }) => {
   const [measurements, setMeasurements] = useState({
     shoulders: '',
     bust: '',
     chest: '',
     waist: '',
-    hips: ''
+    hips: '',
   });
-  
+
   const [loading, setLoading] = useState(false);
-  
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setMeasurements(prev => ({
+    setMeasurements((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
+    // Clear any errors when user starts typing
+    setError(null);
   };
-  
+
   const calculateBodyType = () => {
     setLoading(true);
-    
+    setError(null);
+
+    // Validate inputs first
+    let hasError = false;
+    if (gender === 'female') {
+      const { bust, waist, hips } = measurements;
+      if (!bust || !waist || !hips) {
+        setError('Please enter all measurements');
+        hasError = true;
+      }
+    } else {
+      const { shoulders, chest, waist } = measurements;
+      if (!shoulders || !chest || !waist) {
+        setError('Please enter all measurements');
+        hasError = true;
+      }
+    }
+
+    if (hasError) {
+      setLoading(false);
+      return;
+    }
+
     // Simulate calculation delay
     setTimeout(() => {
-      let result = '';
+      let calculatedResult = '';
       
       if (gender === 'female') {
         const { bust, waist, hips } = measurements;
@@ -33,242 +60,216 @@ const BodyShapeCalculator = ({ gender, onCalculate, onClose }) => {
         const waistVal = parseFloat(waist);
         const hipsVal = parseFloat(hips);
         
-        if (isNaN(bustVal) || isNaN(waistVal) || isNaN(hipsVal)) {
-          alert('Please enter all measurements');
-          setLoading(false);
-          return;
-        }
-        
         const bustHipDiff = Math.abs(bustVal - hipsVal);
         const waistBustRatio = waistVal / bustVal;
         const waistHipRatio = waistVal / hipsVal;
         
         if (bustHipDiff <= 5 && waistBustRatio < 0.75) {
-          result = 'hourglass-women';
+          calculatedResult = 'hourglass';
         } else if (hipsVal > bustVal + 5) {
-          result = 'pear-women';
+          calculatedResult = 'pear';
         } else if (bustVal > hipsVal + 5) {
-          result = 'inverted-triangle-women';
+          calculatedResult = 'inverted-triangle';
         } else if (waistBustRatio >= 0.8 && waistHipRatio >= 0.8) {
-          result = 'rectangle-women';
+          calculatedResult = 'rectangle';
         } else if (waistVal > bustVal && waistVal > hipsVal) {
-          result = 'apple-women';
+          calculatedResult = 'apple';
         } else {
-          result = 'hourglass-women'; // Default
+          calculatedResult = 'hourglass'; // Default
         }
       } else {
-        // For men
         const { shoulders, chest, waist } = measurements;
         const shouldersVal = parseFloat(shoulders);
         const chestVal = parseFloat(chest);
         const waistVal = parseFloat(waist);
         
-        if (isNaN(shouldersVal) || isNaN(chestVal) || isNaN(waistVal)) {
-          alert('Please enter all measurements');
-          setLoading(false);
-          return;
-        }
-        
         const shoulderWaistRatio = shouldersVal / waistVal;
         
         if (shoulderWaistRatio > 1.2) {
-          result = 'inverted-triangle-men';
+          calculatedResult = 'inverted-triangle';
         } else if (shoulderWaistRatio < 0.9) {
-          result = 'triangle-men';
+          calculatedResult = 'triangle';
         } else if (shoulderWaistRatio >= 0.9 && shoulderWaistRatio <= 1.1) {
-          result = 'rectangle-men';
+          calculatedResult = 'rectangle';
         } else if (waistVal > shouldersVal && waistVal > chestVal) {
-          result = 'oval-men';
+          calculatedResult = 'oval';
         } else {
-          result = 'trapezoid-men'; // Default
+          calculatedResult = 'trapezoid'; // Default
         }
       }
       
+      setResult(calculatedResult);
       setLoading(false);
-      onCalculate(result);
+      
+      // Delay the callback slightly to show the result to the user
+      setTimeout(() => {
+        onCalculate(calculatedResult);
+      }, 1500);
     }, 2000);
   };
-  
+
+  const getIcon = (bodyType) => {
+    switch (bodyType) {
+      case 'hourglass': return <Hourglass size={50} color="#f59e0b" />;
+      case 'pear': return <Triangle size={50} color="#f59e0b" />;
+      case 'inverted-triangle': return <Triangle size={50} color="#f59e0b" style={{transform: 'rotate(180deg)'}} />;
+      case 'rectangle': return <Square size={50} color="#f59e0b" />;
+      case 'apple': return <Circle size={50} color="#f59e0b" />;
+      case 'oval': return <Circle size={50} color="#f59e0b" />;
+      case 'trapezoid': return <Triangle size={50} color="#f59e0b" style={{transform: 'rotate(180deg)'}} />;
+      default: return null;
+    }
+  };
+
   return (
-    <div className="calculator-modal" style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0,0,0,0.8)',
-      zIndex: 1000,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-      <div className="calculator-content" style={{
-        background: 'linear-gradient(135deg, #1e1e3f, #2d2d6d)',
-        padding: '24px',
-        borderRadius: '16px',
-        width: '90%',
-        maxWidth: '500px',
-        position: 'relative'
-      }}>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-indigo-900 to-indigo-950 rounded-xl p-6 max-w-md w-full relative border border-indigo-700/50 shadow-xl">
         <button 
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            right: '12px',
-            top: '12px',
-            background: 'none',
-            border: 'none',
-            color: 'white',
-            cursor: 'pointer'
-          }}
+          className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
         >
-          <X size={24} />
+          <X size={20} />
         </button>
         
-        <div style={{textAlign: 'center', marginBottom: '20px'}}>
-          <Calculator size={40} color="#f59e0b" />
-          <h3 style={{fontSize: '24px', marginTop: '8px'}}>Body Shape Calculator</h3>
-          <p>Enter your measurements to determine your body shape</p>
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Calculator size={24} color="#f59e0b" />
+          </div>
+          <h2 className="text-xl font-bold text-amber-400">Body Shape Calculator</h2>
+          <p className="text-white/70 text-sm mt-1">Enter your measurements to determine your body shape</p>
         </div>
         
-        <div style={{marginBottom: '20px'}}>
+        <div className="space-y-4 mb-6">
           {gender === 'female' ? (
             <>
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Bust (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Bust (inches)</label>
+                <input
                   type="number"
                   name="bust"
                   value={measurements.bust}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                  placeholder="Measure around the fullest part"
+                  placeholder="Measure at the fullest part"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
               
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Waist (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Waist (inches)</label>
+                <input
                   type="number"
                   name="waist"
                   value={measurements.waist}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                  placeholder="Measure around the smallest part"
+                  placeholder="Measure at the narrowest part"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
               
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Hips (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Hips (inches)</label>
+                <input
                   type="number"
                   name="hips"
                   value={measurements.hips}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                  placeholder="Measure around the widest part"
+                  placeholder="Measure at the widest part"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
             </>
           ) : (
             <>
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Shoulders (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Shoulders (inches)</label>
+                <input
                   type="number"
                   name="shoulders"
                   value={measurements.shoulders}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
                   placeholder="Measure across shoulders"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
               
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Chest (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Chest (inches)</label>
+                <input
                   type="number"
                   name="chest"
                   value={measurements.chest}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                  placeholder="Measure around the fullest part"
+                  placeholder="Measure at the fullest part"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
               
-              <div style={{marginBottom: '12px'}}>
-                <label style={{display: 'block', marginBottom: '4px'}}>Waist (inches)</label>
-                <input 
+              <div>
+                <label className="block text-sm font-medium text-white/80 mb-1.5">Waist (inches)</label>
+                <input
                   type="number"
                   name="waist"
                   value={measurements.waist}
                   onChange={handleChange}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: 'white'
-                  }}
-                  placeholder="Measure around the navel"
+                  placeholder="Measure at the narrowest part"
+                  className="w-full bg-white/5 border border-white/20 rounded-lg px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-transparent"
                 />
               </div>
             </>
           )}
         </div>
         
-        <button
+        {error && (
+          <div className="bg-red-900/30 border border-red-500/30 text-red-200 rounded-lg px-4 py-2.5 mb-6 text-sm flex items-center">
+            <X size={16} className="mr-2 flex-shrink-0" />
+            {error}
+          </div>
+        )}
+        
+        {result && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6 flex items-center">
+            <div className="mr-4">
+              {getIcon(result)}
+            </div>
+            <div>
+              <h3 className="text-amber-400 font-medium mb-1">Your Body Shape:</h3>
+              <p className="text-lg font-bold capitalize">
+                {result.replace('-', ' ')}
+              </p>
+            </div>
+          </div>
+        )}
+        
+        <Button
+          primary
           onClick={calculateBodyType}
           disabled={loading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            background: loading ? 'rgba(245, 158, 11, 0.5)' : '#f59e0b',
-            borderRadius: '8px',
-            border: 'none',
-            color: 'white',
-            fontWeight: 'bold',
-            cursor: loading ? 'wait' : 'pointer'
-          }}
+          className="w-full mb-4"
         >
-          {loading ? 'Calculating...' : 'Calculate My Body Shape'}
-        </button>
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Calculating...
+            </div>
+          ) : (
+            'Calculate My Body Shape'
+          )}
+        </Button>
+        
+        {onOpenVideo && (
+          <div className="text-center">
+            <button
+              onClick={onOpenVideo}
+              className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm font-medium"
+            >
+              <Youtube size={16} />
+              Not sure how to measure? Watch our guide
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

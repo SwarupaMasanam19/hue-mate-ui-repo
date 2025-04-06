@@ -1,43 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useChatbot } from '../../context/ChatbotContext';
-import OptionCard from '../ui/OptionCard';
+import Button from '../ui/Button';
 
 const SeasonSelection = () => {
   const { goToNextStep } = useChatbot();
+  const [selectedSeason, setSelectedSeason] = useState(null);
 
   const seasonOptions = [
-    { id: 'summer', label: 'Summer', icon: '☀️', description: 'Hot weather clothing' },
-    { id: 'winter', label: 'Winter', icon: '❄️', description: 'Cold weather outfits' },
     { id: 'spring', label: 'Spring', icon: '🌱', description: 'Light, breathable clothing' },
+    { id: 'summer', label: 'Summer', icon: '☀️', description: 'Hot weather clothing' },
     { id: 'fall', label: 'Fall/Autumn', icon: '🍂', description: 'Layered, warm clothing' },
+    { id: 'winter', label: 'Winter', icon: '❄️', description: 'Cold weather outfits' },
     { id: 'all', label: 'All Seasons', icon: '🔄', description: 'Versatile outfits for any season' }
   ];
 
   const handleSelect = (season) => {
-    goToNextStep('season', { season });
+    setSelectedSeason(season);
+  };
+
+  const handleContinue = () => {
+    if (selectedSeason) {
+      goToNextStep('season', { season: selectedSeason });
+    }
   };
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-amber-500 bg-clip-text text-transparent mb-6">
-        Select a Season
-      </h2>
+    <div className="body-type-screen">
+      <h2 className="gradient-text">Select a Season</h2>
+      <p>What season are you shopping for?</p>
       
-      <p className="text-lg mb-8">
-        What season are you shopping for?
-      </p>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 w-full max-w-4xl">
+      <div className="body-types-container">
         {seasonOptions.map((option) => (
-          <OptionCard
+          <div 
             key={option.id}
-            label={option.label}
-            icon={option.icon}
-            description={option.description}
+            className={`body-type-card ${selectedSeason === option.id ? 'selected' : ''}`}
             onClick={() => handleSelect(option.id)}
-            size="medium"
-          />
+          >
+            <div className="body-type-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
+            <p>{option.label}</p>
+            <p className="text-sm text-gray-300 text-center">{option.description}</p>
+          </div>
         ))}
+      </div>
+      
+      <div className="action-buttons">
+        <Button 
+          primary 
+          onClick={handleContinue}
+          disabled={!selectedSeason}
+        >
+          Continue
+        </Button>
+        
+        <Button 
+          secondary 
+          onClick={() => goToNextStep('style')}
+        >
+          Back
+        </Button>
       </div>
     </div>
   );

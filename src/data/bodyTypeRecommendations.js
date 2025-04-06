@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Triangle, Circle, Square, Calculator, Youtube } from 'lucide-react';
 import BodyShapeCalculator from '../components/ui/BodyShapeCalculator';
 
-const BodyTypeSelector = ({ gender, onSelect }) => {
+const BodyTypeSelector = ({ gender, onSelect, onOpenCalculator, onOpenVideo }) => {
   const [selectedType, setSelectedType] = useState(null);
   const [showCalculator, setShowCalculator] = useState(false);
   
@@ -33,6 +33,7 @@ const BodyTypeSelector = ({ gender, onSelect }) => {
       onSelect(selectedType);
     }
   };
+  
   
   return (
     <div className="body-type-screen">

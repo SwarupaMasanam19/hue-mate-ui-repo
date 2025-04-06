@@ -718,7 +718,6 @@ body {
   background-color: #d97706;
   transform: translateY(-3px);
 }
-/* ... your existing CSS ... */
 
 .video-section {
   margin-top: 20px;
@@ -895,6 +894,114 @@ body {
   .results-details {
     text-align: left;
   }
+  /* Add these styles to your App.css file */
+
+/* Calculator reminder with buttons */
+.calculator-reminder {
+  background-color: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 20px auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.calculator-reminder p {
+  margin: 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.calculator-reminder-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.calculator-button, .video-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.calculator-button {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.calculator-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.video-button {
+  background-color: rgba(245, 158, 11, 0.7);
+  color: white;
+}
+
+.video-button:hover {
+  background-color: rgba(245, 158, 11, 0.9);
+}
+
+/* Animation for fade in */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Improve the VideoPlayer UI */
+.video-full-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Improve calculator modal */
+.calculator-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: scaleIn 0.3s ease;
+}
+
+/* Add this style to ensure the video player opens the calculator properly */
+.video-message button {
+  background-color: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px auto;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.video-message button:hover {
+  background-color: #d97706;
+}
 }
 
 /* Mobile Adjustments */
@@ -952,4 +1059,25 @@ body {
 
 .animate-spin {
   animation: spin 1s linear infinite;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
