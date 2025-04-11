@@ -8,6 +8,8 @@ import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
 import { useChatbot } from './context/ChatbotContext';
 import CalculatorPage from './components/CalculatorPage';
 
+import OutfitRecommendationPage from './components/OutfitRecommendationPage';
+
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
@@ -650,6 +652,8 @@ function App() {
   const [showCalculator, setShowCalculator] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [videoId, setVideoId] = useState("420TbEabNzY");
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [showOutfitPage, setShowOutfitPage] = useState(false);
   const bodyTypeIcons = {
     'pear': Triangle,
     'apple': Circle,
@@ -1057,12 +1061,7 @@ function App() {
   />
 )}
       
-      <BodyTypeSelector
-  gender={gender}
-  onSelect={handleBodyTypeSelect}
-  onOpenCalculator={handleOpenCalculator}
-  onOpenVideo={handleOpenVideo}
-/>
+     
 
 
 
@@ -1199,138 +1198,169 @@ function App() {
               />
             )}
 
-            {step === 'results' && (
-              <div className="results-screen">
-                <h2 className="gradient-text">Your Style Recommendations</h2>
-                
-                <div className="results-summary">
-                  <div className="result-photo-container">
-                    <img src={capturedImage} alt="Your photo" className="result-photo" />
-                  </div>
-                  
-                  <div className="results-details">
-                    <div className="result-item">
-                      <h3>Skin Tone</h3>
-                      <div className="tone-chip" style={{ backgroundColor: '#D4A76A' }}>
-                        Warm Medium <span className="hex-small">#D4A76A</span>
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Body Type</h3>
-                      <div className="body-type-result">
-                        {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Occasion</h3>
-                      <div className="occasion-result">
-                        {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Casual'}
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Budget</h3>
-                      <div className="budget-result">
-                        ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="color-palette-container">
-                  <h3>Your Recommended Color Palette</h3>
-                  <div className="color-palette">
-                    <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
-                      <span className="color-name">Gold</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
-                      <span className="color-name">Brown</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#228B22'}}>
-                      <span className="color-name">Forest Green</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
-                      <span className="color-name">Indian Red</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
-                      <span className="color-name">Amber</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Display selected items or outfit */}
-                <div className="outfit-container">
-                  <h3>Selected Items</h3>
-                  
-                  {outfitType === 'full' ? (
-                    <div className="full-outfit">
-                      <img 
-                        src="/api/placeholder/500/600"
-                        alt="Full outfit"
-                        className="outfit-image"
-                      />
-                      <div className="outfit-details">
-                        <h4>Complete Outfit</h4>
-                        <p>Price: ₹5999</p>
-                        <div className="shop-links">
-                          <a href="https://amazon.in" target="_blank" rel="noopener noreferrer">Amazon</a>
-                          <a href="https://flipkart.com" target="_blank" rel="noopener noreferrer">Flipkart</a>
-                          <a href="https://meesho.com" target="_blank" rel="noopener noreferrer">Meesho</a>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="specific-items">
-                      {selectedItems.tops && (
-                        <div className="selected-item">
-                          <img 
-                            src={selectedItems.tops.image || "/api/placeholder/200/250"}
-                            alt={selectedItems.tops.name}
-                            className="item-image"
-                          />
-                          <div className="item-details">
-                            <h4>Top: {selectedItems.tops.name}</h4>
-                            <p>Price: ₹{selectedItems.tops.price}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {selectedItems.bottoms && (
-                        <div className="selected-item">
-                          <img 
-                            src={selectedItems.bottoms.image || "/api/placeholder/200/250"}
-                            alt={selectedItems.bottoms.name}
-                            className="item-image"
-                          />
-                          <div className="item-details">
-                            <h4>Bottom: {selectedItems.bottoms.name}</h4>
-                            <p>Price: ₹{selectedItems.bottoms.price}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                
-                <div className="virtual-try-on">
-                  <h3>Want to see how it looks?</h3>
-                  <button className="primary-button">
-                    Virtual Try-On <Camera size={16} />
-                  </button>
-                </div>
-                
-                <div className="results-actions">
-                  <button className="primary-button" onClick={() => setStep('welcome')}>
-                    Start Over <RefreshCw size={16} />
-                  </button>
-                  <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
-                    Change Skin Tone <Palette size={16} />
-                  </button>
-                </div>
+{step === 'results' && (
+  <div className="results-screen">
+    <h2 className="gradient-text">Your Style Recommendations</h2>
+    
+    <div className="results-summary">
+      <div className="result-photo-container">
+        <img src={capturedImage} alt="Your photo" className="result-photo" />
+      </div>
+      
+      <div className="results-details">
+        <div className="result-item">
+          <h3>Skin Tone</h3>
+          <div className="tone-chip" style={{ backgroundColor: '#D4A76A' }}>
+            Warm Medium <span className="hex-small">#D4A76A</span>
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Body Type</h3>
+          <div className="body-type-result">
+            {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Occasion</h3>
+          <div className="occasion-result">
+            {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Casual'}
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Budget</h3>
+          <div className="budget-result">
+            ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div className="color-palette-container">
+      <h3>Your Recommended Color Palette</h3>
+      <div className="color-palette">
+        <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
+          <span className="color-name">Gold</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
+          <span className="color-name">Brown</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#228B22'}}>
+          <span className="color-name">Forest Green</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
+          <span className="color-name">Indian Red</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
+          <span className="color-name">Amber</span>
+        </div>
+      </div>
+    </div>
+    
+    {/* Display selected items or outfit */}
+    <div className="outfit-container">
+      <h3>Selected Items</h3>
+      
+      {outfitType === 'full' ? (
+        <div className="full-outfit">
+          <div className="outfit-image-container" style={{ width: '100%', maxHeight: '400px', overflow: 'hidden', borderRadius: '8px', marginBottom: '16px' }}>
+          <img
+        src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png"
+        alt="Outfit Part 1"
+        className="outfit-image"
+        style={{ width: '45%', height: '50%', objectFit: 'cover' }}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "https://i.imgur.com/1qYM16Y.jpg";
+        }}
+      />
+            <img
+        src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735619360/Screenshot_2024-12-31_095858_xiu8v7.png"
+        alt="Outfit Part 2"
+        className="outfit-image"
+        style={{ width: '45%', height: '50%', objectFit: 'cover' }}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "https://i.imgur.com/1qYM16Y.jpg";
+        }}
+      />
+      
+          </div>
+          <div className="outfit-details">
+            <h4>Complete Outfit</h4>
+            <p>Price: ₹5999</p>
+            <div className="shop-links">
+             
+              <a href="https://flipkart.com" target="_blank" rel="noopener noreferrer">Flipkart</a>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="specific-items">
+          {selectedItems.tops && (
+            <div className="selected-item">
+              <div style={{ width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px', marginBottom: '8px' }}>
+                <img 
+                  src={selectedItems.tops.image || "/tops.jpg"}
+                  alt={selectedItems.tops.name}
+                  className="item-image"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://i.imgur.com/3bKhIvB.jpg";
+                  }}
+                />
               </div>
-            )}
+              <div className="item-details">
+                <h4>Top: {selectedItems.tops.name}</h4>
+                <p>Price: ₹{selectedItems.tops.price}</p>
+              </div>
+            </div>
+          )}
+          
+          {selectedItems.bottoms && (
+            <div className="selected-item">
+              <div style={{ width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px', marginBottom: '8px' }}>
+                <img 
+                  src={selectedItems.bottoms.image || "/bottoms.jpg"}
+                  alt={selectedItems.bottoms.name}
+                  className="item-image"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://i.imgur.com/NzRXXdG.jpg";
+                  }}
+                />
+              </div>
+              <div className="item-details">
+                <h4>Bottom: {selectedItems.bottoms.name}</h4>
+                <p>Price: ₹{selectedItems.bottoms.price}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+    
+    <div className="virtual-try-on">
+      <h3>Want to see how it looks?</h3>
+      <button className="primary-button">
+        Virtual Try-On <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      </button>
+    </div>
+    
+    <div className="results-actions">
+      <button className="primary-button" onClick={() => setStep('welcome')}>
+        Start Over <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path></svg>
+      </button>
+      <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
+        Change Skin Tone <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+      </button>
+    </div>
+  </div>
+)}
           </div>
         </div>
       )}
