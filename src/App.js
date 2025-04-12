@@ -7,9 +7,9 @@ import Welcome from './components/steps/Welcome';
 import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
 import { useChatbot } from './context/ChatbotContext';
 import CalculatorPage from './components/CalculatorPage';
-
 import OutfitRecommendationPage from './components/OutfitRecommendationPage';
-
+import femaleOutfits from './data/femaleOutfits';
+import ReactConfetti from 'react-confetti';
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 
 // CameraCapture Component
-
 function CameraCapture({ onCapture, onCancel }) {
   const videoRef = useRef(null);
   const [stream, setStream] = useState(null);
@@ -151,6 +150,7 @@ function CameraCapture({ onCapture, onCancel }) {
     </div>
   );
 }
+
 // Gender Selection Component
 function GenderSelection({ onGenderSelect, onContinue, selectedGender }) {
   return (
@@ -471,166 +471,6 @@ function OutfitTypeSelection({ onSelect }) {
   );
 }
 
-// Specific Item Selection Component
-function SpecificItemSelection({ onSelect }) {
-  const items = [
-    { id: 'tops', name: 'Tops', icon: <Shirt size={24} /> },
-    { id: 'bottoms', name: 'Bottoms', icon: <Landmark size={24} /> },
-    { id: 'dresses', name: 'Dresses', icon: <Shirt size={24} /> },
-    { id: 'footwear', name: 'Footwear', icon: <Footprints size={24} /> },
-    { id: 'accessories', name: 'Accessories', icon: <Glasses size={24} /> },
-    { id: 'jewelry', name: 'Jewelry', icon: <Diamond size={24} /> },
-    { id: 'outerwear', name: 'Outerwear', icon: <Shirt size={24} /> }
-  ];
-  
-  return (
-    <div className="specific-item-screen">
-      <h2 className="gradient-text">What specific item are you looking for?</h2>
-      <p>Select what you'd like us to recommend.</p>
-      
-      <div className="specific-item-options">
-        {items.map(item => (
-          <div 
-            key={item.id}
-            className="specific-item-card"
-            onClick={() => onSelect(item.id)}
-          >
-            <div className="specific-item-icon">{item.icon}</div>
-            <h3>{item.name}</h3>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// Item Recommendation Component
-function ItemRecommendations({ items, type, onSelect }) {
-  return (
-    <div className="recommendations-screen">
-      <h2 className="gradient-text">Recommended {type}</h2>
-      <p>Based on your preferences, we think these would look great on you!</p>
-      
-      <div className="recommendation-grid">
-        {items.map(item => (
-          <div 
-            key={item.id}
-            className="recommendation-card"
-            onClick={() => onSelect(item)}
-          >
-            <div className="recommendation-image">
-              <img 
-                src={item.image || "/api/placeholder/300/400"} 
-                alt={item.name}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://via.placeholder.com/300x400?text=Fashion+Item";
-                }}
-              />
-            </div>
-            <div className="recommendation-details">
-              <h3>{item.name}</h3>
-              <p className="recommendation-price">₹{item.price}</p>
-              <div className="recommendation-tags">
-                <span className="recommendation-tag">{item.style}</span>
-                <span className="recommendation-tag">{item.color}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      <div className="recommendation-actions">
-        <button className="primary-button">Show More Options</button>
-      </div>
-    </div>
-  );
-}
-
-// Final Outfit Component
-function FinalOutfit({ outfit, skinTone, bodyType, onStartOver }) {
-  return (
-    <div className="final-outfit-screen">
-      <h2 className="gradient-text">Your Perfect Outfit</h2>
-      
-      <div className="outfit-summary">
-        <div className="outfit-details">
-          <h3>Style Profile</h3>
-          <div className="profile-item">
-            <span className="profile-label">Skin Tone:</span>
-            <span className="profile-value">{skinTone}</span>
-          </div>
-          <div className="profile-item">
-            <span className="profile-label">Body Type:</span>
-            <span className="profile-value">{bodyType}</span>
-          </div>
-          <div className="profile-item">
-            <span className="profile-label">Total Price:</span>
-            <span className="profile-value">₹{outfit.totalPrice}</span>
-          </div>
-        </div>
-        
-        <div className="outfit-items">
-          {outfit.items.map(item => (
-            <div key={item.id} className="outfit-item">
-              <div className="outfit-item-image">
-                <img 
-                  src={item.image || "/api/placeholder/150/200"} 
-                  alt={item.name}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://via.placeholder.com/150x200?text=Item";
-                  }}
-                />
-              </div>
-              <div className="outfit-item-details">
-                <h4>{item.name}</h4>
-                <p>₹{item.price}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      <div className="shopping-links">
-        <h3>Shop this look at:</h3>
-        <div className="shop-buttons">
-          <a 
-            href="https://amazon.in" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="shop-button"
-          >
-            Amazon
-          </a>
-          <a 
-            href="https://flipkart.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="shop-button"
-          >
-            Flipkart
-          </a>
-          <a 
-            href="https://meesho.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="shop-button"
-          >
-            Meesho
-          </a>
-        </div>
-      </div>
-      
-      <div className="final-actions">
-        <button className="primary-button" onClick={onStartOver}>
-          Start Over
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // Main App Component
 function App() {
   const [recommender] = useState(new RecommendationEngine());
@@ -639,11 +479,11 @@ function App() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [gender, setGender] = useState(null);
   const [bodyType, setBodyType] = useState(null);
-  
+  const [outfitDisplayCount, setOutfitDisplayCount] = useState(3);
   const [season, setSeason] = useState(null);
   const [occasion, setOccasion] = useState(null);
   const [style, setStyle] = useState(null);
-  const [colorPreference, setColorPreference] = useState(null);
+  const [colorPreference, setColorPreference] = useState("warm");
   const [budget, setBudget] = useState(null);
   const [outfitType, setOutfitType] = useState(null);
   const [specificItem, setSpecificItem] = useState(null);
@@ -654,6 +494,13 @@ function App() {
   const [videoId, setVideoId] = useState("420TbEabNzY");
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [showOutfitPage, setShowOutfitPage] = useState(false);
+  const [selectedOutfit, setSelectedOutfit] = useState(null);
+  const [skinToneInfo, setSkinToneInfo] = useState({
+    name: "Warm Medium",
+    hex: "#D4A76A",
+    colorType: "warm"
+  });
+
   const bodyTypeIcons = {
     'pear': Triangle,
     'apple': Circle,
@@ -662,10 +509,72 @@ function App() {
     'inverted-triangle': ChevronUp,
     'oval': Circle,
     'trapezoid': ChevronUp,
-};
+  };
+
+  // Function to filter outfits based on user preferences
+  const getFilteredOutfits = () => {
+    return femaleOutfits.filter(outfit => {
+      // Filter by gender
+      if (gender && outfit.gender !== gender) {
+        return false;
+      }
+      
+      // Filter by budget (if specified)
+      if (budget && budget.amount && outfit.price > parseInt(budget.amount)) {
+        return false;
+      }
+      
+      // Filter by occasion if specified
+      if (occasion && outfit.occasions && !outfit.occasions.includes(occasion)) {
+        return false;
+      }
+      
+      // Filter by body type if specified
+      if (bodyType && outfit.bodyTypes && !outfit.bodyTypes.includes(bodyType.split('-')[0])) {
+        return false;
+      }
+      
+      // Filter by color type based on skin tone
+      if (colorPreference && outfit.colorType && outfit.colorType !== colorPreference) {
+        return false;
+      }
+      
+      return true;
+    });
+  };
+  
+  const performSkinToneAnalysis = async (imageData) => {
+    try {
+      // For now, use a simple mock analysis
+      // Later you can integrate the real skin tone analyzer
+      const mockResult = {
+        success: true,
+        name: "Warm Medium",
+        hex: "#D4A76A",
+        colorType: "warm"
+      };
+      
+      // Update skin tone info
+      setSkinToneInfo(mockResult);
+      setColorPreference(mockResult.colorType);
+      
+      // Proceed to next step
+      setStep('analysis');
+    } catch (error) {
+      console.error("Error analyzing skin tone:", error);
+      // Fall back to default
+      setSkinToneInfo({
+        name: "Warm Medium",
+        hex: "#D4A76A",
+        colorType: "warm"
+      });
+      setStep('analysis');
+    }
+  };
+
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
-    setStep('analysis');
+    performSkinToneAnalysis(imageData);
   };
 
   const handleGenderSelect = (selectedGender) => {
@@ -700,7 +609,6 @@ function App() {
     setShowCalculator(true);
   };
   
-
   const handleVideoLink = () => {
     setShowVideo(true);
   };
@@ -708,6 +616,7 @@ function App() {
   const handleCloseVideo = () => {
     setShowVideo(false);
   };
+  
   useEffect(() => {
     const handleOpenVideoEvent = () => {
       handleVideoLink();
@@ -720,14 +629,11 @@ function App() {
     document.addEventListener('openVideo', handleOpenVideoEvent);
     document.addEventListener('openCalculator', handleOpenCalculatorEvent);
     
-    
     return () => {
       document.removeEventListener('openVideo', handleOpenVideoEvent);
       document.removeEventListener('openCalculator', handleOpenCalculatorEvent);
-      
-      
     };
-  }, [showVideo, showCalculator]);
+  }, []);
 
   const handleOpenVideo = (id = "420TbEabNzY") => {
     setShowCalculator(false); // Close calculator if open
@@ -747,26 +653,6 @@ function App() {
     }, 3000);
   };
   
-
-  useEffect(() => {
-    const handleOpenVideoEvent = () => {
-      handleVideoLink();
-    };
-
-    const handleOpenCalculatorEvent = () => {
-      handleCalculatorOpen();
-    };
-
-    document.addEventListener('openVideo', handleOpenVideoEvent);
-    document.addEventListener('openCalculator', handleOpenCalculatorEvent);
-
-    return () => {
-      document.removeEventListener('openVideo', handleOpenVideoEvent);
-      document.removeEventListener('openCalculator', handleOpenCalculatorEvent);
-    };
-  }, []);
-  
-  
   const handleConfirmation = (confirmed) => {
     if (confirmed) {
       setStep('season');
@@ -784,7 +670,6 @@ function App() {
       setStep('bodyType');
     }
   };
-
 
   const handleSeasonSelect = (selectedSeason) => {
     setSeason(selectedSeason);
@@ -856,6 +741,7 @@ function App() {
     }
   };
   
+  
   const handleBottomSelect = (item) => {
     setSelectedItems(prev => ({
       ...prev,
@@ -904,8 +790,6 @@ function App() {
       return "Hello there!";
     }
   };
-
-  
 
   return (
     <div className="App">
@@ -987,11 +871,11 @@ function App() {
                 {gender === 'female' ? 'Looking gorgeous!' : 'Looking handsome!'}
                 </p>
                <div className="tone-indicator">
-               <div className="color-circle" style={{ backgroundColor: '#D4A76A' }}>
-               <span className="hex-code">#D4A76A</span>
+               <div className="color-circle" style={{ backgroundColor: skinToneInfo.hex }}>
+               <span className="hex-code">{skinToneInfo.hex}</span>
                </div>
                <div className="tone-info">
-               <h3 className="tone-name">Warm Medium</h3>
+               <h3 className="tone-name">{skinToneInfo.name}</h3>
                <p className="tone-description">A beautiful warm undertone with golden highlights</p>
                </div>
               </div>
@@ -1022,12 +906,7 @@ function App() {
           onSelect={handleBodyTypeSelect}
           onOpenCalculator={handleOpenCalculator}
           onOpenVideo={handleOpenVideo}
-         >
-      <div>
-        
-        {showCalculator && <CalculatorPage onClose={handleCloseCalculator} />}
-      </div>
-      </BodyTypeSelector>
+         />
       )}
 
             
@@ -1178,195 +1057,289 @@ function App() {
               <OutfitTypeSelection onSelect={handleOutfitTypeSelect} />
             )}
             
-            {step === 'specificItem' && (
-              <SpecificItemSelection onSelect={handleSpecificItemSelect} />
-            )}
-            
-            {step === 'itemRecommendations' && selectedItems.items && (
-              <ItemRecommendations 
-                items={selectedItems.items}
-                type={specificItem}
-                onSelect={handleItemSelect}
-              />
-            )}
-            
-            {step === 'bottomRecommendations' && selectedItems.bottomRecommendations && (
-              <ItemRecommendations 
-                items={selectedItems.bottomRecommendations}
-                type="bottoms"
-                onSelect={handleBottomSelect}
-              />
-            )}
-
-{step === 'results' && (
-  <div className="results-screen">
-    <h2 className="gradient-text">Your Style Recommendations</h2>
+            {step === 'results' && (
+              <div className="results-screen">
+                <h2 className="gradient-text">Your Style Recommendations</h2>
+                
+                <div className="results-summary">
+                  <div className="result-photo-container">
+                    <img src={capturedImage} alt="Your photo" className="result-photo" />
+                  </div>
+                  
+                  <div className="results-details">
+                    <div className="result-item">
+                      <h3>Skin Tone</h3>
+                      <div className="tone-chip" style={{ backgroundColor: skinToneInfo.hex }}>
+                        {skinToneInfo.name} <span className="hex-small">{skinToneInfo.hex}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="result-item">
+                      <h3>Body Type</h3>
+                      <div className="body-type-result">
+                        {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Pear'}
+                      </div>
+                    </div>
+                    
+                    <div className="result-item">
+                      <h3>Occasion</h3>
+                      <div className="occasion-result">
+                        {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Work'}
+                      </div>
+                    </div>
+                    
+                    <div className="result-item">
+                      <h3>Budget</h3>
+                      <div className="budget-result">
+                        ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="color-palette-container">
+                  <h3>Your Recommended Color Palette</h3>
+                  <div className="color-palette">
+                    <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
+                      <span className="color-name">Gold</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
+                      <span className="color-name">Brown</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#228B22'}}>
+                      <span className="color-name">Forest Green</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
+                      <span className="color-name">Indian Red</span>
+                    </div>
+                    <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
+                      <span className="color-name">Amber</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Display outfits */}
+                <div className="outfit-container">
+                  <h3>Recommended Outfits</h3>
+                  
+                  <div className="outfit-grid">
+                    {/* Hard-coded outfits for testing - will be replaced with getFilteredOutfits() */}
+                    <div 
+                      className="outfit-card"
+                      onClick={() => setSelectedOutfit({
+                        name: 'Traditional Lehenga Set',
+                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png',
+                        price: 2999,
+                        style: 'traditional',
+                        occasions: ['wedding', 'festive'],
+                        description: 'A beautiful traditional lehenga set with intricate embroidery, perfect for festive occasions and celebrations.',
+                        shopLinks: { flipkart: 'https://flipkart.com' }
+                      })}
+                    >
+                      <div className="outfit-image">
+                        <img 
+                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png" 
+                          alt="Traditional Lehenga Set" 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
+                          }}
+                        />
+                      </div>
+                      <div className="outfit-info">
+                        <h4>Traditional Lehenga Set</h4>
+                        <p className="price">₹2999</p>
+                        <div className="shop-button">
+                          <a 
+                            href="https://flipkart.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Shop Now
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div 
+                      className="outfit-card"
+                      onClick={() => setSelectedOutfit({
+                        name: 'Embellished Anarkali',
+                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620073/Screenshot_2024-12-31_101055_ld1lql.png',
+                        price: 2799,
+                        style: 'traditional',
+                        occasions: ['festive', 'ceremony'],
+                        description: 'A stunning anarkali suit with intricate embellishments and flowing silhouette, ideal for special occasions.',
+                        shopLinks: { flipkart: 'https://flipkart.com' }
+                      })}
+                    >
+                      <div className="outfit-image">
+                        <img 
+                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620073/Screenshot_2024-12-31_101055_ld1lql.png" 
+                          alt="Embellished Anarkali" 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
+                          }}
+                        />
+                      </div>
+                      <div className="outfit-info">
+                        <h4>Embellished Anarkali</h4>
+                        <p className="price">₹2799</p>
+                        <div className="shop-button">
+                          <a 
+                            href="https://flipkart.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Shop Now
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div 
+                      className="outfit-card"
+                      onClick={() => setSelectedOutfit({
+                        name: 'Traditional Saree',
+                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png',
+                        price: 2499,
+                        style: 'traditional',
+                        occasions: ['wedding', 'formal'],
+                        description: 'A beautiful traditional saree with intricate patterns and rich colors, versatile for many occasions.',
+                        shopLinks: { flipkart: 'https://flipkart.com' }
+                      })}
+                    >
+                      <div className="outfit-image">
+                        <img 
+                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png" 
+                          alt="Traditional Saree" 
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
+                          }}
+                        />
+                      </div>
+                      <div className="outfit-info">
+                        <h4>Traditional Saree</h4>
+                        <p className="price">₹2499</p>
+                        <div className="shop-button">
+                          <a 
+                            href="https://flipkart.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Shop Now
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="view-more-container">
+  <button 
+    className="view-more-button"
+    onClick={() => {
+      // Get all filtered outfits
+      const allOutfits = getFilteredOutfits();
+      
+      // Create a modal or expanded view to show more outfits
+      alert(`${allOutfits.length} outfits match your preferences! We're working on expanding this view.`);
+      
+      // You could also navigate to a dedicated page for all outfits
+      // or expand the current section to show more
+    }}
+  >
+    View More Options
+  </button>
+</div>
+                </div>
+{selectedOutfit && (
+  <div className="selected-outfit-overlay">
+    {/* Add confetti effect that automatically stops after a few seconds */}
+    <ReactConfetti
+      width={window.innerWidth}
+      height={window.innerHeight}
+      recycle={false}
+      numberOfPieces={200}
+      tweenDuration={10000}
+    />
     
-    <div className="results-summary">
-      <div className="result-photo-container">
-        <img src={capturedImage} alt="Your photo" className="result-photo" />
+    <div className="selected-outfit-modal">
+      <button className="close-button" onClick={() => setSelectedOutfit(null)}>×</button>
+      
+      {/* Add Great Choice! heading */}
+      <div className="great-choice-heading">
+        <h1>Great Choice!</h1>
       </div>
       
-      <div className="results-details">
-        <div className="result-item">
-          <h3>Skin Tone</h3>
-          <div className="tone-chip" style={{ backgroundColor: '#D4A76A' }}>
-            Warm Medium <span className="hex-small">#D4A76A</span>
-          </div>
+      <div className="selected-outfit-content">
+        <div className="selected-outfit-image">
+          <img 
+            src={selectedOutfit.image} 
+            alt={selectedOutfit.name} 
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://via.placeholder.com/400x600?text=Outfit+Image";
+            }}
+          />
         </div>
         
-        <div className="result-item">
-          <h3>Body Type</h3>
-          <div className="body-type-result">
-            {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Rectangle'}
-          </div>
-        </div>
-        
-        <div className="result-item">
-          <h3>Occasion</h3>
-          <div className="occasion-result">
-            {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Casual'}
-          </div>
-        </div>
-        
-        <div className="result-item">
-          <h3>Budget</h3>
-          <div className="budget-result">
-            ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div className="color-palette-container">
-      <h3>Your Recommended Color Palette</h3>
-      <div className="color-palette">
-        <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
-          <span className="color-name">Gold</span>
-        </div>
-        <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
-          <span className="color-name">Brown</span>
-        </div>
-        <div className="color-chip" style={{backgroundColor: '#228B22'}}>
-          <span className="color-name">Forest Green</span>
-        </div>
-        <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
-          <span className="color-name">Indian Red</span>
-        </div>
-        <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
-          <span className="color-name">Amber</span>
-        </div>
-      </div>
-    </div>
-    
-    {/* Display selected items or outfit */}
-    <div className="outfit-container">
-      <h3>Selected Items</h3>
-      
-      {outfitType === 'full' ? (
-        <div className="full-outfit">
-          <div className="outfit-image-container" style={{ width: '100%', maxHeight: '400px', overflow: 'hidden', borderRadius: '8px', marginBottom: '16px' }}>
-          <img
-        src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png"
-        alt="Outfit Part 1"
-        className="outfit-image"
-        style={{ width: '45%', height: '50%', objectFit: 'cover' }}
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = "https://i.imgur.com/1qYM16Y.jpg";
-        }}
-      />
-            <img
-        src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735619360/Screenshot_2024-12-31_095858_xiu8v7.png"
-        alt="Outfit Part 2"
-        className="outfit-image"
-        style={{ width: '45%', height: '50%', objectFit: 'cover' }}
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = "https://i.imgur.com/1qYM16Y.jpg";
-        }}
-      />
-      
-          </div>
-          <div className="outfit-details">
-            <h4>Complete Outfit</h4>
-            <p>Price: ₹5999</p>
-            <div className="shop-links">
-             
-              <a href="https://flipkart.com" target="_blank" rel="noopener noreferrer">Flipkart</a>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="specific-items">
-          {selectedItems.tops && (
-            <div className="selected-item">
-              <div style={{ width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px', marginBottom: '8px' }}>
-                <img 
-                  src={selectedItems.tops.image || "/tops.jpg"}
-                  alt={selectedItems.tops.name}
-                  className="item-image"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://i.imgur.com/3bKhIvB.jpg";
-                  }}
-                />
-              </div>
-              <div className="item-details">
-                <h4>Top: {selectedItems.tops.name}</h4>
-                <p>Price: ₹{selectedItems.tops.price}</p>
-              </div>
-            </div>
-          )}
+        <div className="selected-outfit-details">
+          <h3>You've Selected</h3>
+          <h2>{selectedOutfit.name}</h2>
           
-          {selectedItems.bottoms && (
-            <div className="selected-item">
-              <div style={{ width: '100%', height: '200px', overflow: 'hidden', borderRadius: '8px', marginBottom: '8px' }}>
-                <img 
-                  src={selectedItems.bottoms.image || "/bottoms.jpg"}
-                  alt={selectedItems.bottoms.name}
-                  className="item-image"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://i.imgur.com/NzRXXdG.jpg";
-                  }}
-                />
-              </div>
-              <div className="item-details">
-                <h4>Bottom: {selectedItems.bottoms.name}</h4>
-                <p>Price: ₹{selectedItems.bottoms.price}</p>
-              </div>
+          <div className="outfit-specs">
+            <div className="spec-item">
+              <span className="spec-label">Price:</span>
+              <span className="spec-value">₹{selectedOutfit.price}</span>
             </div>
-          )}
+            
+            <div className="spec-item">
+              <span className="spec-label">Style:</span>
+              <span className="spec-value">{selectedOutfit.style || "Traditional"}</span>
+            </div>
+            
+            <div className="spec-item">
+              <span className="spec-label">Occasion:</span>
+              <span className="spec-value">{selectedOutfit.occasions?.[0] || "Formal"}</span>
+            </div>
+          </div>
+          
+          <p className="outfit-description">
+            {selectedOutfit.description || `A beautiful ${selectedOutfit.name} perfect for special occasions. This outfit complements your skin tone and body type.`}
+          </p>
+          
+          <div className="outfit-actions">
+            <a 
+              href={selectedOutfit.shopLinks?.flipkart || "https://flipkart.com"} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="shop-now-button"
+            >
+              Shop Now
+            </a>
+          </div>
         </div>
-      )}
-    </div>
-    
-    <div className="virtual-try-on">
-      <h3>Want to see how it looks?</h3>
-      <button className="primary-button">
-        Virtual Try-On <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-      </button>
-    </div>
-    
-    <div className="results-actions">
-      <button className="primary-button" onClick={() => setStep('welcome')}>
-        Start Over <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path></svg>
-      </button>
-      <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
-        Change Skin Tone <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
-      </button>
+      </div>
     </div>
   </div>
 )}
+                <div className="results-actions">
+                  <button className="primary-button" onClick={() => setStep('welcome')}>
+                    Start Over <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path></svg>
+                  </button>
+                  <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
+                    Change Skin Tone <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
     </div>
   );
 }
-
 
 export default App;
