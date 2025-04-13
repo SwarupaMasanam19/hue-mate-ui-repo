@@ -10,6 +10,8 @@ import CalculatorPage from './components/CalculatorPage';
 import OutfitRecommendationPage from './components/OutfitRecommendationPage';
 import femaleOutfits from './data/femaleOutfits';
 import ReactConfetti from 'react-confetti';
+import DynamicOutfitSuggestions from './components/DynamicOutfitSuggestions';
+
 import { 
   Camera, X, ArrowRight, Info, AlertCircle, Flower, Sun, Leaf, 
   Snowflake, RefreshCw, Shirt, Briefcase, Sparkles, Heart, 
@@ -494,6 +496,7 @@ function App() {
   const [videoId, setVideoId] = useState("420TbEabNzY");
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [showOutfitPage, setShowOutfitPage] = useState(false);
+  const [showOutfitModal, setShowOutfitModal] = useState(false);
   const [selectedOutfit, setSelectedOutfit] = useState(null);
   const [skinToneInfo, setSkinToneInfo] = useState({
     name: "Warm Medium",
@@ -541,6 +544,11 @@ function App() {
       
       return true;
     });
+  };
+
+  const handleOutfitSelect = (outfit) => {
+    setSelectedOutfit(outfit);
+    setShowOutfitModal(true);
   };
   
   const performSkinToneAnalysis = async (imageData) => {
@@ -1058,205 +1066,91 @@ function App() {
             )}
             
             {step === 'results' && (
-              <div className="results-screen">
-                <h2 className="gradient-text">Your Style Recommendations</h2>
-                
-                <div className="results-summary">
-                  <div className="result-photo-container">
-                    <img src={capturedImage} alt="Your photo" className="result-photo" />
-                  </div>
-                  
-                  <div className="results-details">
-                    <div className="result-item">
-                      <h3>Skin Tone</h3>
-                      <div className="tone-chip" style={{ backgroundColor: skinToneInfo.hex }}>
-                        {skinToneInfo.name} <span className="hex-small">{skinToneInfo.hex}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Body Type</h3>
-                      <div className="body-type-result">
-                        {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Pear'}
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Occasion</h3>
-                      <div className="occasion-result">
-                        {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Work'}
-                      </div>
-                    </div>
-                    
-                    <div className="result-item">
-                      <h3>Budget</h3>
-                      <div className="budget-result">
-                        ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="color-palette-container">
-                  <h3>Your Recommended Color Palette</h3>
-                  <div className="color-palette">
-                    <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
-                      <span className="color-name">Gold</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
-                      <span className="color-name">Brown</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#228B22'}}>
-                      <span className="color-name">Forest Green</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
-                      <span className="color-name">Indian Red</span>
-                    </div>
-                    <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
-                      <span className="color-name">Amber</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Display outfits */}
-                <div className="outfit-container">
-                  <h3>Recommended Outfits</h3>
-                  
-                  <div className="outfit-grid">
-                    {/* Hard-coded outfits for testing - will be replaced with getFilteredOutfits() */}
-                    <div 
-                      className="outfit-card"
-                      onClick={() => setSelectedOutfit({
-                        name: 'Traditional Lehenga Set',
-                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png',
-                        price: 2999,
-                        style: 'traditional',
-                        occasions: ['wedding', 'festive'],
-                        description: 'A beautiful traditional lehenga set with intricate embroidery, perfect for festive occasions and celebrations.',
-                        shopLinks: { flipkart: 'https://flipkart.com' }
-                      })}
-                    >
-                      <div className="outfit-image">
-                        <img 
-                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png" 
-                          alt="Traditional Lehenga Set" 
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
-                          }}
-                        />
-                      </div>
-                      <div className="outfit-info">
-                        <h4>Traditional Lehenga Set</h4>
-                        <p className="price">₹2999</p>
-                        <div className="shop-button">
-                          <a 
-                            href="https://flipkart.com" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                          >
-                            Shop Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div 
-                      className="outfit-card"
-                      onClick={() => setSelectedOutfit({
-                        name: 'Embellished Anarkali',
-                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620073/Screenshot_2024-12-31_101055_ld1lql.png',
-                        price: 2799,
-                        style: 'traditional',
-                        occasions: ['festive', 'ceremony'],
-                        description: 'A stunning anarkali suit with intricate embellishments and flowing silhouette, ideal for special occasions.',
-                        shopLinks: { flipkart: 'https://flipkart.com' }
-                      })}
-                    >
-                      <div className="outfit-image">
-                        <img 
-                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620073/Screenshot_2024-12-31_101055_ld1lql.png" 
-                          alt="Embellished Anarkali" 
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
-                          }}
-                        />
-                      </div>
-                      <div className="outfit-info">
-                        <h4>Embellished Anarkali</h4>
-                        <p className="price">₹2799</p>
-                        <div className="shop-button">
-                          <a 
-                            href="https://flipkart.com" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                          >
-                            Shop Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div 
-                      className="outfit-card"
-                      onClick={() => setSelectedOutfit({
-                        name: 'Traditional Saree',
-                        image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png',
-                        price: 2499,
-                        style: 'traditional',
-                        occasions: ['wedding', 'formal'],
-                        description: 'A beautiful traditional saree with intricate patterns and rich colors, versatile for many occasions.',
-                        shopLinks: { flipkart: 'https://flipkart.com' }
-                      })}
-                    >
-                      <div className="outfit-image">
-                        <img 
-                          src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png" 
-                          alt="Traditional Saree" 
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/300x400?text=Outfit+Image";
-                          }}
-                        />
-                      </div>
-                      <div className="outfit-info">
-                        <h4>Traditional Saree</h4>
-                        <p className="price">₹2499</p>
-                        <div className="shop-button">
-                          <a 
-                            href="https://flipkart.com" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                          >
-                            Shop Now
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="view-more-container">
-  <button 
-    className="view-more-button"
-    onClick={() => {
-      // Get all filtered outfits
-      const allOutfits = getFilteredOutfits();
+  <div className="results-screen">
+    <h2 className="gradient-text">Your Style Recommendations</h2>
+    
+    <div className="results-summary">
+      <div className="result-photo-container">
+        <img src={capturedImage} alt="Your photo" className="result-photo" />
+      </div>
       
-      // Create a modal or expanded view to show more outfits
-      alert(`${allOutfits.length} outfits match your preferences! We're working on expanding this view.`);
-      
-      // You could also navigate to a dedicated page for all outfits
-      // or expand the current section to show more
-    }}
-  >
-    View More Options
-  </button>
-</div>
-                </div>
+      <div className="results-details">
+        <div className="result-item">
+          <h3>Skin Tone</h3>
+          <div className="tone-chip" style={{ backgroundColor: skinToneInfo.hex }}>
+            {skinToneInfo.name} <span className="hex-small">{skinToneInfo.hex}</span>
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Body Type</h3>
+          <div className="body-type-result">
+            {bodyType ? bodyType.split('-')[0].charAt(0).toUpperCase() + bodyType.split('-')[0].slice(1) : 'Pear'}
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Occasion</h3>
+          <div className="occasion-result">
+            {occasion ? occasion.charAt(0).toUpperCase() + occasion.slice(1) : 'Work'}
+          </div>
+        </div>
+        
+        <div className="result-item">
+          <h3>Budget</h3>
+          <div className="budget-result">
+            ₹{budget ? budget.amount : '3000'} ({budget ? budget.range : 'medium'})
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div className="color-palette-container">
+      <h3>Your Recommended Color Palette</h3>
+      <div className="color-palette">
+        <div className="color-chip" style={{backgroundColor: '#D4A76A'}}>
+          <span className="color-name">Gold</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#8B4513'}}>
+          <span className="color-name">Brown</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#228B22'}}>
+          <span className="color-name">Forest Green</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#CD5C5C'}}>
+          <span className="color-name">Indian Red</span>
+        </div>
+        <div className="color-chip" style={{backgroundColor: '#E3963E'}}>
+          <span className="color-name">Amber</span>
+        </div>
+      </div>
+    </div>
+    
+    {/* Replace the static outfit grid with DynamicOutfitSuggestions component */}
+    <DynamicOutfitSuggestions
+      gender={gender}
+      skinTone={skinToneInfo.name.toLowerCase()}
+      bodyType={bodyType}
+      budget={budget}
+      occasion={occasion}
+      style={style}
+      colorPreference={colorPreference}
+      onOutfitSelect={handleOutfitSelect}
+    />
+    
+    <div className="results-actions">
+      <button className="primary-button" onClick={() => setStep('welcome')}>
+        Start Over <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path></svg>
+      </button>
+      <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
+        Change Skin Tone <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+      </button>
+    </div>
+  </div>
+             )}
+
 {selectedOutfit && (
   <div className="selected-outfit-overlay">
-    {/* Add confetti effect that automatically stops after a few seconds */}
     <ReactConfetti
       width={window.innerWidth}
       height={window.innerHeight}
@@ -1268,7 +1162,6 @@ function App() {
     <div className="selected-outfit-modal">
       <button className="close-button" onClick={() => setSelectedOutfit(null)}>×</button>
       
-      {/* Add Great Choice! heading */}
       <div className="great-choice-heading">
         <h1>Great Choice!</h1>
       </div>
@@ -1304,6 +1197,11 @@ function App() {
               <span className="spec-label">Occasion:</span>
               <span className="spec-value">{selectedOutfit.occasions?.[0] || "Formal"}</span>
             </div>
+            
+            <div className="spec-item">
+              <span className="spec-label">Body Type:</span>
+              <span className="spec-value">{selectedOutfit.bodyTypes?.join(', ') || "All body types"}</span>
+            </div>
           </div>
           
           <p className="outfit-description">
@@ -1325,16 +1223,6 @@ function App() {
     </div>
   </div>
 )}
-                <div className="results-actions">
-                  <button className="primary-button" onClick={() => setStep('welcome')}>
-                    Start Over <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"></path></svg>
-                  </button>
-                  <button className="secondary-button" onClick={() => handleEditInfo('skinTone')}>
-                    Change Skin Tone <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}

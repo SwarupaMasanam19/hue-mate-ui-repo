@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
+// src/context/ChatbotContext.jsx - Updated with confirmation step
+import React, { createContext, useState, useContext, useRef } from 'react';
 
 // Create context
 const ChatbotContext = createContext();
@@ -8,9 +9,11 @@ export const ChatbotProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState('welcome');
   const [userImage, setUserImage] = useState(null);
+  const [stepHistory, setStepHistory] = useState([]);
   const [formData, setFormData] = useState({
     gender: '',
     skinTone: '',
+    skinToneInfo: { name: 'Warm Medium', hex: '#D4A76A' },
     bodyType: '',
     occasion: '',
     style: '',
@@ -30,6 +33,9 @@ export const ChatbotProvider = ({ children }) => {
 
   // Process to the next step with data
   const goToNextStep = (currentStepName, data = {}) => {
+    // Add current step to history for back button
+    setStepHistory(prev => [...prev, currentStep]);
+    
     // Update form data with new values
     setFormData(prev => ({
       ...prev,
@@ -47,7 +53,8 @@ export const ChatbotProvider = ({ children }) => {
       'style': 'season',
       'season': 'colorPreference',
       'colorPreference': 'budget',
-      'budget': 'topSelection',
+      'budget': 'confirmation', // Go to confirmation instead of directly to selection
+      'confirmation': 'topSelection', // After confirmation, go to top selection
       'topSelection': 'bottomSelection',
       'bottomSelection': 'jewelrySelection',
       'jewelrySelection': 'footwearSelection',
@@ -57,9 +64,20 @@ export const ChatbotProvider = ({ children }) => {
     // Set the next step
     setCurrentStep(stepMap[currentStepName] || 'welcome');
   };
+  
+  // Go to previous step
+  const goToPreviousStep = () => {
+    if (stepHistory.length > 0) {
+      const prevStep = stepHistory[stepHistory.length - 1];
+      setStepHistory(prev => prev.slice(0, -1));
+      setCurrentStep(prevStep);
+    }
+  };
 
   // Go back to a specific step
   const goToStep = (stepName) => {
+    // Add current step to history
+    setStepHistory(prev => [...prev, currentStep]);
     setCurrentStep(stepName);
   };
 
@@ -67,9 +85,11 @@ export const ChatbotProvider = ({ children }) => {
   const resetChatbot = () => {
     setCurrentStep('welcome');
     setUserImage(null);
+    setStepHistory([]);
     setFormData({
       gender: '',
       skinTone: '',
+      skinToneInfo: { name: 'Warm Medium', hex: '#D4A76A' },
       bodyType: '',
       occasion: '',
       style: '',
@@ -83,9 +103,18 @@ export const ChatbotProvider = ({ children }) => {
     });
   };
 
-  // Set user image
-  const setImage = (imageUrl) => {
+  // Set user image and analyze skin tone
+  const setUserPhotoAndAnalyze = (imageUrl) => {
     setUserImage(imageUrl);
+    // Normally you would analyze skin tone here
+    // For now, just set a default
+    setFormData(prev => ({
+      ...prev,
+      skinTone: 'warm',
+      skinToneInfo: { name: 'Warm Medium', hex: '#D4A76A' }
+    }));
+    // After analysis, go to gender selection
+    setCurrentStep('skinToneAnalysis');
   };
 
   return (
@@ -97,9 +126,11 @@ export const ChatbotProvider = ({ children }) => {
         userImage,
         formData,
         goToNextStep,
+        goToPreviousStep,
         goToStep,
         resetChatbot,
-        setImage
+        setUserPhotoAndAnalyze,
+        stepHistory
       }}
     >
       {children}

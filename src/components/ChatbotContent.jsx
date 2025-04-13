@@ -1,9 +1,10 @@
+// src/components/ChatbotContent.jsx - Updated with Confirmation page
 import React from 'react';
 import { useChatbot } from '../context/ChatbotContext';
 
 // Import Step Components
 import Welcome from './steps/Welcome';
-import UploadPhoto from './steps/UploadPhoto'; // This is now camera-only
+import UploadPhoto from './steps/UploadPhoto';
 import SkinToneAnalysis from './steps/SkinToneAnalysis';
 import GenderSelection from './steps/GenderSelection';
 import BodyTypeSelection from './steps/BodyTypeSelection';
@@ -14,14 +15,15 @@ import ColorPreference from './steps/ColorPreference';
 import BudgetInput from './steps/BudgetInput';
 import ItemSelection from './steps/ItemSelection';
 import FinalOutfit from './steps/FinalOutfit';
+import ConfirmationPage from './steps/ConfirmationPage'; // Import the new confirmation page
 
 const ChatbotContent = () => {
   const { currentStep, formData } = useChatbot();
 
-  // Component mapping based on current step - no file upload option
+  // Component mapping based on current step
   const stepComponents = {
     welcome: Welcome,
-    uploadPhoto: UploadPhoto, // This is now camera-only
+    uploadPhoto: UploadPhoto,
     skinToneAnalysis: SkinToneAnalysis,
     gender: GenderSelection,
     bodyType: BodyTypeSelection,
@@ -30,6 +32,7 @@ const ChatbotContent = () => {
     season: SeasonSelection,
     colorPreference: ColorPreference,
     budget: BudgetInput,
+    confirmation: ConfirmationPage, // Add the confirmation step
     topSelection: () => <ItemSelection itemType="tops" />,
     bottomSelection: () => <ItemSelection itemType="bottoms" />,
     jewelrySelection: () => <ItemSelection itemType="jewelry" />,
@@ -41,7 +44,7 @@ const ChatbotContent = () => {
   const CurrentStepComponent = stepComponents[currentStep] || Welcome;
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in">
+    <div className="max-w-4xl mx-auto animate-fade-in w-full">
       <CurrentStepComponent formData={formData} />
     </div>
   );
