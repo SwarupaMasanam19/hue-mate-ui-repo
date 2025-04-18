@@ -235,9 +235,9 @@ const ResultsScreen = ({ formData, userImage, recommendations, onReset }) => {
                 <div className="col-span-2 text-center py-10 bg-white/5 rounded-xl">
                   <p className="text-white/70">Based on your preferences, we recommend:</p>
                   <ul className="mt-4 space-y-2">
-                    <li>🌟 A fitted {style || 'casual'} outfit in {recommendedColors[0].name.toLowerCase()} or {recommendedColors[1].name.toLowerCase()}</li>
-                    <li>🌟 {gender === 'female' ? 'A stylish dress' : 'A well-tailored shirt'} that accentuates your {bodyType ? getBodyTypeName().toLowerCase() : ''} body type</li>
-                    <li>🌟 Accessories in complementary colors to complete your look</li>
+                    <li> A fitted {style || 'casual'} outfit in {recommendedColors[0].name.toLowerCase()} or {recommendedColors[1].name.toLowerCase()}</li>
+                    <li>{gender === 'female' ? 'A stylish dress' : 'A well-tailored shirt'} that accentuates your {bodyType ? getBodyTypeName().toLowerCase() : ''} body type</li>
+                    <li>Accessories in complementary colors to complete your look</li>
                   </ul>
                 </div>
               )}

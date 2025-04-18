@@ -382,7 +382,8 @@ body {
 .body-types-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 16px;
+  gap: 20px;
+  align-items: stretch;
   margin-bottom: 30px;
   width: 100%;
   max-width: 800px;
@@ -397,13 +398,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   border: 2px solid transparent;
-  aspect-ratio: 1;
+  min-height: 200px;
+  height: auto;
 }
 
 .body-type-card:hover {
@@ -1171,7 +1173,7 @@ body {
   font-size: 14px;
   transition: background-color 0.3s ease;
   text-align: center;
-  width: 100%;
+  width: 90%;
 }
 
 .shop-button a:hover {
@@ -1548,3 +1550,4 @@ body {
     justify-content: center;
   }
 }
+

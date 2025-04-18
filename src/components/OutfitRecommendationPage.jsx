@@ -4,7 +4,7 @@ const OutfitRecommendationPage = () => {
   const [showDetails, setShowDetails] = useState(false);
   
   const userProfile = {
-    skinTone: "Warm Medium #D4A76A",
+    skinTone: "Fair #D4A76A",
     bodyType: "Rectangle",
     occasion: "Festive",
     budget: "₹1000 (low)"

@@ -39,7 +39,7 @@ const StyleSelection = () => {
           >
             <div className="body-type-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
             <p>{option.label}</p>
-            <p className="text-sm text-gray-300 text-center">{option.description}</p>
+            <p className="text-sm text-white-300 text-center">{option.description}</p>
           </div>
         ))}
       </div>

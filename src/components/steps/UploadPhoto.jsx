@@ -12,11 +12,46 @@ const UploadPhoto = () => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [stream, setStream] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [skinToneResult, setSkinToneResult] = useState(null);
 
   // Clean up camera stream when component unmounts
   useEffect(() => {
     return () => stopCamera();
   }, []);
+
+  // Call the backend API to predict skin tone
+  const analyzeSkinTone = async (imageData) => {
+    setIsAnalyzing(true);
+    try {
+      const response = await fetch('http://localhost:5000/api/predict-skin-tone', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: imageData }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      if (result.success) {
+        setSkinToneResult(result);
+        // You can also update the context if needed
+        setUserPhotoAndAnalyze(imageData, result);
+      } else {
+        console.error('Analysis failed:', result.error);
+        alert('Failed to analyze skin tone. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error analyzing skin tone:', error);
+      alert('Error connecting to the server. Please try again later.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -70,12 +105,18 @@ const UploadPhoto = () => {
       const canvas = canvasRef.current;
       
       // Set canvas size to match video for best quality
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = 300;
+      canvas.height = 300;
       
       // Capture frame
       const context = canvas.getContext('2d');
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // Resize and draw the video to fit canvas
+  context.drawImage(
+    video,
+    0, 0, video.videoWidth, video.videoHeight, // source video dimensions
+    0, 0, 300, 300 // destination canvas dimensions
+  );
+
       
       // Convert to image URL
       const imageDataUrl = canvas.toDataURL('image/png');
@@ -90,12 +131,14 @@ const UploadPhoto = () => {
   const retakePhoto = () => {
     setCapturedImage(null);
     setShowPreview(false);
+    setSkinToneResult(null);
     startCamera();
   };
 
   const confirmPhoto = () => {
     if (capturedImage) {
-      setUserPhotoAndAnalyze(capturedImage);
+      // Send the image to the backend for analysis
+      analyzeSkinTone(capturedImage);
     }
   };
 
@@ -152,6 +195,20 @@ const UploadPhoto = () => {
         </div>
       )}
       
+      {isAnalyzing && (
+        <div className="mb-6">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500 mx-auto"></div>
+          <p className="mt-2 text-amber-600">Analyzing your skin tone...</p>
+        </div>
+      )}
+      
+      {skinToneResult && (
+        <div className="mb-8 p-4 bg-amber-50 rounded-lg border border-amber-200 animate-fade-in">
+          <h3 className="text-xl font-semibold text-amber-700 mb-2">Analysis Result</h3>
+          <p className="text-lg">Your skin tone is: <span className="font-bold text-amber-600">{skinToneResult.skin_tone}</span></p>
+        </div>
+      )}
+      
       <div className="flex space-x-4 mt-4">
         <input
           type="file"
@@ -172,11 +229,15 @@ const UploadPhoto = () => {
           <Button secondary onClick={stopCamera}>Cancel</Button>
         )}
         
-        {showPreview && capturedImage && (
+        {showPreview && capturedImage && !skinToneResult && !isAnalyzing && (
           <>
             <Button primary onClick={confirmPhoto}>Use This Photo</Button>
             <Button secondary onClick={retakePhoto}>Retake Photo</Button>
           </>
+        )}
+        
+        {skinToneResult && (
+          <Button secondary onClick={retakePhoto}>Try Another Photo</Button>
         )}
       </div>
     </div>
