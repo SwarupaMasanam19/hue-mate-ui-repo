@@ -959,23 +959,30 @@ function App() {
                             />
                         )}
 
-                        {step === 'camera' && (
-                            <div className="camera-screen">
-                                <h2 className="gradient-text">Take a Photo</h2>
-                                <p>For the best skin tone analysis, take a clear photo in good lighting without makeup.</p>
+{step === 'camera' && (
+    <div className="camera-screen">
+        <h2 className="gradient-text">Take a Photo</h2>
+        <p>For the best skin tone analysis, take a clear photo in good lighting without makeup.</p>
 
-                                <CameraCapture
-                                    onCapture={handleCapture}
-                                    onCancel={() => setStep('gender')}
-                                />
-                                {isAnalyzing && (
-                                    <div className="analyzing-overlay">
-                                        <div className="spinner"></div>
-                                        <p>Analyzing your skin tone...</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+        <CameraCapture
+            onCapture={handleCapture}
+            onCancel={() => setStep('gender')}
+        />
+
+{isAnalyzing && capturedImage && (
+    <div className="analyzing-overlay">
+        <div className="analyzing-image-container">
+            <img src={capturedImage} alt="Analyzing" className="analyzing-image" />
+        </div>
+        <p className="mt-2 text-amber-600 analyzing-text">Analyzing your skin tone...</p>
+    </div>
+)}
+        {!isAnalyzing && (
+            //  Show the CameraCapture component when not analyzing
+            <div></div>
+        )}
+    </div>
+)}
 
                         {step === 'analysis' && (
                             <div className="analysis-screen">
