@@ -309,7 +309,7 @@ const femaleOutfits = [
   //Sarees
   {
     id: 'outfit-21',
-    name: 'Ethnic Woven Design Zari Banarasi Saree',
+    name: 'Zari Banarasi Saree',
     image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
     price: 799,
     gender: 'female',
@@ -325,7 +325,7 @@ const femaleOutfits = [
   {
     id: 'outfit-22',
     name: 'Zari Silk Cotton Saree',
-    image: 'https://https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744778957/Screenshot_2025-04-16_101852_ybcfg2.pngres.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744779489/Screenshot_2025-04-16_102751_ix5h21.png',
     price: 999,
     gender: 'female',
     style: 'traditional',
@@ -336,19 +336,227 @@ const femaleOutfits = [
     description: 'A stunning Zari Silk Cotton Banarasi Saree, ideal for special occasions.',
     shopLinks: { Myntra: 'https://www.myntra.com/sarees/marziyaa/marziyaa-ethnic-woven-design-zari-silk-cotton-banarasi-saree/27439636/buy' }
   },
+
+  //date night dressess
+
   {
     id: 'outfit-23',
-    name: 'Zari Banarasi Saree',
-    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
-    price: 799,
+    name: 'Chic Date Night Dress',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745168996/Screenshot_2025-04-20_223911_n6qqei.png',
+    price: 2599,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['date', 'party'],
+    bodyTypes: ['hourglass', 'rectangle', 'pear', 'inverted-triangle'],
+    colorType: 'cool',
+    color: 'burgundy',
+    description: 'A stylish and comfortable midi dress perfect for a romantic date night or a casual party.',
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/stylecast/stylecast-square-neck-bodycon-maxi-dress/30454462/buy' }
+  },
+  {
+    id: 'outfit-24',
+    name: 'Elegant Interview Suit',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745169470/Screenshot_2025-04-20_224656_xsbg55.png',
+    price: 2750,
+    gender: 'female',
+    style: 'formal',
+    occasions: ['interview', 'business', 'work'],
+    bodyTypes: ['rectangle', 'hourglass', 'inverted-triangle'],
+    colorType: 'neutral',
+    color: 'charcoal grey',
+    description: 'A sophisticated pant suit that exudes professionalism and confidence, ideal for interviews and business settings.',
+    shopLinks: { Myntra: 'https://www.myntra.com/suits/rare+rabbit/rare-rabbit-self-design-single-breasted-slim-fit-two-piece-suit/24782516/buy' }
+  },
+  {
+    id: 'outfit-25',
+    name: 'Sophisticated Business Dress',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745169745/Screenshot_2025-04-20_225211_kntlqe.png',
+    price: 2199,
+    gender: 'female',
+    style: 'formal',
+    occasions: ['business', 'work', 'formal'],
+    bodyTypes: ['apple', 'hourglass', 'rectangle'],
+    colorType: 'neutral',
+    color: 'navy blue',
+    description: 'A classic and elegant sheath dress suitable for important business meetings and formal work environments.',
+    shopLinks: { Amazon: 'https://www.amazon.in/CAMLA-Barcelona-Accented-Shimmery-Dress/dp/B0DJ544T9G?th=1&psc=1' }
+  },
+  {
+    id: 'outfit-26',
+    name: 'Glamorous Party Gown',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745170227/Screenshot_2025-04-20_230010_vqsnpl.png',
+    price: 6499,
+    gender: 'female',
+    style: 'formal',
+    occasions: ['party', 'formal', 'evening'],
+    bodyTypes: ['hourglass', 'inverted-triangle', 'rectangle'],
+    colorType: 'cool',
+    color: 'emerald green',
+    description: 'A stunning and glamorous gown that will make you the star of any party or formal evening event.',
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/trendyol/trendyol-v-neck-sleeveless-ruffled-maxi-dress/24506456/buy' }
+  },
+  {
+    id: 'outfit-27',
+    name: 'Flattering Top for Apple Shape',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745170526/Screenshot_2025-04-20_230513_neopgm.png',
+    price: 899,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['casual', 'work'],
+    bodyTypes: ['apple'],
+    colorType: 'warm',
+    color: 'olive green',
+    description: 'A flowy and comfortable top designed to flatter the apple body shape, perfect for everyday wear or a relaxed work environment.',
+    shopLinks: { Myntra: 'https://www.myntra.com/tops/roadster/the-roadster-lifestyle-co-olive-green-shirt-style-top/10336777/buy' }
+  },
+  {
+    id: 'outfit-28',
+    name: 'Balancing Skirt for Inverted Triangle',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745171092/Screenshot_2025-04-20_231415_ihbkep.png',
+    price: 1250,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['casual', 'work', 'college'],
+    bodyTypes: ['inverted-triangle'],
+    colorType: 'cool',
+    color: 'floral print',
+    description: 'An A-line or flared skirt that adds volume to the lower body, creating a balanced silhouette for inverted triangle body types.',
+    shopLinks: { meesho: 'https://www.meesho.com/oomph-womens-floral-a-line-blue-skirts/p/6071db' }
+  },
+  
+  // More Wedding & Ceremony Outfits
+  {
+    id: 'outfit-29',
+    name: 'Elegant Wedding Saree',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745171441/Screenshot_2025-04-20_231953_eig8dg.png',
+    price: 3499,
     gender: 'female',
     style: 'traditional',
-    occasions: ['festive', 'ceremony', 'wedding'],
-    bodyTypes: ['hourglass', 'rectangle', 'apple'],
+    occasions: ['wedding', 'ceremony'],
+    bodyTypes: ['hourglass', 'pear', 'rectangle'],
     colorType: 'warm',
-    color: 'red',
-    description: 'A stunning Woven Design Zari Banarasi Saree, ideal for special occasions.',
-    shopLinks: { Myntra: 'https://www.myntra.com/sarees/divastri/divastri-ethnic-woven-design-zari-banarasi-saree/23293458/buy' }
+    color: 'gold',
+    description: 'A luxurious silk saree with intricate zari work, perfect for making a statement at weddings and ceremonies.',
+    shopLinks: { nykaafashion: 'webhttps://www.nykaafashion.com/kasee-women-gold-solid-saree-with-unstitched/p/16823331?skuId=16823331&utm_content=ads&utm_source=GooglePaid&utm_medium=PLA&utm_campaign=SSC_Catchall&gad_source=1&gbraid=0AAAAAC968R0jmujosgRUmetsklfgcp4OX&gclid=Cj0KCQjwtpLABhC7ARIsALBOCVpPc8iStEQGhWdLuqeKBuroT2vujKBN8InrnhK7QuiMsIx8DmuGrXMaAktHEALw_wcB' }
+  },
+  {
+    id: 'outfit-30',
+    name: 'Graceful Ceremony Gown',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745171722/Screenshot_2025-04-20_232506_hhj0mn.png',
+    price: 4250,
+    gender: 'female',
+    style: 'formal',
+    occasions: ['ceremony', 'formal'],
+    bodyTypes: ['hourglass', 'rectangle', 'apple'],
+    colorType: 'cool',
+    color: 'silver grey',
+    description: 'A sophisticated and flowing gown ideal for formal ceremonies and elegant events.',
+    shopLinks: { Amazon: 'https://www.amazon.in/WEDDING-SUTRA-Designer-Dupatta-Size_Grey/dp/B0DTQ7MJSP?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&psc=1&smid=A2M4414QBJM5RV' }
+  },
+
+  // More Outing Outfits
+  {
+    id: 'outfit-31',
+    name: 'Trendy Casual Jumpsuit',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745172189/Screenshot_2025-04-20_233252_u0cjx6.png',
+    price: 1299,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['outing', 'casual', 'date'],
+    bodyTypes: ['rectangle', 'hourglass', 'inverted-triangle'],
+    colorType: 'cool',
+    color: 'olive',
+    description: 'A comfortable and stylish jumpsuit perfect for a fun day out or a casual date.',
+    shopLinks: { Myntra: 'https://www.myntra.com/jumpsuit/dressberry/dressberry-women-olive-green-solid-basic-jumpsuit/9922977/buy' }
+  },
+  {
+    id: 'outfit-32',
+    name: 'Chic Skirt and Top Set',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745172728/Screenshot_2025-04-20_234151_teeyo2.png',
+    price: 979,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['outing', 'casual', 'college'],
+    bodyTypes: ['pear', 'hourglass', 'rectangle'],
+    colorType: 'warm',
+    color: 'mustard',
+    description: 'A fashionable skirt and top set that’s great for casual outings and college wear.',
+    shopLinks: { meesho: 'https://www.meesho.com/oomph-stretchable-lycra-coord-crop-top-and-pencil-skirt-set-for-women-yellow-coordmt854msk124/p/7cqfbi' }
+  },
+  {
+    id: 'outfit-33',
+    name: 'Relaxed Sundress',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745172871/Screenshot_2025-04-20_234418_cgttpi.png',
+    price: 849,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['outing', 'casual', 'daily'],
+    bodyTypes: ['all', 'hourglass', 'pear', 'rectangle'],
+    colorType: 'cool',
+    color: 'printed',
+    description: 'A breezy and comfortable sundress perfect for warm weather outings and everyday wear.',
+    shopLinks: { Amazon: 'https://www.amazon.in/Sheetal-Associates-Womens-Georgette-Printed/dp/B0CWVK6KB4?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&smid=A1WYWER0W24N8S&th=1&psc=1' }
+  },
+  { 
+    id: 'outfit-34',
+    name: 'Stylish Co-ord Set',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745173010/Screenshot_2025-04-20_234634_g9a8r9.png',
+    price: 1150,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['outing', 'casual', 'date'],
+    bodyTypes: ['inverted-triangle', 'rectangle', 'hourglass'],
+    colorType: 'neutral',
+    color: 'beige',
+    description: 'A chic and versatile co-ord set that’s perfect for stepping out in style.',
+    shopLinks: { Amazon: 'https://www.amazon.in/TADKEE-Womens-Two-Piece-Sleeve-FN-Full-Sleeve-Cord-125-Cream-XXL/dp/B0DPH99RYQ?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&smid=A1WYWER0W24N8S&th=1&psc=1' }
+  },
+
+  // More College Outfits
+  {
+    id: 'outfit-35',
+    name: 'Comfortable Jeans and Top',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745173180/Screenshot_2025-04-20_234907_f8h1lf.png',
+    price: 1399,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['college', 'casual', 'daily'],
+    bodyTypes: ['all', 'hourglass', 'pear', 'rectangle', 'apple', 'inverted-triangle'],
+    colorType: 'cool',
+    color: 'blue and white',
+    description: 'A classic and comfortable jeans and top combination, a staple for college wear.',
+    shopLinks: { Myntra: 'https://www.myntra.com/co-ords/here%26now/herenow-v-neck-top-and-jeans/32653830/buy' }
+  },
+  {
+    id: 'outfit-36',
+    name: 'Trendy Dungaree Dress',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745173596/Screenshot_2025-04-20_235555_ji83bf.png',
+    price: 1550,
+    gender: 'female',
+    style: 'casual',
+    occasions: ['college', 'casual', 'outing'],
+    bodyTypes: ['pear', 'rectangle', 'hourglass'],
+    colorType: 'cool',
+    color: 'denim',
+    description: 'A fun and trendy dungaree dress that’s perfect for a youthful college look.',
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/chemistry/chemistry-shoulder-straps-denim-pinafore-dress/28308338/buy' }
+  },
+
+  // More Date Night Outfits
+  
+  {
+    id: 'outfit-46',
+    name: 'Velvet Evening Dress',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745173735/Screenshot_2025-04-20_235841_wc3yi1.png',
+    price: 5200,
+    gender: 'female',
+    style: 'formal',
+    occasions: ['evening', 'formal'],
+    bodyTypes: ['hourglass', 'pear', 'rectangle'],
+    colorType: 'warm',
+    color: 'deep green',
+    description: 'A luxurious velvet dress that exudes elegance and sophistication for evening galas.',
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/aask/aask-velvet-a-line-midi-dress/28102836/buy' }
   }
 ];
 

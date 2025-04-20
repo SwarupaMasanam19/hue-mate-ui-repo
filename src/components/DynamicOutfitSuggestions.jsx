@@ -84,7 +84,7 @@ const DynamicOutfitSuggestions = ({
     if (!outfits || !Array.isArray(outfits) || outfits.length === 0) {
       return [];
     }
-    
+
     // Filter for female only (since male outfits not available)
     if (gender !== 'female') {
       return [];
@@ -104,166 +104,85 @@ const DynamicOutfitSuggestions = ({
       'olive': 'cool'
     };
 
-    const colorType = filters.skinTone ? 
-      (skinToneToColorType[filters.skinTone.toLowerCase()] || filters.skinTone) : 
+    const colorType = filters.skinTone ?
+      (skinToneToColorType[filters.skinTone.toLowerCase()] || filters.skinTone) :
       'warm'; // Default to warm if not specified
 
     // Extract body type without gender suffix if present
-    const bodyTypeValue = filters.bodyType ? 
-      filters.bodyType.split('-')[0] : 
+    const bodyTypeValue = filters.bodyType ?
+      filters.bodyType.split('-')[0] :
       null;
 
-    // Map occasions to standard values
-    const occasionMapping = {
-      'wedding': ['wedding', 'ceremony'],
-      'marriage': ['wedding', 'ceremony'],
-      'festive': ['festive', 'ceremony', 'wedding'],
-      'work': ['work', 'formal', 'business'],
-      'casual': ['casual', 'daily'],
-      'party': ['party', 'festive'],
-      'date': ['date', 'party']
+    // Map occasions to relevant styles
+    const occasionStylePreference = {
+      'wedding': ['traditional', 'indo-western', 'formal'],
+      'marriage': ['traditional', 'indo-western', 'formal'],
+      'festive': ['traditional', 'indo-western', 'casual'],
+      'work': ['formal', 'casual'],
+      'formal': ['formal', 'traditional', 'indo-western'],
+      'business': ['formal'],
+      'interview': ['formal'],
+      'casual': ['casual', 'ethnic'],
+      'daily': ['casual', 'ethnic'],
+      'party': ['party', 'indo-western', 'formal', 'casual'],
+      'date': ['date', 'indo-western', 'formal', 'casual'],
+      'ceremony': ['traditional', 'indo-western', 'formal'],
+      'outing': ['casual'],
+      'college': ['casual', 'ethnic'],
+      'vacation': ['casual', 'ethnic', 'indo-western'],
+      'workout': ['casual'], // Adjust if you add specific workout styles
+      'other occasion': ['casual', 'formal', 'traditional', 'indo-western', 'ethnic', 'party', 'date', 'work'] // Broad fallback
     };
 
-    // Get expanded occasion values
-    const occasionValues = filters.occasion ? 
-      (occasionMapping[filters.occasion.toLowerCase()] || [filters.occasion.toLowerCase()]) : 
-      null;
-    
-    console.log("Expanded occasion values:", occasionValues);
+    const preferredStylesForOccasion = filters.occasion ?
+      (occasionStylePreference[filters.occasion.toLowerCase()] || ['casual', 'formal', 'traditional', 'indo-western', 'ethnic']) :
+      ['casual', 'formal', 'traditional', 'indo-western', 'ethnic']; // Default to all styles
 
     // Filter outfits based on criteria
     let filteredOutfits = outfits.filter(outfit => {
-      // For debugging - log each outfit's evaluation
-      let matchesOccasion = true;
-      let matchesStyle = true;
-      let matchesBodyType = true;
-      let matchesColorType = true;
-      let matchesBudget = true;
-
-      // Filter by color type (skin tone)
-      if (colorType && outfit.colorType && outfit.colorType !== colorType) {
-        matchesColorType = false;
-      }
-
-      // Filter by body type (if specified)
-      if (bodyTypeValue && outfit.bodyTypes && 
-          !outfit.bodyTypes.includes(bodyTypeValue) && 
-          !outfit.bodyTypes.includes('all')) {
-        matchesBodyType = false;
-      }
-
-      // Filter by budget (if specified)
-      if (filters.budget && filters.budget.max && outfit.price > filters.budget.max) {
-        matchesBudget = false;
-      }
-
-      // Filter by occasion (if specified) - match any of the expanded occasion values
-      if (occasionValues && outfit.occasions) {
-        matchesOccasion = outfit.occasions.some(outfitOccasion => 
-          occasionValues.includes(outfitOccasion.toLowerCase())
-        );
-      }
-
-      // Filter by style (if specified)
-      if (filters.style && outfit.style && outfit.style !== filters.style) {
-        matchesStyle = false;
-      }
-
-      // For wedding/ceremony occasions, prioritize traditional style
-      if ((occasionValues && occasionValues.includes('wedding')) && 
-          outfit.style === 'traditional') {
-        // Strong preference for traditional wedding outfits
-        matchesStyle = true;
-      }
-
-      // Log the evaluation results for this outfit
-      console.log(`Outfit ${outfit.name}: occasion=${matchesOccasion}, style=${matchesStyle}, bodyType=${matchesBodyType}, colorType=${matchesColorType}, budget=${matchesBudget}`);
-      
-      // Prioritize occasion and style for wedding settings
-      if (occasionValues && occasionValues.includes('wedding')) {
-        // For wedding, we care most about having appropriate occasion and style
-        return matchesOccasion && (outfit.style === 'traditional' || matchesStyle);
-      }
+      let matchesOccasion = outfit.occasions && filters.occasion ?
+        outfit.occasions.map(o => o.toLowerCase()).includes(filters.occasion.toLowerCase()) : true;
+      let matchesStyle = filters.style ? outfit.style === filters.style : preferredStylesForOccasion.includes(outfit.style);
+      let matchesBodyType = bodyTypeValue ? (outfit.bodyTypes && (outfit.bodyTypes.includes(bodyTypeValue) || outfit.bodyTypes.includes('all'))) : true;
+      let matchesColorType = colorType ? outfit.colorType === colorType : true;
+      let matchesBudget = filters.budget && filters.budget.max ? outfit.price <= filters.budget.max : true;
 
       return matchesOccasion && matchesStyle && matchesBodyType && matchesColorType && matchesBudget;
     });
-
-    console.log(`Found ${filteredOutfits.length} outfits matching all criteria`);
-
-    // If no outfits match all criteria, prioritize traditional wedding outfits
-    if (filteredOutfits.length === 0 && filters.occasion && 
-        (filters.occasion.toLowerCase() === 'wedding' || filters.occasion.toLowerCase() === 'marriage')) {
-      console.log("No matches - trying to find traditional wedding outfits");
-      filteredOutfits = outfits.filter(outfit => 
-        outfit.style === 'traditional' && 
-        outfit.occasions && 
-        outfit.occasions.some(occ => ['wedding', 'ceremony', 'festive'].includes(occ))
-      );
-    }
-
-    // If still no matches, try to match just occasion and style
-    if (filteredOutfits.length === 0 && filters.occasion) {
-      console.log("No matches - trying with just occasion and style");
-      filteredOutfits = outfits.filter(outfit => {
-        // Match occasion
-        const matchesOccasion = occasionValues && outfit.occasions ? 
-          outfit.occasions.some(outfitOccasion => 
-            occasionValues.includes(outfitOccasion.toLowerCase())
-          ) : true;
-          
-        // Match style if specified
-        const matchesStyle = filters.style && outfit.style ? 
-          outfit.style === filters.style : true;
-          
-        return matchesOccasion && matchesStyle;
-      });
-    }
-
-    // If still no outfits match, fallback to any traditional or formal outfits
-    if (filteredOutfits.length === 0) {
-      console.log("No matches - falling back to any traditional or formal outfits");
-      filteredOutfits = outfits.filter(outfit => 
-        outfit.style === 'traditional' || outfit.style === 'formal'
-      );
-    }
-
-    // If still no matches, return any outfits up to the limit
-    if (filteredOutfits.length === 0) {
-      console.log("No matches at all - returning first few outfits");
-      return outfits.slice(0, limit);
-    }
-
-    console.log(`After fallbacks, found ${filteredOutfits.length} outfits`);
 
     // Sort outfits by relevance
     filteredOutfits.sort((a, b) => {
       let scoreA = 0;
       let scoreB = 0;
-      
-      // Prioritize traditional style for wedding
-      if (filters.occasion && 
-          (filters.occasion.toLowerCase() === 'wedding' || 
-           filters.occasion.toLowerCase() === 'marriage')) {
-        if (a.style === 'traditional') scoreA += 5;
-        if (b.style === 'traditional') scoreB += 5;
-        
-        // And matching occasions
-        if (a.occasions && a.occasions.includes('wedding')) scoreA += 3;
-        if (b.occasions && b.occasions.includes('wedding')) scoreB += 3;
+
+      // Score for matching occasion
+      const occasionA = a.occasions && a.occasions.map(o => o.toLowerCase()).includes(filters.occasion.toLowerCase());
+      const occasionB = b.occasions && b.occasions.map(o => o.toLowerCase()).includes(filters.occasion.toLowerCase());
+      if (occasionA) scoreA += 5;
+      if (occasionB) scoreB += 5;
+
+      // Score for matching style with occasion preference
+      if (filters.occasion) {
+        const isPreferredStyleA = preferredStylesForOccasion.includes(a.style);
+        const isPreferredStyleB = preferredStylesForOccasion.includes(b.style);
+        if (isPreferredStyleA) scoreA += 3;
+        if (isPreferredStyleB) scoreB += 3;
+
+        // Extra score for exact style match if specified by user
+        if (filters.style) {
+          if (a.style === filters.style) scoreA += 5;
+          if (b.style === filters.style) scoreB += 5;
+        }
       }
-      
-      // General style match
-      if (filters.style) {
-        if (a.style === filters.style) scoreA += 2;
-        if (b.style === filters.style) scoreB += 2;
-      }
-      
-      // Body type match
-      if (bodyTypeValue) {
-        if (a.bodyTypes && a.bodyTypes.includes(bodyTypeValue)) scoreA += 1;
-        if (b.bodyTypes && b.bodyTypes.includes(bodyTypeValue)) scoreB += 1;
-      }
-      
+
+      // Score for matching color type
+      if (colorType && a.colorType === colorType) scoreA += 2;
+      if (colorType && b.colorType === colorType) scoreB += 2;
+
+      // Score for matching body type
+      if (bodyTypeValue && a.bodyTypes && a.bodyTypes.includes(bodyTypeValue)) scoreA += 1;
+      if (bodyTypeValue && b.bodyTypes && b.bodyTypes.includes(bodyTypeValue)) scoreB += 1;
+
       return scoreB - scoreA;
     });
 
@@ -274,7 +193,7 @@ const DynamicOutfitSuggestions = ({
         const j = Math.floor(Math.random() * (i + 1));
         [filteredOutfits[i], filteredOutfits[j]] = [filteredOutfits[j], filteredOutfits[i]];
       }
-      
+
       // Return the first 'limit' outfits
       return filteredOutfits.slice(0, limit);
     }

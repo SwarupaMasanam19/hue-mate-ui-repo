@@ -1184,7 +1184,7 @@ function App() {
     
     <div className="results-summary">
       <div className="result-photo-container">
-        {capturedImage && <img src={capturedImage} alt="Your photo" className="result-photo" />}
+        <img src={capturedImage} alt="Your photo" className="result-photo" />
       </div>
       
       <div className="results-details">
@@ -1262,82 +1262,97 @@ function App() {
   </div>
              )}
 
-                        {selectedOutfit && (
-                            <div className="selected-outfit-overlay">
-                                {/* Add confetti effect that automatically stops after a few seconds */}
-                                <ReactConfetti
-                                    width={window.innerWidth}
-                                    height={window.innerHeight}
-                                    recycle={false}
-                                    numberOfPieces={200}
-                                    tweenDuration={10000}
-                                />
+{selectedOutfit && (
+  <div className="selected-outfit-overlay">
+    {/* Add confetti effect that automatically stops after a few seconds */}
+    <ReactConfetti
+      width={window.innerWidth}
+      height={window.innerHeight}
+      recycle={false}
+      numberOfPieces={200}
+      tweenDuration={10000}
+    />
 
-                                <div className="selected-outfit-modal">
-                                    <button className="close-button" onClick={() => setSelectedOutfit(null)}>×</button>
+    <div className="selected-outfit-modal">
+      <button className="close-button" onClick={() => setSelectedOutfit(null)}>×</button>
 
-                                    {/* Add Great Choice! heading */}
-                                    <div className="great-choice-heading">
-                                        <h1>Great Choice!</h1>
-                                    </div>
+      {/* Add Great Choice! heading */}
+      <div className="great-choice-heading">
+        <h1>Great Choice!</h1>
+      </div>
 
-                                    <div className="selected-outfit-content">
-                                        <div className="selected-outfit-image">
-                                            <img
-                                                src={selectedOutfit.image}
-                                                alt={selectedOutfit.name}
-                                                onError={(e) => {
-                                                    e.target.onerror = null;
-                                                    e.target.src = "https://via.placeholder.com/400x600?text=Outfit+Image";
-                                                }}
-                                            />
-                                        </div>
+      <div className="selected-outfit-content">
+        <div className="selected-outfit-image">
+          <img
+            src={selectedOutfit.image}
+            alt={selectedOutfit.name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://via.placeholder.com/400x600?text=Outfit+Image";
+            }}
+          />
+        </div>
 
-                                        <div className="selected-outfit-details">
-                                            <h3>You've Selected</h3>
-                                            <h2>{selectedOutfit.name}</h2>
+        <div className="selected-outfit-details">
+          <h3>You've Selected</h3>
+          <h2>{selectedOutfit.name}</h2>
 
-                                            <div className="outfit-specs">
-                                                <div className="spec-item">
-                                                    <span className="spec-label">Price:</span>
-                                                    <span className="spec-value">₹{selectedOutfit.price}</span>
-                                                </div>
+          <div className="outfit-specs">
+            <div className="spec-item">
+              <span className="spec-label">Price:</span>
+              <span className="spec-value">₹{selectedOutfit.price}</span>
+            </div>
 
-                                                <div className="spec-item">
-                                                    <span className="spec-label">Style:</span>
-                                                    <span className="spec-value">{selectedOutfit.style || "Traditional"}</span>
-                                                </div>
+            <div className="spec-item">
+              <span className="spec-label">Style:</span>
+              <span className="spec-value">{selectedOutfit.style || "Traditional"}</span>
+            </div>
 
-                                                <div className="spec-item">
-                                                    <span className="spec-label">Occasion:</span>
-                                                    <span className="spec-value">{selectedOutfit.occasions?.[0] || "Formal"}</span>
-                                                </div>
+            <div className="spec-item">
+              <span className="spec-label">Occasion:</span>
+              <span className="spec-value">{selectedOutfit.occasions?.[0] || "Formal"}</span>
+            </div>
 
-                                                <div className="spec-item">
-                                                    <span className="spec-label">Body Type:</span>
-                                                    <span className="spec-value">{selectedOutfit.bodyTypes?.join(', ') || "All body types"}</span>
-                                                </div>
-                                            </div>
+            <div className="spec-item">
+              <span className="spec-label">Body Type:</span>
+              <span className="spec-value">{selectedOutfit.bodyTypes?.join(', ') || "All body types"}</span>
+            </div>
+          </div>
 
-                                            <p className="outfit-description">
-                                                {selectedOutfit.description || `A beautiful ${selectedOutfit.name} perfect for special occasions. This outfit complements your skin tone and body type.`}
-                                            </p>
+          <p className="outfit-description">
+            {selectedOutfit.description || `A beautiful ${selectedOutfit.name} perfect for special occasions. This outfit complements your skin tone and body type.`}
+          </p>
 
-                                            <div className="outfit-actions">
-                                                <a
-                                                    href={selectedOutfit.shopLinks?.flipkart || "https://flipkart.com"}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="shop-now-button"
-                                                >
-                                                    Shop Now
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+          <div className="outfit-actions">
+            <>
+              {selectedOutfit.shopLinks && Object.keys(selectedOutfit.shopLinks).map((platform) => (
+                <a
+                  key={platform}
+                  href={selectedOutfit.shopLinks[platform]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shop-now-button"
+                >
+                  Shop on {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                </a>
+              ))}
+              {!selectedOutfit.shopLinks || Object.keys(selectedOutfit.shopLinks).length === 0 && (
+                <a
+                  href="https://myntra.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shop-now-button"
+                >
+                  Shop Now
+                </a>
+              )}
+            </>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
                     </div>
                 </div>
             )}

@@ -861,9 +861,9 @@ body {
 }
 
 .result-photo-container {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius:50%;
   border: 4px solid rgba(245, 158, 11, 0.5);
   overflow: hidden;
   margin: 0 auto 24px;
@@ -1637,4 +1637,53 @@ body {
   width: 100%;    
   height: 100%;   
   object-fit: cover; 
+}
+
+.season-selection-screen { /* Using a new class for the screen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+
+
+.season-options-container { /* New class for season options container */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 500px; /* Reduced max-width for smaller containers */
+  padding: 10px 0; /* Reduced vertical padding */
+}
+
+.season-option-card { /* New class for season cards */
+  padding: 15px; /* Reduced padding */
+  min-width: 100px; /* Reduced min-width */
+  min-height: 100px; /* Reduced min-height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background-color: #222;
+  color: #f8fafc;
+  text-align: center;
+  margin: 0 5px; /* Reduced horizontal margin */
+}
+
+.season-option-icon {
+  font-size: 24px; /* Reduced icon size */
+  margin-bottom: 5px; /* Reduced spacing */
+}
+
+.season-option-card.selected {
+  border-color: #f59e0b;
+}
+
+.action-buttons {
+  margin-top: 10px; /* Reduced margin */
+  display: flex;
+  gap: 5px; /* Reduced gap */
 }
