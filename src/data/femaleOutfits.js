@@ -6,7 +6,7 @@ const femaleOutfits = [
   {
     id: 'outfit-1',
     name: 'Traditional Lehenga Set',
-    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620203/Screenshot_2024-12-31_101310_em86l5.png',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png',
     price: 2999,
     gender: 'female',
     style: 'traditional',
@@ -15,13 +15,13 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'light pink',
     description: 'A beautiful traditional lehenga set with intricate embroidery, perfect for festive occasions and celebrations.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Ajio: 'https://www.ajio.com/fusionic-embellished-flared-lehenga-choli-set-with-dupatta/p/466230391_pink' }
   },
   {
     id: 'outfit-2',
     name: 'Embellished Anarkali',
-    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735620073/Screenshot_2024-12-31_101055_ld1lql.png',
-    price: 2799,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745145620/Screenshot_2025-04-20_161001_lapku3.png',
+    price: 1899,
     gender: 'female',
     style: 'traditional',
     occasions: ['festive', 'ceremony'],
@@ -29,12 +29,12 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'red',
     description: 'A stunning anarkali suit with intricate embellishments and flowing silhouette, ideal for special occasions.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/kurtas/kalini/kalini-women-embellished-georgette-anarkali-kurta/31153455/buy' }
   },
   {
     id: 'outfit-3',
     name: 'Traditional Saree',
-    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735626691/Screenshot_2024-12-31_115906_rit4i8.png',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745146309/Screenshot_2025-04-20_162132_y7lgix.png',
     price: 2499,
     gender: 'female',
     style: 'traditional',
@@ -43,15 +43,15 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'pink',
     description: 'A beautiful traditional saree with intricate patterns and rich colors, versatile for many occasions.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/sarees/kalini/kalini-ethnic-motifs-woven-design-zari-banarasi-saree/28207802/buy' }
   },
   
   // Casual Outfits
   {
     id: 'outfit-4',
     name: 'Casual Kurti Set',
-    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1735627651/Screenshot_2024-12-31_121713_o3tehv.png',
-    price: 1499,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745146449/Screenshot_2025-04-20_162355_sj4mdf.png',
+    price: 1189,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily', 'work'],
@@ -59,13 +59,13 @@ const femaleOutfits = [
     colorType: 'cool',
     color: 'turquoise',
     description: 'A comfortable and stylish casual kurti set perfect for everyday wear and office settings.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/kurta-sets/anouk/anouk-floral-embroidered-regular-sequinned-kurta-with-trousers--dupatta/28980354/buy' }
   },
   {
     id: 'outfit-5',
     name: 'Casual Denim Set',
-    image: 'https://i.pinimg.com/originals/fb/62/13/fb62131f2f5cc1b674a6da9df3fee167.jpg',
-    price: 1799,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745146777/Screenshot_2025-04-20_162855_jtuyig.png',
+    price: 1029,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'outing'],
@@ -73,15 +73,15 @@ const femaleOutfits = [
     colorType: 'cool',
     color: 'denim blue',
     description: 'A trendy denim outfit that combines comfort and style for casual outings and everyday wear.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Amazon: 'https://www.amazon.in/Aarika-Womens-Casual-Colour-Co-ord/dp/B0DTKF8S6X/ref=sr_1_10?crid=2MOJSRQ1FJS74&dib=eyJ2IjoiMSJ9.XFquZWnhNC-V8OI3qT5BNHPm3oByQvyF7PvtZwf8dcIL7hh9ubh5jkjJQT-vi1smivfHCNqZu5bDJu7rHhtOgNyqoJLs2z_6dI0OysIQh5Y9gd2Un9U1TIWTrxnT-TO_WcSPFXV77xIpzpULH-z4vI4tyHY8Jmuz_DEW_86HOntmxhQsA-NOYDyXjUgNXJO-FfyZRq6wvIBl0ZllHhbUzLw-gf2uEl7aHtB5fU3q36wtywfAe2UhcKFLBV0lLJ3saaFziR6vOIOCbb3PSPSOM0oZUyjAbjPg1uaZH6qHSoQ.yDDwvN0hB1lGR8v7il1MN9dvUn_bbTOcz-kZFHwODNg&dib_tag=se&keywords=Casual%2BDenim%2BSet%2Bwomen&qid=1745146697&sprefix=casual%2Bdenim%2Bset%2Bwome%2Caps%2C276&sr=8-10&th=1&psc=1' }
   },
   
   // Work Outfits
   {
     id: 'outfit-6',
     name: 'Professional Saree',
-    image: 'https://i.pinimg.com/originals/18/25/3a/18253a3e3f2facbd5e85afe0edc943d9.jpg',
-    price: 2299,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745146984/Screenshot_2025-04-20_163202_puqazy.png',
+    price: 785,
     gender: 'female',
     style: 'formal',
     occasions: ['work', 'business', 'formal'],
@@ -89,13 +89,13 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'navy blue',
     description: 'An elegant professional saree that perfectly balances tradition with office-appropriate style.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Amazon: 'https://www.amazon.in/Uniform-Sarees-Corp-Polycotton-Teachers/dp/B08FMC67RQ/ref=sr_1_18?crid=1WYNTDO1KQHPU&dib=eyJ2IjoiMSJ9.lzBknATu8qQtM3QY7YseReF9fwWQt1hY-IjqF5ONzxYgl_E7OgAnA0lHy2hf5AIK_TJc3fbeiu87H3VuFNncCxuV0eAJpjVxs5WNWmYS97UbQPAQjBlrGAoz7EprATeUIAA112rUljAwxvQYkyo_vXvnD34gWK8Q66t_7Iv4Vo0h-Vup-KpnqYxA2Q7-dagp8Fog1v3ZJYqnboWB4dK_j3gqNPUliYYAXYViNxk5Wi8XksHWWWvECHDeFjEtVC7VesHZjWW0HA52fA41YLZkpkFEfXtPgR5wbPMqA8RUmcI.vn3ZASA2L6P67FMWImjlfiPs-LUmeNAQLnnmwT_lMeA&dib_tag=se&keywords=professional%2Bsaree%2Bnavy%2Bblue%2Bcolor&qid=1745146836&sprefix=professional%2Bsaree%2Bnavy%2Bblue%2Bcol%2Caps%2C246&sr=8-18&th=1' }
   },
   {
     id: 'outfit-7',
     name: 'Formal Shirt & Trousers',
-    image: 'https://i.pinimg.com/originals/b1/71/23/b17123fea7daa24a3d88604940b8be3a.jpg',
-    price: 2599,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147145/Screenshot_2025-04-20_163504_femsku.png',
+    price: 999,
     gender: 'female',
     style: 'formal',
     occasions: ['work', 'business', 'interview'],
@@ -103,15 +103,15 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'white and black',
     description: 'A sharp and professional formal outfit with a well-fitted shirt and trousers, perfect for business settings.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { meesho: 'https://www.meesho.com/womengirls-formal-white-shirt-and-black-pant-set-no-compromise-in-quality/p/3wpkel' }
   },
   
   // Indo-Western Outfits
   {
     id: 'outfit-8',
     name: 'Indo-Western Fusion Dress',
-    image: 'https://i.pinimg.com/originals/aa/52/bd/aa52bd01af3c28bd7d851c7ac8328df4.jpg',
-    price: 2899,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147377/Screenshot_2025-04-20_163844_ufugvl.png',
+    price: 1930,
     gender: 'female',
     style: 'indo-western',
     occasions: ['party', 'festive', 'date'],
@@ -119,15 +119,15 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'maroon',
     description: 'A beautiful fusion of Indian and Western styles in this unique dress, perfect for parties and special events.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Nykaa: 'https://www.nykaafashion.com/mabish-by-sonal-jain-maroon-printed-crop-top-with-sharara-frill-dupatta-set-of-3/p/13542203?adsource=shopping_india&skuId=13542140&utm_content=ads&utm_source=GooglePaid&utm_medium=PLA&utm_campaign=SSC_Catchall&gad_source=1&gclid=Cj0KCQjwtpLABhC7ARIsALBOCVrahfF5xDl2zhh_qlWtPVcDGxD7DhwQMf2nG5Hh1hrfXMPW88tCJOAaAn-YEALw_wcB' }
   },
   
   // Casual Ethnic
   {
     id: 'outfit-9',
     name: 'Casual Palazzo Set',
-    image: 'https://i.pinimg.com/originals/e9/2c/62/e92c625fcc5d5f7087bd3cc775947a4d.jpg',
-    price: 1699,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147490/Screenshot_2025-04-20_164114_ssmx2v.png',
+    price: 769,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily', 'college'],
@@ -135,15 +135,15 @@ const femaleOutfits = [
     colorType: 'cool',
     color: 'blue',
     description: 'A comfortable and stylish palazzo set that is perfect for daily wear with a touch of ethnic charm.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/co-ords/stylum/stylum-blue-puff-sleeves-top-with-palazzos-/24742838/buy' }
   },
   
   // Budget Outfits
   {
     id: 'outfit-10',
     name: 'Affordable Kurta Set',
-    image: 'https://i.pinimg.com/originals/bc/b0/f3/bcb0f3b9d4c05c3b9010063ab833bad9.jpg',
-    price: 999,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147611/Screenshot_2025-04-20_164319_u2wbsg.png',
+    price: 950,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily', 'college'],
@@ -151,13 +151,13 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'yellow',
     description: 'An affordable yet stylish kurta set that offers great value without compromising on quality or appearance.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Nykaa: 'https://www.nykaafashion.com/libas-women-mustard-solid-kurta-with-pant-and-dupatta-set-of-3/p/16452925?adsource=shopping_india&skuId=16452925&utm_content=ads&utm_source=GooglePaid&utm_medium=PLA&utm_campaign=SSC_Catchall&gad_source=1&gclid=Cj0KCQjwtpLABhC7ARIsALBOCVpn8k0cS45xgWdiYX95-uZ9c2hA7ZBKf6y7CIFzSkceHxjCJusLO5IaAuSlEALw_wcB' }
   },
   {
     id: 'outfit-11',
     name: 'Budget Saree',
-    image: 'https://i.pinimg.com/originals/19/a3/64/19a364d40d3fef3dab76ca15377f7e2a.jpg',
-    price: 1199,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147793/Screenshot_2025-04-20_164618_srb18u.png',
+    price: 499,
     gender: 'female',
     style: 'traditional',
     occasions: ['festive', 'casual', 'college'],
@@ -165,15 +165,15 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'beige',
     description: 'A beautiful yet affordable saree that delivers the perfect traditional look without breaking the bank.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/sarees/moda+rapido/moda-rapido-zari-designer-kanjeevaram-saree/33044285/buy?utm_source=dms_google&utm_medium=pmax_cpc&utm_campaign=dms_google_pmax_cpc_Myntra_SOK_KPI_Traffic_New&keyword=&matchtype=&target=&placement=&gad_source=1&gclid=Cj0KCQjwtpLABhC7ARIsALBOCVpTWkI-0LFCzFb80vIIclu5MPof9ZAq6623SGSUh5lA6XRGJd9ymnsaAlMsEALw_wcB' }
   },
   
   // Premium Outfits
   {
     id: 'outfit-12',
     name: 'Designer Wedding Lehenga',
-    image: 'https://i.pinimg.com/originals/cb/73/42/cb7342d8dc0f8b3f817c7d79f5c81331.jpg',
-    price: 8999,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745147943/Screenshot_2025-04-20_164839_cmrqjg.png',
+    price: 7999,
     gender: 'female',
     style: 'traditional',
     occasions: ['wedding', 'ceremony'],
@@ -181,13 +181,13 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'red gold',
     description: 'A stunning designer lehenga with exquisite handcrafted details, perfect for your special wedding day.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/lehenga-choli/atsevam/atsevam-women-red--gold-embroidered--semi-stitched-lehenga--unstitched-blouse--dupatta/20002512/buy?utm_source=dms_google&utm_medium=pmax_cpc&utm_campaign=dms_google_pmax_cpc_Myntra_SOK_KPI_Traffic_New&keyword=&matchtype=&target=&placement=&gad_source=1&gclid=Cj0KCQjwtpLABhC7ARIsALBOCVoIKDi3hIva0aWyVxhNC2KjfbC08LlGyRMFGnw2jiPI_M_9Wub_7_kaAkt2EALw_wcB' }
   },
   {
     id: 'outfit-13',
     name: 'Luxury Evening Gown',
-    image: 'https://i.pinimg.com/originals/1e/93/a7/1e93a7bc0f15f13dca5f5f6250d9597d.jpg',
-    price: 7599,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745148426/Screenshot_2025-04-20_165654_nt6zsc.png',
+    price: 9999,
     gender: 'female',
     style: 'formal',
     occasions: ['party', 'formal'],
@@ -195,14 +195,14 @@ const femaleOutfits = [
     colorType: 'cool',
     color: 'navy blue',
     description: 'An elegant evening gown designed to make a statement at formal events and high-end parties.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/trendyol/trendyol-women-puff-sleeve-maxi-dress/33181245/buy' }
   },
   
   // For Apple Body Type
   {
     id: 'outfit-14',
     name: 'A-Line Dress',
-    image: 'https://i.pinimg.com/originals/90/e2/05/90e2050575744da9e59599a91e7167eb.jpg',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745148752/Screenshot_2025-04-20_165932_f56ary.png',
     price: 2499,
     gender: 'female',
     style: 'casual',
@@ -211,30 +211,30 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'black',
     description: 'A flattering A-line dress that creates a balanced silhouette, perfect for apple body types.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Westside: 'https://www.westside.com/products/gia-black-high-low-linen-blend-a-line-dress-301002926?variant=44145173856309&country=IN&currency=INR&utm_medium=product_sync&utm_source=google&utm_content=sag_organic&utm_campaign=sag_organic&srsltid=AfmBOopiliilO-BmkmehWOeIttMV6rSQD5-Zpc3lFNzo5H2ATGkY-qq2c5w' }
   },
   
   // For Rectangle Body Type
   {
     id: 'outfit-15',
     name: 'Peplum Style Top & Skirt',
-    image: 'https://i.pinimg.com/originals/76/b6/ca/76b6ca72d96f398eba58fe05a5f5af4d.jpg',
-    price: 2699,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745149274/Screenshot_2025-04-20_171054_flua80.png',
+    price: 1499,
     gender: 'female',
     style: 'formal',
     occasions: ['work', 'formal', 'party'],
     bodyTypes: ['rectangle'],
     colorType: 'cool',
-    color: 'blue',
+    color: 'Yellow',
     description: 'A sophisticated peplum top and skirt combination that creates curves and definition for rectangle body types.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/co-ords/taavi/taavi-women-dabu-cotton-smocked-detail-peplum-top-with-high-slit-skirt/21513860/buy' }
   },
   
   // For Inverted Triangle Body Type
   {
     id: 'outfit-16',
     name: 'A-Line Skirt Outfit',
-    image: 'https://i.pinimg.com/originals/91/91/12/919112cddd3f0cdc9b57c91b1c4cdb5c.jpg',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745153404/Screenshot_2025-04-20_181840_w1fwgv.png',
     price: 2299,
     gender: 'female',
     style: 'casual',
@@ -243,14 +243,14 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'beige',
     description: 'An outfit featuring an A-line skirt that balances proportions perfectly for inverted triangle body types.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/kurta-sets/idalia/idalia-women-beige--off-white-ethnic-motifs-printed-gotta-patti-cotton-kurta-with-skirt/15116498/buy' }
   },
   
   // For Pear Body Type
   {
     id: 'outfit-17',
     name: 'Fit and Flare Dress',
-    image: 'https://i.pinimg.com/originals/8a/26/57/8a2657adcce8c029d7b9c2db7ef56ddf.jpg',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745153638/Screenshot_2025-04-20_182339_br71kv.png',
     price: 2899,
     gender: 'female',
     style: 'casual',
@@ -259,15 +259,15 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'coral',
     description: 'A beautiful fit and flare dress that accentuates the waist and creates a balanced silhouette for pear body types.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Ajio: 'https://www.ajio.com/fabindia--women-fit-and-flare-dress/p/701020889_coral?srsltid=AfmBOooVWrLEvT22KlcEfC9bzzMNSjatSeAniiqi_Tg1j5m7TNF5cnJBi0k&gPromoCode=New_Repeat_Customers#gmf' }
   },
   
   // Budget Options by Color Type
   {
     id: 'outfit-18',
     name: 'Budget Warm Tone Outfit',
-    image: 'https://i.pinimg.com/originals/f9/42/8c/f9428cb5723cffcc81c8be220953b965.jpg',
-    price: 1499,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745153832/Screenshot_2025-04-20_182659_bkxc7m.png',
+    price: 499,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily'],
@@ -275,13 +275,13 @@ const femaleOutfits = [
     colorType: 'warm',
     color: 'rust orange',
     description: 'An affordable casual outfit in warm tones that flatters most body types and skin tones.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Myntra: 'https://www.myntra.com/dresses/dressberry/dressberry-burnt-orange-ribbed-reverie-fit--flare-mini-dress/30447023/buy' }
   },
   {
     id: 'outfit-19',
     name: 'Budget Cool Tone Outfit',
-    image: 'https://i.pinimg.com/originals/0a/76/aa/0a76aa46894b7eb5c1f3e6b4a7d7cc20.jpg',
-    price: 1399,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745153976/Screenshot_2025-04-20_182923_hlum9o.png',
+    price: 599,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily'],
@@ -289,13 +289,13 @@ const femaleOutfits = [
     colorType: 'cool',
     color: 'blue teal',
     description: 'An affordable casual outfit in cool tones that complements cool skin tones beautifully.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Amazon: 'https://www.amazon.in/TADKEE-Womens-Two-Piece-Sleeve-FN-Full-Sleeve-Cord-125-Teal-S/dp/B0DPHB3VKG?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&smid=A1WYWER0W24N8S&th=1&psc=1' }
   },
   {
     id: 'outfit-20',
     name: 'Budget Neutral Tone Outfit',
-    image: 'https://i.pinimg.com/originals/28/76/0c/28760c3bb8b0417614d11f8198564257.jpg',
-    price: 1299,
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745154135/Screenshot_2025-04-20_183133_vn5jvz.png',
+    price: 599,
     gender: 'female',
     style: 'casual',
     occasions: ['casual', 'daily', 'work'],
@@ -303,7 +303,7 @@ const femaleOutfits = [
     colorType: 'neutral',
     color: 'beige cream',
     description: 'An affordable casual outfit in neutral tones that works with any skin tone and is perfect for everyday wear.',
-    shopLinks: { flipkart: 'https://flipkart.com' }
+    shopLinks: { Amazon: 'https://www.amazon.in/Varanga-Women-Beige-Shirt-Collar/dp/B0CTMWL9NG?source=ps-sl-shoppingads-lpcontext&ref_=fplfs&smid=A1WYWER0W24N8S&th=1&psc=1' }
   },
 
   //Sarees
@@ -338,7 +338,7 @@ const femaleOutfits = [
   },
   {
     id: 'outfit-23',
-    name: 'Ethnic Woven Design Zari Banarasi Saree',
+    name: 'Zari Banarasi Saree',
     image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
     price: 799,
     gender: 'female',
