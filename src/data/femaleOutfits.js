@@ -308,7 +308,7 @@ const femaleOutfits = [
 
   //Sarees
   {
-    id: 'outfit-2',
+    id: 'outfit-21',
     name: 'Ethnic Woven Design Zari Banarasi Saree',
     image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
     price: 799,
@@ -321,6 +321,35 @@ const femaleOutfits = [
     description: 'A stunning Woven Design Zari Banarasi Saree, ideal for special occasions.',
     shopLinks: { Myntra: 'https://www.myntra.com/sarees/divastri/divastri-ethnic-woven-design-zari-banarasi-saree/23293458/buy' }
   },
+
+  {
+    id: 'outfit-22',
+    name: 'Zari Silk Cotton Saree',
+    image: 'https://https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744778957/Screenshot_2025-04-16_101852_ybcfg2.pngres.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
+    price: 999,
+    gender: 'female',
+    style: 'traditional',
+    occasions: ['festive', 'ceremony', 'wedding'],
+    bodyTypes: ['hourglass', 'rectangle', 'apple'],
+    colorType: 'warm',
+    color: 'red',
+    description: 'A stunning Zari Silk Cotton Banarasi Saree, ideal for special occasions.',
+    shopLinks: { Myntra: 'https://www.myntra.com/sarees/marziyaa/marziyaa-ethnic-woven-design-zari-silk-cotton-banarasi-saree/27439636/buy' }
+  },
+  {
+    id: 'outfit-23',
+    name: 'Ethnic Woven Design Zari Banarasi Saree',
+    image: 'https://res.cloudinary.com/dnwl4zmjv/image/upload/v1744524702/Screenshot_2025-04-13_114050_funkx5.png',
+    price: 799,
+    gender: 'female',
+    style: 'traditional',
+    occasions: ['festive', 'ceremony', 'wedding'],
+    bodyTypes: ['hourglass', 'rectangle', 'apple'],
+    colorType: 'warm',
+    color: 'red',
+    description: 'A stunning Woven Design Zari Banarasi Saree, ideal for special occasions.',
+    shopLinks: { Myntra: 'https://www.myntra.com/sarees/divastri/divastri-ethnic-woven-design-zari-banarasi-saree/23293458/buy' }
+  }
 ];
 
 export default femaleOutfits;

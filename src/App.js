@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 import RecommendationEngine from './utils/RecommendationEngine';
-import BodyTypeSelector from './components/steps/BodyTypeSelection';
+import BodyTypeSelection from './components/steps/BodyTypeSelection';
 import BodyShapeCalculator from './components/BodyShapeCalculator';
 import Welcome from './components/steps/Welcome';
 import YouTubeVideoPlayer from './components/YouTubeVideoPlayer';
@@ -230,7 +230,7 @@ function SeasonSelection({ onSelect }) {
             <h2 className="gradient-text">Which season are you shopping for?</h2>
             <p>This helps us recommend appropriate fabrics and styles.</p>
 
-            <div className="season-options">
+            <div className="season-options-container">
                 {seasons.map(season => (
                     <div
                         key={season.id}
@@ -914,15 +914,15 @@ function App() {
                 aria-label="Open HueMate Assistant"
             >
                 <div className="chatbot-button-inner">
-                    <img src="/chatbot-logo.png" alt="HueMate" onError={(e) => { e.target.src = "/chatbot-logo.png"; }} />
-                </div>
+  <img src="https://res.cloudinary.com/dnwl4zmjv/image/upload/v1745080442/chatbot-logo_gjbv7g.png" alt="HueMate" style={{ display: 'block' }} />
+</div>
             </button>
 
             {isOpen && (
                 <div className="chatbot-fullscreen">
                     <div className="chatbot-header">
                         <div className="header-logo">
-                            <img src="/chatbot-logo.png" alt="HueMate" className="header-logo-image" onError={(e) => { e.target.src = "/chatbot-logo.png"; }} />
+                            <img src="/chatbot-logo.png" alt="HueMate" className="header-logo-image" onError={(e) => { e.target.src = "/public/chatbot-logo.png"; }} />
                         </div>
                         <h1>HueMate - Your Perfect Shade, Every Time</h1>
                         <button onClick={() => setIsOpen(false)} className="close-button"><X size={24} /></button>
@@ -969,21 +969,21 @@ function App() {
             onCancel={() => setStep('gender')}
         />
 
-{isAnalyzing && capturedImage && (
-    <div className="analyzing-overlay">
-        <div className="analyzing-image-container">
-            <img src={capturedImage} alt="Analyzing" className="analyzing-image" />
-        </div>
-        <p className="mt-2 text-amber-600 analyzing-text">Analyzing your skin tone...</p>
-    </div>
-)}
+        {isAnalyzing && capturedImage && (
+            <div className="analyzing-overlay">
+                <div className="analyzing-image-container">
+                    <img src={capturedImage} alt="Analyzing" className="analyzing-image" />
+                </div>
+                <p className="mt-2 text-amber-600 analyzing-text">Analyzing your skin tone...</p>
+            </div>
+        )}
+
         {!isAnalyzing && (
-            //  Show the CameraCapture component when not analyzing
+            
             <div></div>
         )}
     </div>
 )}
-
                         {step === 'analysis' && (
                             <div className="analysis-screen">
                                 <h2 className="gradient-text">Skin Tone Analysis</h2>
@@ -1025,12 +1025,13 @@ function App() {
                         )}
 
                         {step === 'bodyType' && (
-                            <BodyTypeSelector
-                                gender={gender}
-                                onSelect={handleBodyTypeSelect}
-                                onOpenCalculator={handleOpenCalculator}
-                                onOpenVideo={handleOpenVideo}
-                            />
+                            <BodyTypeSelection
+                            gender={gender}
+                            onSelect={handleBodyTypeSelect}
+                            onOpenCalculator={handleOpenCalculator}
+                            onOpenVideo={handleOpenVideo}
+                            onSeasonSelect={handleSeasonSelect} 
+                          />
                         )}
 
                         {showCalculatorReminder && (
@@ -1073,30 +1074,30 @@ function App() {
                             )}
                         </div>
                         {showVideo && (
-                            <div className="video-full-page">
-                                <div className="video-box">
-                                    <div className="video-container">
-                                        <YouTubeVideoPlayer
-                                            videoId="420TbEabNzY"
-                                            onClose={handleCloseVideo}
-                                            onOpenCalculator={handleCalculatorOpen}
-                                        />
-                                    </div>
-                                    <div className="video-message">
-                                        <div>How to Measure Your Body</div>
-                                        <div>After watching this video, you'll know exactly how to take the correct measurements for your body type.</div>
-                                        <button onClick={handleCalculatorOpen}>
-                                            <Calculator size={20} /> Open Body Shape Calculator
-                                        </button>
-                                        <button onClick={handleCloseVideo}>Close Video</button>
-                                    </div>
-                                    <button onClick={handleCloseVideo} className="video-close">
-                                        <X size={24} />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
+  <div className="video-full-page">
+    <div className="video-box">
+      <div className="video-container">
+        <YouTubeVideoPlayer
+          key={showVideo}
+          videoId={videoId}
+          onClose={handleCloseVideo}
+          onOpenCalculator={handleCalculatorOpen}
+        />
+      </div>
+      <div className="video-message">
+        <div>How to Measure Your Body</div>
+        <div>After watching this video, you'll know exactly how to take the correct measurements for your body type.</div>
+        <button onClick={handleCalculatorOpen}>
+          <Calculator size={20} /> Open Body Shape Calculator
+        </button>
+        <button onClick={handleCloseVideo}>Close Video</button>
+      </div>
+      <button onClick={handleCloseVideo} className="video-close">
+        <X size={24} />
+      </button>
+    </div>
+  </div>
+)}
                         {
                             step === 'confirmation' && (
                                 <div className="confirmation-screen">
@@ -1183,7 +1184,7 @@ function App() {
     
     <div className="results-summary">
       <div className="result-photo-container">
-        <img src={capturedImage} alt="Your photo" className="result-photo" />
+        {capturedImage && <img src={capturedImage} alt="Your photo" className="result-photo" />}
       </div>
       
       <div className="results-details">

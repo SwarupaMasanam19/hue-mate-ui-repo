@@ -53,8 +53,8 @@ export const ChatbotProvider = ({ children }) => {
       'style': 'season',
       'season': 'colorPreference',
       'colorPreference': 'budget',
-      'budget': 'confirmation', // Go to confirmation instead of directly to selection
-      'confirmation': 'topSelection', // After confirmation, go to top selection
+      'budget': 'confirmation', 
+      'confirmation': 'topSelection',
       'topSelection': 'bottomSelection',
       'bottomSelection': 'jewelrySelection',
       'jewelrySelection': 'footwearSelection',

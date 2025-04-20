@@ -2,50 +2,58 @@ import React, { useState } from 'react';
 import { useChatbot } from '../../context/ChatbotContext';
 import Button from '../ui/Button';
 import { LayoutTemplate, RectangleHorizontal, CircleDot, Calculator, Youtube } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHourglassHalf, faAppleAlt, faSquare } from '@fortawesome/free-solid-svg-icons';
+import SeasonSelection from '../steps/SeasonSelection';
 const BodyTypeSelection = () => {
   const { goToNextStep } = useChatbot();
   const [selectedBodyType, setSelectedBodyType] = useState(null);
-
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [showSeasonSelection, setShowSeasonSelection] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
   const bodyTypeOptions = [
-    {
-      id: 'hourglass',
-      label: 'Hourglass',
-      icon: <LayoutTemplate size={48} color="#f8fafc" />,
-      description: 'Balanced proportions with a defined waist.'
-    },
-    {
-      id: 'pear',
-      label: 'Pear',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f8fafc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 3v18l6-6 6 6V3" />
-          <path d="M12 12c-2 0-3-2-2-4 1-2 3-2 4 0 1 2 0 4-2 4z" />
-        </svg>
-      ),
-      description: 'Wider hips than shoulders, defined waist.'
-    },
-    {
-      id: 'rectangle',
-      label: 'Rectangle',
-      icon: <RectangleHorizontal size={48} color="#f8fafc" />,
-      description: 'Shoulders, waist, and hips are relatively aligned.'
-    },
-    {
-      id: 'apple',
-      label: 'Apple',
-      icon: <CircleDot size={48} color="#f8fafc" />,
-      description: 'Fuller midsection with slimmer legs and hips.'
-    }
-  ];
+      {
+        id: 'pear',
+        label: 'Pear',
+        icon: <img src="/assets/icons/pear_icon.png" alt="Pear Icon" style={{ width: '100px', height: '100px' }} />,
+        description: 'Wider hips than shoulders, defined waist.'
+      },
+      {
+        id: 'apple',
+        label: 'Apple',
+        icon: <FontAwesomeIcon icon={faAppleAlt} style={{ fontSize: '50px', color: '#f8fafc' }} />,
+        description: 'Fuller midsection with slimmer legs and hips.'
+      },
+      {
+        id: 'rectangle',
+        label: 'Rectangle',
+        icon: <FontAwesomeIcon icon={faSquare} style={{ fontSize: '50px', color: '#f8fafc', transform: 'scaleX(1.5)' }} />,
+        description: 'Shoulders, waist, and hips are relatively aligned.'
+      },
+      {
+        id: 'hourglass',
+        label: 'Hourglass',
+        icon: <FontAwesomeIcon icon={faHourglassHalf} style={{ fontSize: '50px', color: '#f8fafc' }} />,
+        description: 'Balanced proportions with a defined waist.'
+      }
+    ];
 
   const handleSelectBodyType = (type) => {
     setSelectedBodyType(type);
+    console.log("Selected Body Type:", type);
   };
 
   const handleContinue = () => {
     if (selectedBodyType) {
-      goToNextStep('bodyType', { bodyType: selectedBodyType });
+      goToNextStep('season', { bodyType: selectedBodyType });
+      setShowSeasonSelection(true); // Show the season selection component
+    } else {
+      alert('Please select your body type to continue.');
     }
+  };
+
+  const handleSeasonSelect = (season) => {
+    setShowSeasonSelection(false); // Hide season selection after selection
   };
 
   const handleOpenCalculator = () => {

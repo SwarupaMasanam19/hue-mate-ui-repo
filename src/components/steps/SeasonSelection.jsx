@@ -25,18 +25,18 @@ const SeasonSelection = () => {
   };
 
   return (
-    <div className="body-type-screen">
+    <div className="season-selection-screen">
       <h2 className="gradient-text">Select a Season</h2>
       <p>What season are you shopping for?</p>
       
-      <div className="body-types-container">
+      <div className="season-options-container">
         {seasonOptions.map((option) => (
           <div 
             key={option.id}
-            className={`body-type-card ${selectedSeason === option.id ? 'selected' : ''}`}
+            className={`season-option-card ${selectedSeason === option.id ? 'selected' : ''}`}
             onClick={() => handleSelect(option.id)}
           >
-            <div className="body-type-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
+            <div className="season-option-icon" style={{ fontSize: '28px' }}>{option.icon}</div>
             <p>{option.label}</p>
             <p className="text-sm text-gray-300 text-center">{option.description}</p>
           </div>

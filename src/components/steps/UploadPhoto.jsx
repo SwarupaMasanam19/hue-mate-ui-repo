@@ -187,14 +187,13 @@ const UploadPhoto = () => {
       )}
       
       {showPreview && capturedImage && (
-        <div className="mb-8 animate-fade-in-scale">
-          <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-amber-400 mb-4">
-            <img src={capturedImage} alt="Preview" className="w-full h-full object-cover" />
-          </div>
-          <p className="text-lg mb-2">How does this photo look?</p>
+    <div className="mb-8 animate-fade-in-scale">
+        <div className="preview-image-container">
+            <img src={capturedImage} alt="Preview" className="preview-image" />
         </div>
-      )}
-      
+        <p className="text-lg mb-2">How does this photo look?</p>
+    </div>
+)}
       {isAnalyzing && (
         <div className="mb-6">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500 mx-auto"></div>
