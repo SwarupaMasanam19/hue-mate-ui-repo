@@ -1,11 +1,8 @@
 // src/components/DynamicOutfitSuggestions.jsx - Fixed version
 import React, { useState, useEffect } from 'react';
 import femaleOutfits from '../data/femaleOutfits';
+import maleOutfits from '../data/maleOutfits';
 
-/**
- * Component that shows filtered outfit suggestions based on the user's existing inputs
- * Designed to fit directly into the existing App.jsx results step
- */
 const DynamicOutfitSuggestions = ({ 
   gender, 
   skinTone, 
@@ -18,16 +15,17 @@ const DynamicOutfitSuggestions = ({
 }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const outfitData = gender === 'male' ? maleOutfits : femaleOutfits;
 
   // Get filtered outfits when component mounts or inputs change
   useEffect(() => {
-    console.log("Filtering with criteria:", { gender, skinTone, bodyType, budget, occasion, style, colorPreference });
+    console.log("Filtering with criteria:", { gender, skinTone, bodyType, budget, occasion, style, colorPreference, outfitData });
     setLoading(true);
     
     // Small delay to show loading state
     setTimeout(() => {
       const filteredOutfits = getFilteredOutfits(
-        femaleOutfits, 
+        outfitData,
         {
           skinTone: colorPreference || skinTone,
           bodyType,
@@ -86,9 +84,7 @@ const DynamicOutfitSuggestions = ({
     }
 
     // Filter for female only (since male outfits not available)
-    if (gender !== 'female') {
-      return [];
-    }
+    
 
     // Map skin tone to color type
     const skinToneToColorType = {
@@ -221,13 +217,7 @@ const DynamicOutfitSuggestions = ({
     }, 300);
   };
 
-  if (gender !== 'female') {
-    return (
-      <div className="bg-white/5 rounded-xl p-6 text-center my-6">
-        <p className="text-white/70">Outfit suggestions are currently only available for women.</p>
-      </div>
-    );
-  }
+
 
   if (loading) {
     return (

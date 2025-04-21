@@ -9,6 +9,7 @@ import { useChatbot } from './context/ChatbotContext';
 import CalculatorPage from './components/CalculatorPage';
 import OutfitRecommendationPage from './components/OutfitRecommendationPage';
 import femaleOutfits from './data/femaleOutfits';
+import maleOutfits from './data/maleOutfits';
 import ReactConfetti from 'react-confetti';
 import DynamicOutfitSuggestions from './components/DynamicOutfitSuggestions';
 
